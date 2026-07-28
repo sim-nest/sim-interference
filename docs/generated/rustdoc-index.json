@@ -1,0 +1,19 @@
+{
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "crate_name": "sim_lib_interference_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-interference-core/Cargo.toml",
+      "package": "sim-lib-interference-core",
+      "summary": "Checked physical boundaries for coherent scalar wave-field studies."
+    },
+    {
+      "crate_name": "xtask",
+      "group": "workspace",
+      "manifest": "xtask/Cargo.toml",
+      "package": "xtask",
+      "summary": "Repository automation wrapper for validation and generated documentation."
+    }
+  ]
+}
