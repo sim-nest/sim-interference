@@ -266,6 +266,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim-lib-interference-compute"
+version = "0.1.0"
+dependencies = [
+ "sim-kernel",
+ "sim-lib-interference-core",
+ "sim-lib-numbers-tensor",
+]
+
+[[package]]
 name = "sim-lib-interference-core"
 version = "0.1.0"
 

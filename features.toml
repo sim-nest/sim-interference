@@ -111,6 +111,38 @@ claims_specimens = [
 ]
 
 [[feature]]
+id = "feature/sim-interference/normalized-tensor-lowering"
+title = "Normalized tile-local Tensor lowering"
+summary = "Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor."
+owner = "crate/sim-lib-interference-compute"
+audiences = ["code", "framework"]
+guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. This leaf owns no provider, device API, shader, storage type, fallback router, or public compute-site selection."
+claims_anchors = [
+  "anchor/crate/sim-lib-interference-compute",
+  "anchor/rustdoc/sim-lib-interference-compute/crate-root",
+  "anchor/rustdoc/sim-lib-interference-compute/lowered-tile",
+  "anchor/rustdoc/sim-lib-interference-compute/lowering-error",
+  "anchor/rustdoc/sim-lib-interference-compute/lowering-plan",
+  "anchor/rustdoc/sim-lib-interference-compute/phase-budget",
+  "anchor/rustdoc/sim-lib-interference-compute/plane-tile",
+  "anchor/rustdoc/sim-lib-interference-compute/plane-tile-constants",
+  "anchor/rustdoc/sim-lib-interference-compute/point-tile-constants",
+  "anchor/rustdoc/sim-lib-interference-compute/preflight-check",
+  "anchor/rustdoc/sim-lib-interference-compute/required_tensor_operation_names",
+  "anchor/rustdoc/sim-lib-interference-compute/source-phase-estimate",
+  "anchor/rustdoc/sim-lib-interference-compute/source-tile-constants",
+  "anchor/rustdoc/sim-lib-interference-compute/tile-plan",
+  "anchor/rustdoc/sim-lib-interference-compute/tile-profile",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-compute/src/tests/preflight",
+]
+supports = [
+  "feature/sim-interference/scalar-wave-model",
+  "feature/sim-interference/certified-sampling",
+]
+
+[[feature]]
 id = "feature/sim-interference/deterministic-reference-solver"
 title = "Verified deterministic CPU phasor reference"
 summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence."
