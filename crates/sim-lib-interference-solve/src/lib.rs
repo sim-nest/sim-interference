@@ -18,7 +18,11 @@
 //! exact partition of the source grid. Undefined phase is
 //! [`ScalarSample::Masked`], detail reduction is fail-closed, and every result
 //! carries a [`ProjectionCertificate`] retaining source sampling evidence.
+//! [`analyze_fringes`] then derives deterministic statistics, strict local
+//! node/antinode candidates, and Michelson contrast without dropping either
+//! sampling evidence or projection identity.
 
+mod analysis;
 mod analytic;
 mod complex;
 mod error;
@@ -31,12 +35,15 @@ mod reference;
 mod verification;
 mod verify;
 
+pub use analysis::{
+    AnalysisError, Extremum, ExtremumKind, FieldStats, FringeReport, analyze_fringes,
+};
 pub use error::ReferenceSolveError;
 pub use field::HostPhasorField;
 pub use observable::Observable;
 pub use projection::{
     DetectorFootprint, GridDimensions, LossClass, ProjectionCertificate, ProjectionError,
-    ScalarProjection, ScalarSample, project,
+    ProjectionIdentity, ScalarProjection, ScalarSample, project,
 };
 pub use reduce::{ReductionRule, reduce_for_view};
 pub use reference::{ReferencePhasorSolver, SolveEvidence};

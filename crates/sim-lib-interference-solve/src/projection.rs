@@ -96,6 +96,24 @@ pub struct ProjectionCertificate {
 }
 
 impl ProjectionCertificate {
+    /// Returns the projection parameters that identify this scalar field.
+    ///
+    /// Sampling evidence and the result-dependent mask count are deliberately
+    /// excluded. The identity describes how the scalar field was obtained,
+    /// while [`Self::source_sampling_certificate`] describes whether its
+    /// physical source field was adequately sampled.
+    pub fn identity(self) -> ProjectionIdentity {
+        ProjectionIdentity {
+            source_dimensions: self.source_dimensions,
+            target_dimensions: self.target_dimensions,
+            footprint: self.footprint,
+            observable: self.observable,
+            phase_floor: self.phase_floor,
+            rule: self.rule,
+            loss_class: self.loss_class,
+        }
+    }
+
     /// Returns the source phasor shape.
     pub fn source_dimensions(self) -> GridDimensions {
         self.source_dimensions
@@ -139,6 +157,59 @@ impl ProjectionCertificate {
     /// Returns the number of target cells whose phase is undefined.
     pub fn mask_count(self) -> usize {
         self.mask_count
+    }
+}
+
+/// Stable identity of the projection operation that produced a scalar field.
+///
+/// This keeps analysis reports tied to the exact observable, dimensions, and
+/// detector semantics they summarize. It is separated from sampling evidence
+/// because both are first-class provenance with different meanings.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProjectionIdentity {
+    source_dimensions: GridDimensions,
+    target_dimensions: GridDimensions,
+    footprint: DetectorFootprint,
+    observable: Observable,
+    phase_floor: f64,
+    rule: ReductionRule,
+    loss_class: LossClass,
+}
+
+impl ProjectionIdentity {
+    /// Returns the source phasor shape.
+    pub fn source_dimensions(self) -> GridDimensions {
+        self.source_dimensions
+    }
+
+    /// Returns the analyzed scalar shape.
+    pub fn target_dimensions(self) -> GridDimensions {
+        self.target_dimensions
+    }
+
+    /// Returns the inclusive source-cell footprint bounds.
+    pub fn footprint(self) -> DetectorFootprint {
+        self.footprint
+    }
+
+    /// Returns the analyzed observable.
+    pub fn observable(self) -> Observable {
+        self.observable
+    }
+
+    /// Returns the phase masking floor used during projection.
+    pub fn phase_floor(self) -> f64 {
+        self.phase_floor
+    }
+
+    /// Returns the projection's reduction rule.
+    pub fn rule(self) -> ReductionRule {
+        self.rule
+    }
+
+    /// Returns the projection's declared information-loss class.
+    pub fn loss_class(self) -> LossClass {
+        self.loss_class
     }
 }
 
