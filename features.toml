@@ -1,0 +1,53 @@
+schema = "sim.features"
+
+[enforcement.audience]
+code = "strict"
+framework = "strict"
+
+[enforcement.specimen]
+user = "strict"
+framework = "strict"
+code = "advisory"
+
+[enforcement.route]
+major_entrypoints = "advisory"
+frameworks = "advisory"
+
+[[feature]]
+id = "feature/sim-interference/generated-docs"
+title = "Repository documentation surface"
+summary = "Publish generated package, card, rustdoc, recipe, diagram, and Index facts for the interference domain."
+owner = "crate/xtask"
+audiences = ["code"]
+guidance = "Use this row when checking the generated documentation and Index lane for sim-interference."
+claims_anchors = [
+  "anchor/cli/xtask",
+  "anchor/crate/xtask",
+  "anchor/doc/generated/card-index",
+  "anchor/doc/generated/feature-map",
+  "anchor/doc/generated/provenance",
+  "anchor/doc/generated/repo-contract",
+  "anchor/doc/generated/rustdoc-index",
+  "anchor/doc/generated/sim-index-fragment",
+  "anchor/repo/sim-interference",
+]
+claims_surfaces = [
+  "cli/xtask",
+  "docs/sim-interference/generated",
+]
+
+[[feature]]
+id = "feature/sim-interference/quantity-vocabulary"
+title = "Checked interference quantity vocabulary"
+summary = "Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types."
+owner = "crate/sim-lib-interference-core"
+audiences = ["code", "framework"]
+guidance = "Use these focused wrappers at interference-domain boundaries. Metres may be signed, positive distances, frequency, and speed are strictly positive, attenuation and amplitude are non-negative, and phase is stored in [-pi, pi). This is not a general units framework and does not claim a wave solver."
+claims_anchors = [
+  "anchor/crate/sim-lib-interference-core",
+  "anchor/rustdoc/sim-lib-interference-core/crate-root",
+]
+claims_specimens = [
+  "recipe/sim-interference/01-basics/checked-quantities",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/quantity",
+]

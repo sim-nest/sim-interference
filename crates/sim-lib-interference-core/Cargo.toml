@@ -1,0 +1,21 @@
+[package]
+name = "sim-lib-interference-core"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+readme = "README.md"
+repository.workspace = true
+homepage.workspace = true
+publish = false
+description = "Validated physical boundary types for coherent scalar wave-field studies."
+keywords = ["interference", "wave", "physics", "simulation"]
+categories = ["science", "simulation"]
+
+[dependencies]
+
+[[example]]
+name = "checked-quantities"
+path = "../../recipes/01-basics/checked-quantities/main.rs"
+
+[lints]
+workspace = true

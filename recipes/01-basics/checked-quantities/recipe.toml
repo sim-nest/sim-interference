@@ -1,0 +1,11 @@
+id = "checked-quantities"
+title = "Construct checked interference quantities"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 10
+tags = ["interference", "physics", "quantities", "validation"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "checked-quantities"

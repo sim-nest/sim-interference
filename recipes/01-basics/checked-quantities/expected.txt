@@ -1,0 +1,7 @@
+metres=-2.5
+positive-metres=0.25
+frequency-hz=440
+speed-m-s=343
+attenuation-np-m=0
+phase-rad=-3.141592653589793
+field-amplitude=0
