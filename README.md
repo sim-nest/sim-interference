@@ -4,10 +4,10 @@
 wave-field studies. `sim-lib-interference-core` owns checked physical
 quantities, the exact homogeneous scalar propagation model, finite physical
 sample planes, sampling certificates, and allocation-free work preflight.
-`sim-lib-interference-solve` owns the deterministic CPU `f64` reference and its
-analytic, metamorphic, time-sign, and Helmholtz convergence verification. The
-repository does not claim a runtime tensor adapter, accelerated provider, or
-renderer.
+`sim-lib-interference-solve` owns the deterministic CPU `f64` reference, its
+analytic, metamorphic, time-sign, and Helmholtz convergence verification, and
+certified scalar observation and detector reduction. The repository does not
+claim a runtime tensor adapter, accelerated provider, or renderer.
 
 Every coherent problem has one frequency and a canonical source set. The
 time convention `u=Re{U exp(-i omega t)}`, outgoing spatial sign
@@ -25,6 +25,11 @@ successful result carries the complete preflight evidence; any failure returns
 no field. The verification suite checks closed-form identities, true
 metamorphic laws, crest direction, and second-order convergence of the complex
 Helmholtz residual on common physical points at two stencil spacings.
+Projection derives real, imaginary, amplitude, wrapped phase, normalized
+squared magnitude, and instantaneous fields without rerunning propagation.
+Undefined phase is structurally masked. Detail mode refuses loss, while named
+complex, scalar-area, and squared-magnitude-area detectors integrate an exact
+partition of every source cell and return their own projection certificate.
 
 Repository validation:
 

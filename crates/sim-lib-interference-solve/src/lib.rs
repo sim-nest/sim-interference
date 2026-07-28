@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-//! Deterministic CPU `f64` reference solving for coherent scalar wave fields.
+//! Deterministic CPU `f64` solving and certified observation of coherent scalar fields.
 //!
 //! [`ReferencePhasorSolver`] consumes the checked physical model and preflight
 //! vocabulary from `sim-lib-interference-core`. Successful solves return a
@@ -11,18 +11,34 @@
 //! second-order convergence of a seven-point Helmholtz residual over point,
 //! plane, mixed, attenuating, and multi-source fixtures. The crate has no SIM
 //! runtime, tensor, compute-provider, or presentation dependency.
+//!
+//! [`project`] derives real, imaginary, amplitude, wrapped phase,
+//! squared-magnitude, and instantaneous scalar fields without rerunning
+//! propagation. [`reduce_for_view`] applies an explicit detector rule over an
+//! exact partition of the source grid. Undefined phase is
+//! [`ScalarSample::Masked`], detail reduction is fail-closed, and every result
+//! carries a [`ProjectionCertificate`] retaining source sampling evidence.
 
 mod analytic;
 mod complex;
 mod error;
 mod field;
 mod helmholtz;
+mod observable;
+mod projection;
+mod reduce;
 mod reference;
 mod verification;
 mod verify;
 
 pub use error::ReferenceSolveError;
 pub use field::HostPhasorField;
+pub use observable::Observable;
+pub use projection::{
+    DetectorFootprint, GridDimensions, LossClass, ProjectionCertificate, ProjectionError,
+    ScalarProjection, ScalarSample, project,
+};
+pub use reduce::{ReductionRule, reduce_for_view};
 pub use reference::{ReferencePhasorSolver, SolveEvidence};
 pub use verification::{
     MAX_ANALYTIC_RELATIVE_ERROR, MAX_METAMORPHIC_RELATIVE_ERROR, VerificationError,

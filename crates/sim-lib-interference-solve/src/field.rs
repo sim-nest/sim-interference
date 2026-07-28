@@ -35,6 +35,25 @@ impl HostPhasorField {
         self.imaginary[index] = imaginary;
     }
 
+    #[cfg(test)]
+    pub(crate) fn from_test_components(
+        rows: usize,
+        columns: usize,
+        real: Vec<f64>,
+        imaginary: Vec<f64>,
+    ) -> Self {
+        let cells = rows.checked_mul(columns).expect("test shape must fit");
+        assert_eq!(real.len(), cells);
+        assert_eq!(imaginary.len(), cells);
+        assert!(real.iter().chain(&imaginary).all(|value| value.is_finite()));
+        Self {
+            rows,
+            columns,
+            real,
+            imaginary,
+        }
+    }
+
     /// Returns the number of rows.
     pub fn rows(&self) -> usize {
         self.rows

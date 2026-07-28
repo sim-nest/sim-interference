@@ -13,7 +13,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-interference-solve/Cargo.toml",
       "package": "sim-lib-interference-solve",
-      "summary": "Deterministic CPU f64 reference solving for coherent scalar wave fields."
+      "summary": "Deterministic CPU f64 solving and certified observation of coherent scalar fields."
     },
     {
       "crate_name": "xtask",

@@ -116,7 +116,7 @@ title = "Verified deterministic CPU phasor reference"
 summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence."
 owner = "crate/sim-lib-interference-solve"
 audiences = ["code", "framework"]
-guidance = "Use ReferencePhasorSolver as the dependency-free executable specification. It admits the complete request and every cell/source geometry before output allocation, visits cells row-major and sources in stable-id order, applies Neumaier compensation independently to real and imaginary components, and returns a HostPhasorField plus immutable SolveEvidence or no field. Run verify_reference_solver for fail-closed plane-period, point-spreading, attenuation, interference, reciprocity, linearity, rigid-motion, global-phase, source-permutation, outgoing-crest, and seven-point Helmholtz checks. The Helmholtz matrix covers point, plane, mixed, attenuating, and multi-source fields at common physical points for h and h/2. This crate does not claim observables, tensor runtime storage, acceleration, or presentation."
+guidance = "Use ReferencePhasorSolver as the dependency-free executable specification. It admits the complete request and every cell/source geometry before output allocation, visits cells row-major and sources in stable-id order, applies Neumaier compensation independently to real and imaginary components, and returns a HostPhasorField plus immutable SolveEvidence or no field. Run verify_reference_solver for fail-closed plane-period, point-spreading, attenuation, interference, reciprocity, linearity, rigid-motion, global-phase, source-permutation, outgoing-crest, and seven-point Helmholtz checks. The Helmholtz matrix covers point, plane, mixed, attenuating, and multi-source fields at common physical points for h and h/2. This crate does not claim tensor runtime storage, acceleration, or presentation."
 claims_anchors = [
   "anchor/crate/sim-lib-interference-solve",
   "anchor/rustdoc/sim-lib-interference-solve/crate-root",
@@ -131,4 +131,28 @@ claims_anchors = [
 claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/reference_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/verification_conformance",
+]
+
+[[feature]]
+id = "feature/sim-interference/certified-interference"
+title = "Certified observables and detector reduction"
+summary = "Project coherent phasors into honest scalar observables and reduce them through explicit detectors without dropping samples or averaging wrapped phase."
+owner = "crate/sim-lib-interference-solve"
+audiences = ["code", "framework"]
+guidance = "Use project for full-detail real, imaginary, amplitude, masked phase, normalized squared-magnitude, or Instant { wt } observation. Use reduce_for_view only with the detector rule matching the observable: complex mean before phase-sensitive projection, scalar area mean for amplitude, or squared-magnitude area mean for the normalized energy proxy. Detail refuses a smaller target. Integer axis partitions cover every source cell exactly once, including odd and non-divisible grids. ScalarProjection always carries ProjectionCertificate with dimensions, footprint bounds, rule, loss class, unchanged source SamplingCertificate, and mask count."
+claims_anchors = [
+  "anchor/rustdoc/sim-lib-interference-solve/detector-footprint",
+  "anchor/rustdoc/sim-lib-interference-solve/grid-dimensions",
+  "anchor/rustdoc/sim-lib-interference-solve/loss-class",
+  "anchor/rustdoc/sim-lib-interference-solve/observable",
+  "anchor/rustdoc/sim-lib-interference-solve/project",
+  "anchor/rustdoc/sim-lib-interference-solve/projection-certificate",
+  "anchor/rustdoc/sim-lib-interference-solve/projection-error",
+  "anchor/rustdoc/sim-lib-interference-solve/reduce_for_view",
+  "anchor/rustdoc/sim-lib-interference-solve/reduction-rule",
+  "anchor/rustdoc/sim-lib-interference-solve/scalar-projection",
+  "anchor/rustdoc/sim-lib-interference-solve/scalar-sample",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/projection_conformance",
 ]
