@@ -24,6 +24,15 @@
 //! [`ScenarioBuilder`] constructs bounded two-point, counter-propagating,
 //! phased-array, and rectangular discrete-aperture problems. Array amplitudes
 //! are normalized and wavelength-relative element spacing remains explicit.
+//! [`ToneStudy`] seals one independently solved frequency with its exact
+//! problem, plane, positive composition weight, and solve evidence.
+//! [`MultiToneStudy`] admits only certified tones on identical physical sample
+//! geometry. [`ToneCombination::IncoherentMagnitudeSquared`] sums weighted
+//! component squared magnitudes and [`ToneCombination::Instant`] sums
+//! weighted real fields at one shared clock time; unlike phasors are never
+//! added. Every [`MultiToneProjection`] carries [`MultiToneCertificate`] with
+//! the highest-frequency [`MultiToneSamplingRequirements`] and all component
+//! [`ToneCertificate`] records.
 
 mod analysis;
 mod analytic;
@@ -31,6 +40,8 @@ mod complex;
 mod error;
 mod field;
 mod helmholtz;
+mod multitone;
+mod multitone_error;
 mod observable;
 mod projection;
 mod reduce;
@@ -46,6 +57,11 @@ pub use analysis::{
 };
 pub use error::ReferenceSolveError;
 pub use field::HostPhasorField;
+pub use multitone::{
+    MultiToneCertificate, MultiToneProjection, MultiToneSamplingRequirements, MultiToneStudy,
+    ToneCertificate, ToneCombination, ToneStudy,
+};
+pub use multitone_error::MultiToneError;
 pub use observable::Observable;
 pub use projection::{
     DetectorFootprint, GridDimensions, LossClass, ProjectionCertificate, ProjectionError,

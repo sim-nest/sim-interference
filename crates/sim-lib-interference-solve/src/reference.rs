@@ -5,7 +5,10 @@ use sim_lib_interference_core::{
     SamplingPolicy, SamplingThresholds, WorkBudget, contribution_at,
 };
 
-use crate::{HostPhasorField, ReferenceSolveError, complex::Complex64};
+use crate::{
+    HostPhasorField, ReferenceSolveError,
+    complex::{CompensatedSum, Complex64},
+};
 
 /// Immutable evidence retained for one complete reference solve.
 #[derive(Clone, Debug, PartialEq)]
@@ -214,10 +217,8 @@ fn accumulate_cell(
     row: usize,
     column: usize,
 ) -> Result<Complex64, ReferenceSolveError> {
-    let mut real_sum = 0.0;
-    let mut real_correction = 0.0;
-    let mut imaginary_sum = 0.0;
-    let mut imaginary_correction = 0.0;
+    let mut real_sum = CompensatedSum::default();
+    let mut imaginary_sum = CompensatedSum::default();
 
     for source in &problem.sources {
         let source_id = source.id();
@@ -229,33 +230,13 @@ fn accumulate_cell(
                 cause: Box::new(cause),
             }
         })?;
-        compensated_add(&mut real_sum, &mut real_correction, real);
-        require_finite_accumulation(source_id, row, column, "real", real_sum, real_correction)?;
-        compensated_add(&mut imaginary_sum, &mut imaginary_correction, imaginary);
-        require_finite_accumulation(
-            source_id,
-            row,
-            column,
-            "imaginary",
-            imaginary_sum,
-            imaginary_correction,
-        )?;
+        real_sum.add(real);
+        require_finite_accumulation(source_id, row, column, "real", real_sum)?;
+        imaginary_sum.add(imaginary);
+        require_finite_accumulation(source_id, row, column, "imaginary", imaginary_sum)?;
     }
 
-    Ok(Complex64::new(
-        real_sum + real_correction,
-        imaginary_sum + imaginary_correction,
-    ))
-}
-
-fn compensated_add(sum: &mut f64, correction: &mut f64, value: f64) {
-    let next = *sum + value;
-    *correction += if sum.abs() >= value.abs() {
-        (*sum - next) + value
-    } else {
-        (value - next) + *sum
-    };
-    *sum = next;
+    Ok(Complex64::new(real_sum.total(), imaginary_sum.total()))
 }
 
 fn require_finite_accumulation(
@@ -263,11 +244,10 @@ fn require_finite_accumulation(
     row: usize,
     column: usize,
     component: &'static str,
-    sum: f64,
-    correction: f64,
+    accumulation: CompensatedSum,
 ) -> Result<(), ReferenceSolveError> {
-    let value = sum + correction;
-    if sum.is_finite() && correction.is_finite() && value.is_finite() {
+    let value = accumulation.total();
+    if accumulation.is_finite() {
         Ok(())
     } else {
         Err(ReferenceSolveError::NonFiniteAccumulation {

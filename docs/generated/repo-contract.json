@@ -209,6 +209,16 @@
           "kind": [
             "test"
           ],
+          "name": "multitone_conformance",
+          "src": "crates/sim-lib-interference-solve/tests/multitone_conformance.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
           "name": "projection_conformance",
           "src": "crates/sim-lib-interference-solve/tests/projection_conformance.rs"
         },
@@ -267,10 +277,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-28T11:56:13+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "706d7e47d652af4e488f4ef648c8c8edf5098a54",
+    "git_commit": "8032b2a30451a2036c50d68008b6dadcc281c965",
     "repo": "sim-interference",
     "schema": "sim.provenance.v1",
-    "source_commit": "706d7e47d652af4e488f4ef648c8c8edf5098a54",
+    "source_commit": "8032b2a30451a2036c50d68008b6dadcc281c965",
     "source_remote": "https://github.com/sim-nest/sim-interference",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -283,9 +293,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "83ab91df8684e48f",
+    "workspace_hash": "d349e7fdfd9c7428",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 50,
+    "workspace_hash_input_count": 54,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-interference-core/Cargo.toml",
@@ -316,6 +326,9 @@
       "crates/sim-lib-interference-solve/src/field.rs",
       "crates/sim-lib-interference-solve/src/helmholtz.rs",
       "crates/sim-lib-interference-solve/src/lib.rs",
+      "crates/sim-lib-interference-solve/src/multitone.rs",
+      "crates/sim-lib-interference-solve/src/multitone_error.rs",
+      "crates/sim-lib-interference-solve/src/multitone_tests.rs",
       "crates/sim-lib-interference-solve/src/observable.rs",
       "crates/sim-lib-interference-solve/src/projection.rs",
       "crates/sim-lib-interference-solve/src/projection_tests.rs",
@@ -329,6 +342,7 @@
       "crates/sim-lib-interference-solve/src/verification.rs",
       "crates/sim-lib-interference-solve/src/verify.rs",
       "crates/sim-lib-interference-solve/tests/analysis_scenario_conformance.rs",
+      "crates/sim-lib-interference-solve/tests/multitone_conformance.rs",
       "crates/sim-lib-interference-solve/tests/projection_conformance.rs",
       "crates/sim-lib-interference-solve/tests/reference_conformance.rs",
       "crates/sim-lib-interference-solve/tests/verification_conformance.rs",

@@ -189,3 +189,24 @@ claims_specimens = [
   "recipe/sim-interference/01-basics/fringe-analysis",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/analysis_scenario_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/certified-multitone-composition"
+title = "Certified multi-tone composition"
+summary = "Combine independently certified coherent frequency studies on identical physical sample geometry as incoherent squared magnitude or shared-clock instantaneous scalars."
+owner = "crate/sim-lib-interference-solve"
+audiences = ["code", "framework"]
+guidance = "Use ToneStudy::solve to seal each one-frequency InterferenceProblem, exact SamplingPlane, positive weight, HostPhasorField, and SolveEvidence. MultiToneStudy rejects empty sets, duplicate frequencies, and any exact plane mismatch, then orders components by frequency. ToneCombination never adds unlike phasors: IncoherentMagnitudeSquared sums weighted component squared magnitudes, while Instant sums weighted real component observations at one finite time. MultiToneSamplingRequirements uses the highest frequency for the spatial carrier certificate and temporal Nyquist floor; every MultiToneProjection retains the shared plane, combination, set requirements, and each component's original certificate."
+claims_anchors = [
+  "anchor/rustdoc/sim-lib-interference-solve/multi-tone-certificate",
+  "anchor/rustdoc/sim-lib-interference-solve/multi-tone-error",
+  "anchor/rustdoc/sim-lib-interference-solve/multi-tone-projection",
+  "anchor/rustdoc/sim-lib-interference-solve/multi-tone-sampling-requirements",
+  "anchor/rustdoc/sim-lib-interference-solve/multi-tone-study",
+  "anchor/rustdoc/sim-lib-interference-solve/tone-certificate",
+  "anchor/rustdoc/sim-lib-interference-solve/tone-combination",
+  "anchor/rustdoc/sim-lib-interference-solve/tone-study",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/multitone_conformance",
+]
