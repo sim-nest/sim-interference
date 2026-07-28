@@ -56,7 +56,7 @@ pub use analysis::{
     AnalysisError, Extremum, ExtremumKind, FieldStats, FringeReport, analyze_fringes,
 };
 pub use error::ReferenceSolveError;
-pub use field::HostPhasorField;
+pub use field::{HostPhasorField, HostPhasorFieldError};
 pub use multitone::{
     MultiToneCertificate, MultiToneProjection, MultiToneSamplingRequirements, MultiToneStudy,
     ToneCertificate, ToneCombination, ToneStudy,

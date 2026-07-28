@@ -210,3 +210,46 @@ claims_anchors = [
 claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/multitone_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/tensor-runtime-records"
+title = "Tensor-backed interference runtime records"
+summary = "Project checked problems, planes, fields, studies, evidence, and scalar projections into fail-closed Citizen records and Shapes over the canonical Tensor."
+owner = "crate/sim-lib-interference-runtime"
+audiences = ["code", "framework"]
+guidance = "Use these records at the SIM boundary. PhasorField contains exactly two compatible canonical real Tensors; Projection contains one Tensor plus an explicit phase mask. Host reference buffers cross into Tensor storage once, resident components materialize only on explicit request, and every read-construct rechecks dimensions, units, provenance, and masks."
+claims_anchors = [
+  "anchor/crate/sim-lib-interference-runtime",
+  "anchor/runtime-lib/sim-lib-interference-runtime/interference-records-lib",
+  "anchor/rustdoc/sim-lib-interference-runtime/emitter-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/interference-records-lib",
+  "anchor/rustdoc/sim-lib-interference-runtime/medium-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/phasor-field-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/plane-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/problem-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/projection-certificate-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/projection-request-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/sampling-certificate-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/scalar-projection-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/study-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/study-evidence-descriptor",
+  "anchor/rustdoc/sim-lib-interference-runtime/work-estimate-descriptor",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-runtime/src/citizen",
+]
+supports = [
+  "feature/sim-interference/scalar-wave-model",
+  "feature/sim-interference/certified-sampling",
+  "feature/sim-interference/deterministic-reference-solver",
+  "feature/sim-interference/certified-interference",
+]
+
+[[route]]
+id = "route/represent-interference-study-at-runtime"
+task = "Represent an interference study as runtime data"
+audiences = ["code", "framework"]
+steps = [
+  { feature = "feature/sim-interference/tensor-runtime-records", why = "The runtime feature composes canonical Tensor storage, Citizen read-constructs, and Shape checks without adding a domain parser or grid storage." },
+  { specimen = "spec-test/sim-interference/crates/sim-lib-interference-runtime/src/citizen", why = "The checked Citizen inventory specimen proves every interference record can be installed and reconstructed." },
+]

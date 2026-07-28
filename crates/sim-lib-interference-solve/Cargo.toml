@@ -16,7 +16,7 @@ sim-lib-interference-core = { path = "../sim-lib-interference-core" }
 
 [[example]]
 name = "fringe-analysis"
-path = "../../recipes/01-basics/fringe-analysis/main.rs"
+path = "examples/fringe_analysis.rs"
 
 [lints]
 workspace = true

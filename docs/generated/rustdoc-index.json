@@ -9,6 +9,13 @@
       "summary": "Checked physical boundaries for coherent scalar wave-field studies."
     },
     {
+      "crate_name": "sim_lib_interference_runtime",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-interference-runtime/Cargo.toml",
+      "package": "sim-lib-interference-runtime",
+      "summary": "Tensor-backed runtime records for coherent interference studies."
+    },
+    {
       "crate_name": "sim_lib_interference_solve",
       "group": "workspace",
       "manifest": "crates/sim-lib-interference-solve/Cargo.toml",

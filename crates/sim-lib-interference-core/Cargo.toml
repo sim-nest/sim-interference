@@ -15,7 +15,7 @@ categories = ["science", "simulation"]
 
 [[example]]
 name = "checked-quantities"
-path = "../../recipes/01-basics/checked-quantities/main.rs"
+path = "examples/checked_quantities.rs"
 
 [lints]
 workspace = true

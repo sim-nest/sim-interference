@@ -6,8 +6,12 @@ quantities, the exact homogeneous scalar propagation model, finite physical
 sample planes, sampling certificates, and allocation-free work preflight.
 `sim-lib-interference-solve` owns the deterministic CPU `f64` reference, its
 analytic, metamorphic, time-sign, and Helmholtz convergence verification, and
-certified scalar observation and detector reduction. The repository does not
-claim a runtime tensor adapter, accelerated provider, or renderer.
+certified scalar observation and detector reduction.
+`sim-lib-interference-runtime` projects those checked values into Tensor-backed
+Citizen records and registers the public Problem, Plane, Study,
+ProjectionRequest, and Projection Shapes. It reuses the canonical Tensor and
+general-purpose codecs; the repository does not claim an accelerated provider
+or renderer.
 
 Every coherent problem has one frequency and a canonical source set. The
 time convention `u=Re{U exp(-i omega t)}`, outgoing spatial sign

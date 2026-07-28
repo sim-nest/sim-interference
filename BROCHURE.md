@@ -11,7 +11,9 @@ finite physical pixel-centre planes, truth-carrying sampling certificates,
 checked work budgets, and a deterministic CPU `f64` reference field. That
 field can be observed as real, imaginary, amplitude, honest masked phase,
 normalized squared magnitude, or instantaneous time, then reduced through a
-named detector with complete projection provenance.
+named detector with complete projection provenance. The runtime crate turns
+those values into fail-closed Citizen records and Shapes while storing phasors
+in the canonical Tensor implementation.
 
 ## Why you will be glad
 

@@ -2,6 +2,7 @@
 resolver = "3"
 members = [
   "crates/sim-lib-interference-core",
+  "crates/sim-lib-interference-runtime",
   "crates/sim-lib-interference-solve",
   "xtask",
 ]

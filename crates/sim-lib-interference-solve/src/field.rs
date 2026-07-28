@@ -2,6 +2,36 @@
 
 use crate::{ReferenceSolveError, complex::Complex64};
 
+/// A host phasor component buffer was not a valid finite two-dimensional field.
+#[derive(Clone, Debug, PartialEq)]
+pub enum HostPhasorFieldError {
+    /// A component plane dimension was zero.
+    ZeroDimension {
+        /// Rejected dimension.
+        axis: &'static str,
+    },
+    /// The row/column product overflowed or did not match both component lengths.
+    ShapeMismatch {
+        /// Declared row count.
+        rows: usize,
+        /// Declared column count.
+        columns: usize,
+        /// Real component length.
+        real_len: usize,
+        /// Imaginary component length.
+        imaginary_len: usize,
+    },
+    /// One component contained a NaN or infinity.
+    NonFinite {
+        /// Component plane.
+        component: &'static str,
+        /// Row-major cell index.
+        index: usize,
+        /// Rejected value.
+        value: f64,
+    },
+}
+
 /// A complete two-dimensional host phasor field.
 ///
 /// Real and imaginary components are stored in separate flat `f64` buffers.
@@ -15,6 +45,61 @@ pub struct HostPhasorField {
 }
 
 impl HostPhasorField {
+    /// Admits complete finite row-major component planes.
+    ///
+    /// This is the explicit materialization boundary used by runtime tensor
+    /// adapters. It performs no propagation and takes ownership of both
+    /// buffers without copying them.
+    pub fn from_component_planes(
+        rows: usize,
+        columns: usize,
+        real: Vec<f64>,
+        imaginary: Vec<f64>,
+    ) -> Result<Self, HostPhasorFieldError> {
+        if rows == 0 {
+            return Err(HostPhasorFieldError::ZeroDimension { axis: "rows" });
+        }
+        if columns == 0 {
+            return Err(HostPhasorFieldError::ZeroDimension { axis: "columns" });
+        }
+        let Some(cells) = rows.checked_mul(columns) else {
+            return Err(HostPhasorFieldError::ShapeMismatch {
+                rows,
+                columns,
+                real_len: real.len(),
+                imaginary_len: imaginary.len(),
+            });
+        };
+        if real.len() != cells || imaginary.len() != cells {
+            return Err(HostPhasorFieldError::ShapeMismatch {
+                rows,
+                columns,
+                real_len: real.len(),
+                imaginary_len: imaginary.len(),
+            });
+        }
+        for (component, values) in [("real", &real), ("imaginary", &imaginary)] {
+            if let Some((index, value)) = values
+                .iter()
+                .copied()
+                .enumerate()
+                .find(|(_, value)| !value.is_finite())
+            {
+                return Err(HostPhasorFieldError::NonFinite {
+                    component,
+                    index,
+                    value,
+                });
+            }
+        }
+        Ok(Self {
+            rows,
+            columns,
+            real,
+            imaginary,
+        })
+    }
+
     pub(crate) fn try_zeroed(rows: usize, columns: usize) -> Result<Self, ReferenceSolveError> {
         let cells = rows
             .checked_mul(columns)
