@@ -1,0 +1,4 @@
+# target|public_target|adapter|profile|backend|driver|power|thermal|crossover_cells|portable_artifact_sha256|vendor_artifact_sha256
+gpu:nvidia/rtx-5080-laptop|5080-laptop|NVIDIA GeForce RTX 5080 Laptop GPU|gpu-math5-906fb6ebf4043082-5407b6c9c00321c2|Vulkan|595.71.05|24.01W|52C|16384|906fb6ebf40430828942bce5b42678d1879e0bb372408cfdf2be5f88b5cc9b5f|5407b6c9c00321c2f2894be82b1885f0a81a81bb09e9880b9e65b15e247ad744
+gpu:nvidia/rtx-5090|5090|NVIDIA GeForce RTX 5090|gpu-math5-e34afef85ae835ef-c1ae17e71f6b7f71|Vulkan|595.84|15.79W|37C|16384|e34afef85ae835ef342092ef8cb08a7aa82c782c28ad3f0c67143ee476f134b7|c1ae17e71f6b7f713692a0e5dbd8f48f03d6c71a9562d86b3cd21e53286159fb
+gpu:amd/gfx1151|ryzen-ai-max-395|AMD Radeon Graphics (RADV STRIX_HALO)|gpu-math5-feb9c326040371ea-a3def3d8f447a8a8|Vulkan|radv|unavailable|unavailable|16384|feb9c326040371eae0cb9d601850263791398b81c64cfee60b14e0aa5f33e095|a3def3d8f447a8a8784a988141f1ba127289ae0d1df869cd74ce3bac68513dad
