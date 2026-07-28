@@ -1,15 +1,19 @@
 # sim-interference
 
 `sim-interference` is the public SIM repository for certified coherent scalar
-wave-field studies. The current foundation is deliberately narrow:
-`sim-lib-interference-core` owns checked physical quantity boundaries and
-nothing yet claims to solve or render a field.
+wave-field studies. `sim-lib-interference-core` owns checked physical
+quantities, the exact homogeneous scalar propagation model, finite physical
+sample planes, sampling certificates, and allocation-free work preflight. It
+does not claim a field solver or renderer.
 
-The quantity vocabulary rejects non-finite values at construction, distinguishes
-positive from non-negative domains, and normalizes phase into one documented
-interval. Later crates will build the model, reference solver, runtime adapter,
-compute lowering, and view surface on these boundaries without introducing a
-second tensor or a kernel dependency.
+Every coherent problem has one frequency and a canonical source set. The
+outgoing `exp(-i omega t)` convention, point-source `1/r` spreading,
+attenuation, singularity radius, and forward-plane half-space are explicit.
+Sampling certificates measure carrier wavelength, worst-case
+half-wavelength squared-magnitude fringes, and point-source envelope change.
+Strict requests require a resolved certificate; annotated requests preserve
+the warning. Work budgets independently bound cells, emitter evaluations,
+host and result bytes, and certificate stencil work before field allocation.
 
 Repository validation:
 

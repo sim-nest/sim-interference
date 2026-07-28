@@ -20,6 +20,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-interference/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, rustdoc, recipe, diagram, and Index facts for the interference domain. |
 | `feature/sim-interference/quantity-vocabulary` | `crate/sim-lib-interference-core` | 2 | Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types. |
 | `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 2 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
+| `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 4 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
 
 ## Surfaces
 
@@ -533,5 +534,541 @@ fn non_finite_derived_geometry_is_rejected() {
             ..
         })
     ));
+}
+```
+
+### `feature/sim-interference/certified-sampling`
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/budget_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/budget_conformance.rs`:
+
+```rust
+use sim_lib_interference_core::{
+    Emitter, FieldAmplitude, Hertz, InterferenceError, InterferenceProblem, MetresPerSecond,
+    NepersPerMetre, Point3M, PositiveMetres, Radians, RequestPreflight, SamplingPlane,
+    SamplingPolicy, SamplingThresholds, ScalarMedium, SourceSet, UnitVector3, WorkBudget,
+    WorkEstimate, WorkMetric,
+};
+
+fn problem() -> InterferenceProblem {
+    let emitter = Emitter::ForwardPlane {
+        id: "plane".to_owned(),
+        through: Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        direction: UnitVector3::new(0.0, 0.0, 1.0).unwrap(),
+        amplitude: FieldAmplitude::new(1.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    };
+    InterferenceProblem::new(
+        Hertz::new(1_000.0).unwrap(),
+        ScalarMedium::new(
+            MetresPerSecond::new(343.0).unwrap(),
+            NepersPerMetre::new(0.0).unwrap(),
+        ),
+        SourceSet::new(vec![emitter]).unwrap(),
+        PositiveMetres::new(0.001).unwrap(),
+    )
+}
+
+fn plane(cells_per_axis: usize) -> SamplingPlane {
+    SamplingPlane::new(
+        Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+        PositiveMetres::new(1.0).unwrap(),
+        PositiveMetres::new(1.0).unwrap(),
+        cells_per_axis,
+        cells_per_axis,
+    )
+    .unwrap()
+}
+
+#[test]
+fn estimate_accounts_for_all_required_work_dimensions() {
+    assert_eq!(
+        WorkEstimate::new(4, 2).unwrap(),
+        WorkEstimate {
+            cells: 4,
+            emitters: 2,
+            emitter_evaluations: 8,
+            host_bytes: 64,
+            result_bytes: 64,
+            certificate_stencil_work: 28,
+        }
+    );
+}
+
+#[test]
+fn every_budget_field_is_enforced_with_estimate_and_limit() {
+    let estimate = WorkEstimate::new(4, 2).unwrap();
+    let mut budget = WorkBudget {
+        max_cells: estimate.cells,
+        max_emitter_evaluations: estimate.emitter_evaluations,
+        max_host_bytes: estimate.host_bytes,
+        max_result_bytes: estimate.result_bytes,
+        max_certificate_stencil_work: estimate.certificate_stencil_work,
+    };
+    assert_eq!(budget.admit(&estimate), Ok(()));
+
+    budget.max_certificate_stencil_work -= 1;
+    assert_eq!(
+        budget.admit(&estimate),
+        Err(InterferenceError::WorkBudgetExceeded {
+            metric: WorkMetric::CertificateStencilWork,
+            estimate: 28,
+            limit: 27,
+        })
+    );
+}
+
+#[test]
+fn preflight_returns_sampling_and_work_evidence_before_solver_storage_exists() {
+    let preflight = RequestPreflight::admit(
+        &problem(),
+        &plane(64),
+        SamplingPolicy::Strict,
+        SamplingThresholds::default(),
+        WorkBudget::default(),
+    )
+    .unwrap();
+
+    assert_eq!(preflight.work_estimate.cells, 4_096);
+    assert_eq!(preflight.work_estimate.emitter_evaluations, 4_096);
+    assert_eq!(preflight.work_estimate.result_bytes, 65_536);
+}
+
+#[test]
+fn checked_estimation_rejects_arithmetic_overflow() {
+    assert_eq!(
+        WorkEstimate::new(u64::MAX, 2),
+        Err(InterferenceError::WorkEstimateOverflow {
+            metric: WorkMetric::EmitterEvaluations,
+        })
+    );
+}
+```
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/certificate_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/certificate_conformance.rs`:
+
+```rust
+use sim_lib_interference_core::{
+    Emitter, FieldAmplitude, Hertz, InterferenceProblem, MetresPerSecond, NepersPerMetre, Point3M,
+    PositiveMetres, Radians, SamplingCertificate, SamplingPlane, SamplingPolicy,
+    SamplingThresholds, SamplingVerdict, ScalarMedium, SourceSet, UnitVector3,
+};
+
+fn plane(extent_m: f64, cells_per_axis: usize) -> SamplingPlane {
+    SamplingPlane::new(
+        Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+        PositiveMetres::new(extent_m).unwrap(),
+        PositiveMetres::new(extent_m).unwrap(),
+        cells_per_axis,
+        cells_per_axis,
+    )
+    .unwrap()
+}
+
+fn problem(frequency_hz: f64, sources: Vec<Emitter>) -> InterferenceProblem {
+    InterferenceProblem::new(
+        Hertz::new(frequency_hz).unwrap(),
+        ScalarMedium::new(
+            MetresPerSecond::new(343.0).unwrap(),
+            NepersPerMetre::new(0.0).unwrap(),
+        ),
+        SourceSet::new(sources).unwrap(),
+        PositiveMetres::new(0.001).unwrap(),
+    )
+}
+
+fn forward_plane() -> Emitter {
+    Emitter::ForwardPlane {
+        id: "plane".to_owned(),
+        through: Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        direction: UnitVector3::new(0.0, 0.0, 1.0).unwrap(),
+        amplitude: FieldAmplitude::new(1.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    }
+}
+
+fn point(z_m: f64) -> Emitter {
+    Emitter::Point {
+        id: "point".to_owned(),
+        position: Point3M::from_metres(0.5, 0.5, z_m).unwrap(),
+        amplitude_at_reference: FieldAmplitude::new(1.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    }
+}
+
+#[test]
+fn certificate_records_carrier_and_doubled_power_bandwidth() {
+    let certificate =
+        SamplingCertificate::measure(&problem(40_000.0, vec![forward_plane()]), &plane(2.0, 200))
+            .unwrap();
+
+    assert_eq!(certificate.wavelength_m, 343.0 / 40_000.0);
+    assert_eq!(
+        certificate.samples_per_power_fringe_u,
+        certificate.samples_per_wavelength_u / 2.0
+    );
+    assert_eq!(
+        certificate.samples_per_power_fringe_v,
+        certificate.samples_per_wavelength_v / 2.0
+    );
+    assert_eq!(certificate.nearest_point_source_distance_m, None);
+    assert_eq!(certificate.max_envelope_fraction_per_cell, 0.0);
+    assert_eq!(certificate.verdict, SamplingVerdict::Aliased);
+}
+
+#[test]
+fn nearest_point_source_and_conservative_envelope_are_measured() {
+    let certificate =
+        SamplingCertificate::measure(&problem(1_000.0, vec![point(1.0)]), &plane(1.0, 100))
+            .unwrap();
+
+    assert_eq!(certificate.nearest_point_source_distance_m, Some(1.0));
+    let diagonal = 0.01_f64.hypot(0.01);
+    let expected = diagonal;
+    assert_eq!(certificate.max_envelope_fraction_per_cell, expected);
+    assert_eq!(certificate.verdict, SamplingVerdict::Resolved);
+}
+
+#[test]
+fn coarse_near_source_sampling_has_a_finite_conservative_bound() {
+    let certificate =
+        SamplingCertificate::measure(&problem(1_000.0, vec![point(0.1)]), &plane(1.0, 1)).unwrap();
+
+    assert_eq!(certificate.nearest_point_source_distance_m, Some(0.1));
+    assert_eq!(
+        certificate.max_envelope_fraction_per_cell,
+        1.0_f64.hypot(1.0) / 0.1
+    );
+    assert_eq!(certificate.verdict, SamplingVerdict::Aliased);
+}
+
+#[test]
+fn a_point_source_touching_the_plane_has_no_finite_envelope_certificate() {
+    assert!(matches!(
+        SamplingCertificate::measure(&problem(1_000.0, vec![point(0.0)]), &plane(1.0, 100)),
+        Err(
+            sim_lib_interference_core::InterferenceError::UnboundedSamplingEnvelope {
+                nearest_point_source_distance_m: 0.0,
+                ..
+            }
+        )
+    ));
+}
+
+#[test]
+fn explicit_threshold_records_control_all_three_verdicts() {
+    let problem = problem(40_000.0, vec![forward_plane()]);
+    let marginal = SamplingCertificate::measure(&problem, &plane(2.0, 1_000)).unwrap();
+    let resolved = SamplingCertificate::measure(&problem, &plane(2.0, 2_000)).unwrap();
+
+    assert_eq!(
+        SamplingThresholds::default().resolved_min_samples_per_wavelength,
+        8.0
+    );
+    assert_eq!(
+        SamplingThresholds::default().marginal_min_samples_per_wavelength,
+        4.0
+    );
+    assert_eq!(marginal.verdict, SamplingVerdict::Marginal);
+    assert_eq!(resolved.verdict, SamplingVerdict::Resolved);
+
+    let relaxed = SamplingThresholds::new(4.0, 2.0, 0.10, 0.20).unwrap();
+    let reclassified =
+        SamplingCertificate::measure_with_thresholds(&problem, &plane(2.0, 1_000), relaxed)
+            .unwrap();
+    assert_eq!(reclassified.thresholds, relaxed);
+    assert_eq!(reclassified.verdict, SamplingVerdict::Resolved);
+}
+
+#[test]
+fn thresholds_are_validated_and_strict_is_fail_closed() {
+    assert!(SamplingThresholds::new(4.0, 8.0, 0.05, 0.10).is_err());
+    assert!(SamplingThresholds::new(8.0, 4.0, 0.20, 0.10).is_err());
+    assert!(SamplingThresholds::new(f64::NAN, 4.0, 0.05, 0.10).is_err());
+    let invalid_record = SamplingThresholds {
+        resolved_min_samples_per_wavelength: f64::NAN,
+        ..SamplingThresholds::default()
+    };
+    assert!(
+        SamplingCertificate::measure_with_thresholds(
+            &problem(1_000.0, vec![forward_plane()]),
+            &plane(1.0, 100),
+            invalid_record,
+        )
+        .is_err()
+    );
+
+    let aliased =
+        SamplingCertificate::measure(&problem(40_000.0, vec![forward_plane()]), &plane(2.0, 200))
+            .unwrap();
+    assert_eq!(SamplingPolicy::default(), SamplingPolicy::Strict);
+    assert_eq!(
+        SamplingPolicy::Strict.admit(&aliased),
+        Err(
+            sim_lib_interference_core::InterferenceError::SamplingRefused {
+                certificate: aliased,
+            }
+        )
+    );
+    assert_eq!(SamplingPolicy::Annotate.admit(&aliased), Ok(()));
+}
+```
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_acceptance_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/sampling_acceptance_conformance.rs`:
+
+```rust
+//! End-to-end conformance for sampling and work preflight.
+
+use sim_lib_interference_core::{
+    Emitter, FieldAmplitude, Hertz, InterferenceError, InterferenceProblem, MetresPerSecond,
+    NepersPerMetre, Point3M, PositiveMetres, Radians, RequestPreflight, SamplingPlane,
+    SamplingPolicy, SamplingThresholds, SamplingVerdict, ScalarMedium, SourceSet, UnitVector3,
+    WorkBudget, WorkEstimate, WorkMetric,
+};
+
+fn forward_plane() -> Emitter {
+    Emitter::ForwardPlane {
+        id: "plane".to_owned(),
+        through: Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        direction: UnitVector3::new(0.0, 0.0, 1.0).unwrap(),
+        amplitude: FieldAmplitude::new(1.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    }
+}
+
+fn point(z_m: f64) -> Emitter {
+    Emitter::Point {
+        id: "point".to_owned(),
+        position: Point3M::from_metres(0.5, 0.5, z_m).unwrap(),
+        amplitude_at_reference: FieldAmplitude::new(1.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    }
+}
+
+fn air_problem(frequency_hz: f64, emitter: Emitter) -> InterferenceProblem {
+    InterferenceProblem::new(
+        Hertz::new(frequency_hz).unwrap(),
+        ScalarMedium::new(
+            MetresPerSecond::new(343.0).unwrap(),
+            NepersPerMetre::new(0.0).unwrap(),
+        ),
+        SourceSet::new(vec![emitter]).unwrap(),
+        PositiveMetres::new(0.001).unwrap(),
+    )
+}
+
+fn plane(extent_m: f64, cells_per_axis: usize) -> Result<SamplingPlane, InterferenceError> {
+    SamplingPlane::new(
+        Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+        PositiveMetres::new(extent_m).unwrap(),
+        PositiveMetres::new(extent_m).unwrap(),
+        cells_per_axis,
+        cells_per_axis,
+    )
+}
+
+fn strict_preflight(
+    problem: &InterferenceProblem,
+    plane: &SamplingPlane,
+) -> Result<RequestPreflight, InterferenceError> {
+    RequestPreflight::admit(
+        problem,
+        plane,
+        SamplingPolicy::Strict,
+        SamplingThresholds::default(),
+        WorkBudget::default(),
+    )
+}
+
+#[test]
+fn forty_kilohertz_air_on_two_metres_at_two_hundred_cells_refuses() {
+    let error = strict_preflight(
+        &air_problem(40_000.0, forward_plane()),
+        &plane(2.0, 200).unwrap(),
+    )
+    .unwrap_err();
+    let InterferenceError::SamplingRefused { certificate } = error else {
+        panic!("expected strict sampling refusal");
+    };
+
+    assert_eq!(certificate.verdict, SamplingVerdict::Aliased);
+    let expected_carrier_samples = (343.0 / 40_000.0) / (2.0 / 200.0);
+    assert_eq!(
+        certificate.samples_per_wavelength_u,
+        expected_carrier_samples
+    );
+    assert_eq!(
+        certificate.samples_per_power_fringe_u,
+        expected_carrier_samples / 2.0
+    );
+}
+
+#[test]
+fn forty_kilohertz_air_on_a_resolved_grid_passes() {
+    let preflight = strict_preflight(
+        &air_problem(40_000.0, forward_plane()),
+        &plane(2.0, 2_048).unwrap(),
+    )
+    .unwrap();
+
+    assert_eq!(
+        preflight.sampling_certificate.verdict,
+        SamplingVerdict::Resolved
+    );
+    assert!(preflight.sampling_certificate.samples_per_wavelength_u > 8.0);
+    assert_eq!(preflight.work_estimate.cells, 2_048 * 2_048);
+}
+
+#[test]
+fn near_source_envelope_under_resolution_refuses_despite_carrier_resolution() {
+    let error = strict_preflight(
+        &air_problem(1_000.0, point(0.01)),
+        &plane(1.0, 256).unwrap(),
+    )
+    .unwrap_err();
+    let InterferenceError::SamplingRefused { certificate } = error else {
+        panic!("expected envelope sampling refusal");
+    };
+
+    assert!(certificate.samples_per_wavelength_u > 8.0);
+    assert!(certificate.max_envelope_fraction_per_cell > 0.10);
+    assert_eq!(certificate.verdict, SamplingVerdict::Aliased);
+}
+
+#[test]
+fn arithmetic_overflow_is_refused_by_allocation_free_constructors() {
+    assert_eq!(
+        SamplingPlane::new(
+            Point3M::from_metres(0.0, 0.0, 0.0).unwrap(),
+            UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+            UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+            PositiveMetres::new(1.0).unwrap(),
+            PositiveMetres::new(1.0).unwrap(),
+            usize::MAX,
+            2,
+        ),
+        Err(InterferenceError::SamplingCellCountOverflow {
+            rows: usize::MAX,
+            columns: 2,
+        })
+    );
+    assert_eq!(
+        WorkEstimate::new(u64::MAX, 2),
+        Err(InterferenceError::WorkEstimateOverflow {
+            metric: WorkMetric::EmitterEvaluations,
+        })
+    );
+}
+```
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/sampling_conformance.rs`:
+
+```rust
+use sim_lib_interference_core::{
+    InterferenceError, Point3M, PositiveMetres, SamplingPlane, UnitVector3,
+};
+
+fn plane(
+    u_axis: UnitVector3,
+    v_axis: UnitVector3,
+    rows: usize,
+    columns: usize,
+) -> Result<SamplingPlane, InterferenceError> {
+    SamplingPlane::new(
+        Point3M::from_metres(-1.0, -2.0, 3.0).unwrap(),
+        u_axis,
+        v_axis,
+        PositiveMetres::new(2.0).unwrap(),
+        PositiveMetres::new(4.0).unwrap(),
+        rows,
+        columns,
+    )
+}
+
+#[test]
+fn pixel_centres_and_right_handed_normal_are_exactly_defined() {
+    let plane = plane(
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+        2,
+        2,
+    )
+    .unwrap();
+
+    assert_eq!(plane.cell_count(), 4);
+    assert_eq!(plane.cell_size_u_m(), 1.0);
+    assert_eq!(plane.cell_size_v_m(), 2.0);
+    assert_eq!(plane.normal().components(), [0.0, 0.0, 1.0]);
+    assert_eq!(
+        plane.point_at(0, 0).unwrap().coordinates_metres(),
+        [-0.5, -1.0, 3.0]
+    );
+    assert_eq!(
+        plane.point_at(1, 1).unwrap().coordinates_metres(),
+        [0.5, 1.0, 3.0]
+    );
+}
+
+#[test]
+fn invalid_frames_dimensions_and_indices_fail_closed() {
+    let x = UnitVector3::new(1.0, 0.0, 0.0).unwrap();
+    let y = UnitVector3::new(0.0, 1.0, 0.0).unwrap();
+    let skew = UnitVector3::new(1.0, 1.0, 0.0).unwrap();
+
+    assert!(matches!(
+        plane(x, skew, 2, 2),
+        Err(InterferenceError::NonOrthogonalSamplingAxes { .. })
+    ));
+    assert_eq!(
+        plane(x, y, 0, 2),
+        Err(InterferenceError::ZeroSamplingDimension { name: "rows" })
+    );
+    assert_eq!(
+        plane(x, y, 2, 0),
+        Err(InterferenceError::ZeroSamplingDimension { name: "columns" })
+    );
+
+    let valid = plane(x, y, 2, 2).unwrap();
+    assert_eq!(
+        valid.point_at(2, 0),
+        Err(InterferenceError::SamplingCellOutOfBounds {
+            row: 2,
+            column: 0,
+            rows: 2,
+            columns: 2,
+        })
+    );
+}
+
+#[test]
+fn cell_count_overflow_is_rejected_during_construction() {
+    let error = plane(
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        UnitVector3::new(0.0, 1.0, 0.0).unwrap(),
+        usize::MAX,
+        2,
+    )
+    .unwrap_err();
+
+    assert_eq!(
+        error,
+        InterferenceError::SamplingCellCountOverflow {
+            rows: usize::MAX,
+            columns: 2,
+        }
+    );
 }
 ```

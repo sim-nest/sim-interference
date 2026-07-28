@@ -1,22 +1,26 @@
 # sim-lib-interference-core
 
-In one line: this crate prevents invalid scalar-wave inputs from crossing the
-interference domain boundary.
+In one line: this crate validates scalar-wave physics, sampling truth, and
+bounded work before solving begins.
 
 ## What it gives you
 
-Seven focused `f64` wrappers cover signed coordinates, positive lengths,
-positive frequencies and speeds, non-negative attenuation and amplitude, and
-canonical phase.
+Focused `f64` wrappers feed one coherent source model and exact Green-function
+convention. `SamplingPlane` defines finite pixel centres;
+`SamplingCertificate` records carrier, power-fringe, and point-envelope
+adequacy; `RequestPreflight` applies sampling policy and `WorkBudget`.
 
 ## Why you will be glad
 
-- Non-finite values fail immediately with stable quantity names.
-- Physical zero rules are visible in the type constructors.
-- Phase comparisons do not depend on how many turns a caller supplied.
-- No general units framework or solver dependency is pulled into the base.
+- Sampling thresholds are data carried by the certificate, not hidden UI
+  policy.
+- Strict requests fail closed with the exact measurements that caused refusal.
+- Every count and byte product uses checked arithmetic.
+- No general units, grid, tensor, solver, or presentation dependency is pulled
+  into the base.
 
 ## Where it fits
 
-Future interference model and solver crates depend on this crate. It has no SIM
-dependency and owns no tensor, compute, runtime, codec, or view behavior.
+Interference solver and runtime layers consume this crate's admitted records.
+It has no SIM dependency and owns no tensor, compute, runtime, codec, or view
+behavior.

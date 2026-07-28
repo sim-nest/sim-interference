@@ -84,3 +84,28 @@ claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/model_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/propagation_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/certified-sampling"
+title = "Certified physical plane sampling"
+summary = "Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation."
+owner = "crate/sim-lib-interference-core"
+audiences = ["code", "framework"]
+guidance = "Construct SamplingPlane for an orthonormal physical pixel-centre grid, then use RequestPreflight before allocating field storage. Every SamplingCertificate carries the explicit SamplingThresholds used to classify resolved, marginal, or aliased input. Strict is fail-closed; Annotate is an explicit evidence-preserving opt-in. WorkEstimate uses checked arithmetic for cells, emitter evaluations, host/result bytes, and seven-point certificate stencil work, and WorkBudget limits each number independently."
+claims_anchors = [
+  "anchor/rustdoc/sim-lib-interference-core/request-preflight",
+  "anchor/rustdoc/sim-lib-interference-core/sampling-certificate",
+  "anchor/rustdoc/sim-lib-interference-core/sampling-plane",
+  "anchor/rustdoc/sim-lib-interference-core/sampling-policy",
+  "anchor/rustdoc/sim-lib-interference-core/sampling-thresholds",
+  "anchor/rustdoc/sim-lib-interference-core/sampling-verdict",
+  "anchor/rustdoc/sim-lib-interference-core/work-budget",
+  "anchor/rustdoc/sim-lib-interference-core/work-estimate",
+  "anchor/rustdoc/sim-lib-interference-core/work-metric",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/budget_conformance",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/certificate_conformance",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_acceptance_conformance",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_conformance",
+]

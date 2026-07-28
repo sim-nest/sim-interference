@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 //! Checked physical boundaries for coherent scalar wave-field studies.
 //!
-//! This crate owns the dependency-free quantity and source vocabulary used by
-//! the interference family. It deliberately does not define grid solving,
-//! tensor storage, runtime bindings, or presentation.
+//! This crate owns the dependency-free quantity, source, sampling, and
+//! preflight vocabulary used by the interference family. It deliberately does
+//! not define grid solving, tensor storage, runtime bindings, or presentation.
 //!
 //! # Governing convention
 //!
@@ -19,7 +19,16 @@
 //! non-negative signed distance `s`. The positive propagation sign is outgoing
 //! under the `exp(-i * omega * t)` time convention, and the imaginary part of
 //! `k_tilde` gives `exp(-alpha * distance)` attenuation.
+//!
+//! [`SamplingPlane`] defines physical pixel centres in an orthonormal finite
+//! frame. [`SamplingCertificate`] measures carrier phase, half-wavelength
+//! squared-magnitude fringes, and point-source `1/r` envelope change against
+//! explicit [`SamplingThresholds`]. [`RequestPreflight`] applies
+//! [`SamplingPolicy`] and [`WorkBudget`] before a solver allocates field
+//! storage.
 
+mod budget;
+mod certificate;
 mod emitter;
 mod error;
 mod geometry;
@@ -27,7 +36,10 @@ mod medium;
 mod problem;
 mod propagation;
 mod quantity;
+mod sampling;
 
+pub use budget::{RequestPreflight, WorkBudget, WorkEstimate, WorkMetric};
+pub use certificate::{SamplingCertificate, SamplingPolicy, SamplingThresholds, SamplingVerdict};
 pub use emitter::{Emitter, SourceSet};
 pub use error::InterferenceError;
 pub use geometry::{Point3M, UnitVector3};
@@ -37,3 +49,4 @@ pub use propagation::{contribution_at, forward_plane_contribution_at, point_cont
 pub use quantity::{
     FieldAmplitude, Hertz, Metres, MetresPerSecond, NepersPerMetre, PositiveMetres, Radians,
 };
+pub use sampling::{SAMPLING_AXIS_ORTHOGONALITY_TOLERANCE, SamplingPlane};

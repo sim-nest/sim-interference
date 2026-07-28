@@ -1,8 +1,10 @@
 # sim-lib-interference-core
 
-Validated physical boundary types for coherent scalar wave-field studies.
+Validated physical boundaries for coherent scalar wave-field studies.
 
-The crate currently exports only its checked quantity vocabulary. Raw `f64`
-values remain private until they have passed the relevant finite, sign, and zero
-rules. No model, propagation law, solver, runtime binding, or surface is claimed
-at this stage.
+The crate exports checked quantities, one-frequency point and forward-plane
+emitters, the exact homogeneous propagation convention, orthonormal finite
+sampling planes, carrier/fringe/envelope certificates, and checked work
+preflight. `RequestPreflight` classifies sampling and admits every explicit
+work dimension before a solver allocates output. The crate owns no solver,
+tensor, runtime binding, compute provider, or surface.
