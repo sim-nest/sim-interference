@@ -11,6 +11,7 @@ mod constants;
 mod coordinates;
 mod dense;
 mod diff;
+mod evidence;
 mod lower;
 mod preflight;
 mod provider;
@@ -24,6 +25,11 @@ pub use dense::{DenseExecutionEvidence, DenseF32Field, solve_dense_f32_cpu};
 pub use diff::{
     ConformanceMetric, DifferentialError, DifferentialMaximum, DifferentialReport,
     DifferentialTolerances, ScalarTolerance, compare_dense_to_reference,
+    compare_materialized_to_reference,
+};
+pub use evidence::{
+    HARDWARE_DETERMINISM_REPEATS, HardwareEvidenceMetrics, HardwareEvidenceReport,
+    HardwareMeasurementResult,
 };
 pub use lower::{LoweredTile, LoweringPlan};
 pub use preflight::{
@@ -35,10 +41,12 @@ pub use provider::{
 };
 pub use tile::{PlaneTile, TilePlan};
 
-/// Checked modeled-provider recipes embedded with the compute adapter.
+/// Checked modeled and optional physical-provider evidence recipes.
 pub static RECIPES: sim_cookbook::EmbeddedDir =
     include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
 
+#[cfg(test)]
+mod hardware_tests;
 #[cfg(test)]
 mod modeled_tests;
 #[cfg(test)]

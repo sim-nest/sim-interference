@@ -15,12 +15,18 @@ portable `f32` Tensor operations can evaluate it without large-world phase loss.
   and predicted-error evidence.
 - One fixed differential report for components, amplitude, above-floor wrapped
   phase, and squared magnitude against the deterministic `f64` oracle.
+- The same differential report for dense, modeled, and materialized wgpu
+  results.
+- Sanitized adapter/profile evidence with an explicit measured/not-measured
+  boundary and a 100-repeat same-profile determinism gate.
 - Scoped compute-site routing that leaves the CPU registry default untouched.
 - Pre-submission CPU selection for absent or ineligible providers.
 - Resident real/imaginary Studies with upload, submission, segment, readback,
   adapter, profile, and tolerance evidence.
 - Fail-closed OOM, deadline, device-loss, execution, and readback behavior with
   no CPU restart after provider selection.
+- Explicit unavailable-wgpu refusal and automatic pre-submit CPU-choice
+  evidence.
 
 ## Why you will be glad
 
@@ -41,3 +47,7 @@ remain unchanged and interchangeable.
 reuses `TensorSite`, the active environment executor, canonical resident Tensor
 storage, and the runtime `StudySolver`; it adds no device enum, shader API,
 storage type, or kernel surface.
+
+The physical evidence recipe remains headless by default. An opted-in run
+measures a probe-backed adapter; absence is printed as `not-measured` and never
+counted as hardware acceptance.

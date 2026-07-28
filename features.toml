@@ -116,11 +116,12 @@ title = "Normalized tile-local Tensor lowering"
 summary = "Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor."
 owner = "crate/sim-lib-interference-compute"
 audiences = ["code", "framework"]
-guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. Use solve_dense_f32_cpu for the portable CPU baseline and compare_dense_to_reference for fixed absolute-plus-relative real, imaginary, amplitude, above-floor wrapped-phase, and squared-magnitude evidence. DenseExecutionEvidence retains the executor, tile and segment counts, submissions, admitted phase limit, predicted tile bound, observed max psi, and predicted error bounds; DifferentialReport retains every maximum and the true worst normalized cell. The checked decade sweep proves normalized error remains bounded while naive absolute-f32 phase error grows. LoweringPlan itself defines no device API, shader, queue, storage type, or compute-site selector; the separate resident-compute feature composes it with the runtime provider seam."
+guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. Use solve_dense_f32_cpu for the portable CPU baseline; compare_dense_to_reference and compare_materialized_to_reference feed dense, modeled, and physical results through one fixed absolute-plus-relative real, imaginary, amplitude, above-floor wrapped-phase, and squared-magnitude report. DenseExecutionEvidence retains the executor, tile and segment counts, submissions, admitted phase limit, predicted tile bound, observed max psi, and predicted error bounds; DifferentialReport retains every maximum and the true worst normalized cell. The checked decade sweep proves normalized error remains bounded while naive absolute-f32 phase error grows. LoweringPlan itself defines no device API, shader, queue, storage type, or compute-site selector; the separate resident-compute feature composes it with the runtime provider seam."
 claims_anchors = [
   "anchor/crate/sim-lib-interference-compute",
   "anchor/rustdoc/sim-lib-interference-compute/crate-root",
   "anchor/rustdoc/sim-lib-interference-compute/compare_dense_to_reference",
+  "anchor/rustdoc/sim-lib-interference-compute/compare_materialized_to_reference",
   "anchor/rustdoc/sim-lib-interference-compute/conformance-metric",
   "anchor/rustdoc/sim-lib-interference-compute/dense-execution-evidence",
   "anchor/rustdoc/sim-lib-interference-compute/dense-f32-field",
@@ -159,10 +160,14 @@ title = "Resident interference studies on compute sites"
 summary = "Route an admitted interference Study through the active Env-bound Tensor executor, with pre-submission CPU selection, resident f32 results, explicit transfer evidence, and no restart after provider selection."
 owner = "crate/sim-lib-interference-compute"
 audiences = ["user", "code", "framework"]
-guidance = "Load InterferenceComputeLib beside InterferenceLib, then realize the unchanged interference/solve expression at a TensorSite. The site-scoped tensor/executor binding selects TensorStudySolver through the runtime's tensor-study-solver slot. No executor, a missing required operation, an unsupported f32 profile, work below min_accelerated_cells, or an output requiring host tile assembly selects the deterministic CPU reference before submission. A selected provider owns the request: OOM, deadline, device-loss, execution, metadata, and readback failures are returned without CPU restart. Each tile's three immutable coordinate planes upload once, all arithmetic intermediates remain resident, and explicit host observation materializes only real and imaginary; repeated observation uses the Tensor storage cache. StudyEvidence records provider, adapter/profile, uploads, accepted submissions, segments, zero intermediate materializations, two final component materializations, and the fixed f32 tolerances."
+guidance = "Load InterferenceComputeLib beside InterferenceLib, then realize the unchanged interference/solve expression at a TensorSite. The site-scoped tensor/executor binding selects TensorStudySolver through the runtime's tensor-study-solver slot. No executor, an automatic provider's explicit CPU choice, a missing required operation, an unsupported f32 profile, work below min_accelerated_cells, or an output requiring host tile assembly selects the deterministic CPU reference before submission. A selected provider owns the request: OOM, deadline, device-loss, execution, metadata, and readback failures are returned without CPU restart. Each tile's three immutable coordinate planes upload once, all arithmetic intermediates remain resident, and explicit host observation materializes only real and imaginary; repeated observation uses the Tensor storage cache. StudyEvidence records provider, adapter/profile, uploads, accepted submissions, segments, zero intermediate materializations, two final component materializations, and the fixed f32 tolerances. HardwareEvidenceReport adds sanitized probe-backed adapter/profile identity, the shared differential maxima, phase range, lifecycle counters, and exactly 100 bit-identical same-profile repeats. Physical measurement is opt-in: not-measured is printable headless evidence but cannot satisfy the hardware gate."
 claims_anchors = [
   "anchor/runtime-lib/sim-lib-interference-compute/interference-compute-lib",
   "anchor/rustdoc/sim-lib-interference-compute/cpu-fallback-reason",
+  "anchor/rustdoc/sim-lib-interference-compute/hardware-evidence-metrics",
+  "anchor/rustdoc/sim-lib-interference-compute/hardware-evidence-report",
+  "anchor/rustdoc/sim-lib-interference-compute/hardware-measurement-result",
+  "anchor/rustdoc/sim-lib-interference-compute/hardware_determinism_repeats",
   "anchor/rustdoc/sim-lib-interference-compute/interference-compute-lib",
   "anchor/rustdoc/sim-lib-interference-compute/interference_compute_lib_symbol",
   "anchor/rustdoc/sim-lib-interference-compute/provider-route",
@@ -172,6 +177,8 @@ claims_anchors = [
 ]
 claims_specimens = [
   "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-resident-study",
+  "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/wgpu-differential-evidence",
+  "spec-test/sim-interference/crates/sim-lib-interference-compute/src/hardware_tests",
   "spec-test/sim-interference/crates/sim-lib-interference-compute/src/modeled_tests",
 ]
 supports = [

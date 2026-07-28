@@ -17,10 +17,13 @@ sim-kernel = { version = "0.1.0" }
 sim-lib-interference-core = { path = "../sim-lib-interference-core" }
 sim-lib-interference-runtime = { path = "../sim-lib-interference-runtime" }
 sim-lib-interference-solve = { path = "../sim-lib-interference-solve" }
-sim-lib-numbers-tensor = { version = "0.2.0" }
+sim-lib-numbers-tensor = { version = "0.1.6" }
 
 [dev-dependencies]
 sim-kernel = { version = "0.1.0", features = ["test-support"] }
+sim-lib-compute-auto = { version = "0.3.0" }
+sim-lib-compute-model = { version = "0.3.0" }
+sim-lib-compute-wgpu = { version = "0.2.0" }
 sim-lib-numbers-arith = { version = "0.2.0" }
 sim-lib-numbers-float = { version = "0.2.0" }
 

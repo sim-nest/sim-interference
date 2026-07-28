@@ -1,0 +1,12 @@
+id = "wgpu-differential-evidence"
+title = "Capture bounded wgpu interference evidence"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["interference", "compute", "wgpu", "differential", "determinism", "evidence"]
+requires = ["interference-runtime", "interference-compute", "site/compute/wgpu", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "hardware_tests::wgpu_evidence_recipe_reports_not_measured_without_a_hardware_claim"
+expected = "expected.txt"

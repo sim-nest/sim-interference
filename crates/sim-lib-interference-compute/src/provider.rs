@@ -30,6 +30,8 @@ pub fn interference_compute_lib_symbol() -> Symbol {
 pub enum CpuFallbackReason {
     /// No Tensor executor is active in the current environment.
     NoExecutor,
+    /// An automatic executor selected its CPU route before submission.
+    ProviderCpuChoice,
     /// The configured provider profile does not admit canonical f32.
     UnsupportedDtype,
     /// The executor card omits at least one operation required by the lowering.
@@ -187,10 +189,13 @@ impl StudySolver for TensorStudySolver {
         let Some(executor) = active_tensor_executor(cx) else {
             return self.fallback(cx, request, CpuFallbackReason::NoExecutor);
         };
+        let card = executor.card();
+        if card.locality == Symbol::qualified("compute", "auto") && card.provider == "auto/cpu" {
+            return self.fallback(cx, request, CpuFallbackReason::ProviderCpuChoice);
+        }
         if !self.config.tile_profile.supports_f32 {
             return self.fallback(cx, request, CpuFallbackReason::UnsupportedDtype);
         }
-        let card = executor.card();
         if !self.card_is_eligible(&card) {
             return self.fallback(cx, request, CpuFallbackReason::UnsupportedOperations);
         }

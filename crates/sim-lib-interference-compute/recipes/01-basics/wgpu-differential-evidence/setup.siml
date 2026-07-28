@@ -1,0 +1,6 @@
+(realize
+  (interference/solve problem plane
+    {sampling annotate work-budget default})
+  :fabric site/compute/wgpu/0
+  :requires '(device.gpu.wgpu)
+  :result interference/Study)

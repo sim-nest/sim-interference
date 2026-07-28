@@ -133,6 +133,19 @@ impl DifferentialReport {
             && self.phase.is_none_or(DifferentialMaximum::passed)
             && self.magnitude_squared.passed()
     }
+
+    /// Returns the largest absolute Cartesian-component error.
+    pub fn max_component_absolute_error(&self) -> f64 {
+        self.real.error.max(self.imaginary.error)
+    }
+
+    /// Returns the largest compared absolute wrapped-phase error.
+    ///
+    /// A field containing only below-floor cancellation cells returns zero
+    /// because phase is deliberately undefined there.
+    pub fn max_phase_absolute_error(&self) -> f64 {
+        self.phase.map_or(0.0, |maximum| maximum.error)
+    }
 }
 
 /// Structural or non-finite input rejected before differential reporting.
@@ -168,6 +181,48 @@ pub fn compare_dense_to_reference(
     candidate: &DenseF32Field,
     tolerances: DifferentialTolerances,
 ) -> Result<DifferentialReport, DifferentialError> {
+    compare_candidate(
+        reference,
+        CandidateField {
+            name: "dense",
+            rows: candidate.rows(),
+            columns: candidate.columns(),
+            real: CandidateComponent::F32(candidate.real()),
+            imaginary: CandidateComponent::F32(candidate.imaginary()),
+        },
+        tolerances,
+    )
+}
+
+/// Compares one materialized provider result with the deterministic f64 oracle.
+///
+/// Provider results use the same component, amplitude, phase-floor, wrapped
+/// phase, and squared-magnitude reporting path as [`compare_dense_to_reference`].
+/// The candidate is expected to be a materialized f32 Tensor field represented
+/// by the runtime's host phasor container.
+pub fn compare_materialized_to_reference(
+    reference: &HostPhasorField,
+    candidate: &HostPhasorField,
+    tolerances: DifferentialTolerances,
+) -> Result<DifferentialReport, DifferentialError> {
+    compare_candidate(
+        reference,
+        CandidateField {
+            name: "materialized",
+            rows: candidate.rows(),
+            columns: candidate.columns(),
+            real: CandidateComponent::F64(candidate.real()),
+            imaginary: CandidateComponent::F64(candidate.imaginary()),
+        },
+        tolerances,
+    )
+}
+
+fn compare_candidate(
+    reference: &HostPhasorField,
+    candidate: CandidateField<'_>,
+    tolerances: DifferentialTolerances,
+) -> Result<DifferentialReport, DifferentialError> {
     validate_inputs(reference, candidate, tolerances)?;
     let mut maxima = Maxima::default();
     let columns = reference.columns();
@@ -176,8 +231,8 @@ pub fn compare_dense_to_reference(
         let column = index % columns;
         let rr = reference.real()[index];
         let ri = reference.imaginary()[index];
-        let cr = candidate.real()[index] as f64;
-        let ci = candidate.imaginary()[index] as f64;
+        let cr = candidate.real.get(index);
+        let ci = candidate.imaginary.get(index);
         let reference_amplitude = rr.hypot(ri);
         let candidate_amplitude = cr.hypot(ci);
         maxima.observe(
@@ -236,16 +291,26 @@ pub fn compare_dense_to_reference(
 
 fn validate_inputs(
     reference: &HostPhasorField,
-    candidate: &DenseF32Field,
+    candidate: CandidateField<'_>,
     tolerances: DifferentialTolerances,
 ) -> Result<(), DifferentialError> {
-    if reference.rows() != candidate.rows() || reference.columns() != candidate.columns() {
+    if reference.rows() != candidate.rows || reference.columns() != candidate.columns {
         return Err(DifferentialError::new(format!(
-            "reference shape [{}, {}] differs from dense shape [{}, {}]",
+            "reference shape [{}, {}] differs from {} shape [{}, {}]",
             reference.rows(),
             reference.columns(),
-            candidate.rows(),
-            candidate.columns()
+            candidate.name,
+            candidate.rows,
+            candidate.columns
+        )));
+    }
+    if candidate.real.len() != reference.len() || candidate.imaginary.len() != reference.len() {
+        return Err(DifferentialError::new(format!(
+            "{} component lengths [{}, {}] differ from reference length {}",
+            candidate.name,
+            candidate.real.len(),
+            candidate.imaginary.len(),
+            reference.len()
         )));
     }
     for (name, tolerance) in [
@@ -284,22 +349,52 @@ fn validate_inputs(
             )));
         }
     }
-    for (name, values) in [
-        ("dense real", candidate.real()),
-        ("dense imaginary", candidate.imaginary()),
-    ] {
-        if let Some((index, value)) = values
-            .iter()
-            .copied()
-            .enumerate()
-            .find(|(_, value)| !value.is_finite())
-        {
+    for (component, values) in [("real", candidate.real), ("imaginary", candidate.imaginary)] {
+        if let Some((index, value)) = values.first_non_finite() {
             return Err(DifferentialError::new(format!(
-                "{name} cell {index} is non-finite: {value}"
+                "{} {component} cell {index} is non-finite: {value}",
+                candidate.name
             )));
         }
     }
     Ok(())
+}
+
+#[derive(Clone, Copy)]
+enum CandidateComponent<'a> {
+    F32(&'a [f32]),
+    F64(&'a [f64]),
+}
+
+impl CandidateComponent<'_> {
+    fn len(self) -> usize {
+        match self {
+            Self::F32(values) => values.len(),
+            Self::F64(values) => values.len(),
+        }
+    }
+
+    fn get(self, index: usize) -> f64 {
+        match self {
+            Self::F32(values) => f64::from(values[index]),
+            Self::F64(values) => values[index],
+        }
+    }
+
+    fn first_non_finite(self) -> Option<(usize, f64)> {
+        (0..self.len())
+            .map(|index| (index, self.get(index)))
+            .find(|(_, value)| !value.is_finite())
+    }
+}
+
+#[derive(Clone, Copy)]
+struct CandidateField<'a> {
+    name: &'static str,
+    rows: usize,
+    columns: usize,
+    real: CandidateComponent<'a>,
+    imaginary: CandidateComponent<'a>,
 }
 
 fn limit(tolerance: ScalarTolerance, reference: f64, candidate: f64) -> f64 {

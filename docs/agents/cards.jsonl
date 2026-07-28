@@ -3,6 +3,10 @@
 {"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/expected.txt"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt"}

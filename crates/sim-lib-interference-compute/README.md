@@ -40,6 +40,15 @@ observed maximum residual phase, and predicted geometry and arithmetic errors.
 | wrapped phase above amplitude `1e-5` | `3e-4` | `1e-4` |
 | squared magnitude | `4e-5` | `4e-4` |
 
+`compare_materialized_to_reference` applies that identical report to modeled
+and physical-provider results after the two explicit final component
+materializations. `HardwareEvidenceReport` binds the result to a sanitized
+adapter/profile id, phase bound, tile and segment counts, lifecycle counters,
+and exactly 100 same-profile repeats. A measured pass requires bit-identical
+component planes across all repeats in addition to the differential
+tolerances. `not-measured` is an explicit result and can never satisfy the
+hardware gate.
+
 The checked tilted-plane sweep records why normalized reduction is required:
 
 | distance (m) | observed max abs psi | normalized phase error | naive absolute-f32 phase error | predicted bound | tiles | worst cell |
@@ -67,3 +76,14 @@ adapter/profile, upload/submission/segment counts, zero intermediate
 materializations, two final component materializations, and fixed f32
 tolerances. Resident storage owns synchronized observation caching, so repeated
 host projection does not repeat readback.
+
+The checked provider matrix exercises the same f64 oracle, dense f32 baseline,
+modeled site, and opt-in wgpu site over attenuated multi-segment fields,
+long-world normalized phase, exact cancellation, and measured crossover edges.
+Explicit wgpu absence exports no site. The automatic provider's `auto/cpu`
+decision is recognized before the first Tensor submission and retained as
+`ProviderCpuChoice`; accepted provider failures still never restart on CPU.
+
+Set `SIM_INTERFERENCE_WGPU_PHYSICAL=1` only when a probe-backed adapter should be
+measured. Headless default tests emit the bounded `not-measured` recipe evidence
+without probing hardware or turning absence into a passing hardware claim.
