@@ -19,6 +19,7 @@ fn assert_invalid<T>(
                 assert_eq!(value, expected_value);
             }
         }
+        Err(other) => panic!("expected invalid quantity, got {other:?}"),
         Ok(_) => panic!("invalid quantity was admitted"),
     }
 }

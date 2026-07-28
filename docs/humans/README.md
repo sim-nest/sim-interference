@@ -19,6 +19,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | --- | --- | ---: | --- |
 | `feature/sim-interference/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, rustdoc, recipe, diagram, and Index facts for the interference domain. |
 | `feature/sim-interference/quantity-vocabulary` | `crate/sim-lib-interference-core` | 2 | Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types. |
+| `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 2 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
 
 ## Surfaces
 
@@ -84,6 +85,7 @@ fn assert_invalid<T>(
                 assert_eq!(value, expected_value);
             }
         }
+        Err(other) => panic!("expected invalid quantity, got {other:?}"),
         Ok(_) => panic!("invalid quantity was admitted"),
     }
 }
@@ -186,5 +188,350 @@ fn diagnostic_text_and_quantity_names_are_stable() {
         Radians::new(f64::INFINITY).unwrap_err().to_string(),
         "invalid quantity `phase-rad`: inf"
     );
+}
+```
+
+### `feature/sim-interference/scalar-wave-model`
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/model_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/model_conformance.rs`:
+
+```rust
+use std::f64::consts::PI;
+
+use sim_lib_interference_core::{
+    Emitter, FieldAmplitude, Hertz, InterferenceError, InterferenceProblem, MetresPerSecond,
+    NepersPerMetre, POINT_SOURCE_REFERENCE_DISTANCE_METRES, Point3M, PositiveMetres, Radians,
+    ScalarMedium, SourceSet, UnitVector3,
+};
+
+fn point(id: &str) -> Emitter {
+    Emitter::Point {
+        id: id.to_owned(),
+        position: Point3M::from_metres(1.0, 2.0, 3.0).unwrap(),
+        amplitude_at_reference: FieldAmplitude::new(2.5).unwrap(),
+        phase: Radians::new(0.25).unwrap(),
+    }
+}
+
+fn forward_plane(id: &str) -> Emitter {
+    Emitter::ForwardPlane {
+        id: id.to_owned(),
+        through: Point3M::from_metres(-1.0, 0.0, 1.0).unwrap(),
+        direction: UnitVector3::new(0.0, 0.0, 10.0).unwrap(),
+        amplitude: FieldAmplitude::new(1.5).unwrap(),
+        phase: Radians::new(-0.5).unwrap(),
+    }
+}
+
+fn medium() -> ScalarMedium {
+    ScalarMedium::new(
+        MetresPerSecond::new(4.0).unwrap(),
+        NepersPerMetre::new(0.5).unwrap(),
+    )
+}
+
+#[test]
+fn points_admit_only_finite_coordinates() {
+    let point = Point3M::from_metres(-1.0, 2.0, -0.0).unwrap();
+    assert_eq!(point.coordinates_metres(), [-1.0, 2.0, 0.0]);
+
+    for coordinates in [
+        [f64::NAN, 0.0, 0.0],
+        [0.0, f64::INFINITY, 0.0],
+        [0.0, 0.0, f64::NEG_INFINITY],
+    ] {
+        assert!(matches!(
+            Point3M::from_metres(coordinates[0], coordinates[1], coordinates[2]),
+            Err(InterferenceError::InvalidQuantity { .. })
+        ));
+    }
+}
+
+#[test]
+fn directions_are_finite_non_zero_and_normalized_without_overflow() {
+    let direction = UnitVector3::new(3.0, 4.0, -0.0).unwrap();
+    assert_eq!(direction.components(), [0.6, 0.8, 0.0]);
+
+    let large = UnitVector3::new(f64::MAX, f64::MAX, 0.0).unwrap();
+    let [x, y, z] = large.components();
+    assert!((x.hypot(y).hypot(z) - 1.0).abs() <= f64::EPSILON);
+
+    for components in [
+        [0.0, -0.0, 0.0],
+        [f64::NAN, 1.0, 0.0],
+        [1.0, f64::INFINITY, 0.0],
+    ] {
+        assert!(matches!(
+            UnitVector3::new(components[0], components[1], components[2]),
+            Err(InterferenceError::InvalidDirection { .. })
+        ));
+    }
+}
+
+#[test]
+fn medium_derives_the_complex_wavenumber_with_the_outgoing_sign() {
+    let medium = medium();
+    let wave_number = medium.wavenumber(Hertz::new(2.0).unwrap());
+
+    assert_eq!(wave_number.real_radians_per_metre(), PI);
+    assert_eq!(wave_number.imaginary_nepers_per_metre(), 0.5);
+    assert_eq!(medium.speed().get(), 4.0);
+    assert_eq!(medium.attenuation().get(), 0.5);
+}
+
+#[test]
+fn source_sets_hold_both_canonical_emitter_kinds() {
+    let sources = SourceSet::new(vec![forward_plane("plane"), point("point")]).unwrap();
+
+    assert_eq!(sources.len(), 2);
+    assert!(!sources.is_empty());
+    assert!(matches!(
+        &sources.as_slice()[0],
+        Emitter::ForwardPlane { .. }
+    ));
+    assert!(matches!(&sources.as_slice()[1], Emitter::Point { .. }));
+}
+
+#[test]
+fn source_sets_sort_by_stable_id_and_reject_ambiguous_identity() {
+    let sources = SourceSet::new(vec![
+        point("z-source"),
+        point("a-source"),
+        point("m-source"),
+    ])
+    .unwrap();
+    let ids: Vec<_> = sources.iter().map(Emitter::id).collect();
+    assert_eq!(ids, ["a-source", "m-source", "z-source"]);
+
+    let permuted = SourceSet::new(vec![
+        point("m-source"),
+        point("z-source"),
+        point("a-source"),
+    ])
+    .unwrap();
+    assert_eq!(sources, permuted);
+
+    assert_eq!(
+        SourceSet::new(Vec::new()).unwrap_err(),
+        InterferenceError::EmptySourceSet
+    );
+    assert_eq!(
+        SourceSet::new(vec![point("")]).unwrap_err(),
+        InterferenceError::EmptySourceId
+    );
+    assert_eq!(
+        SourceSet::new(vec![point("same"), forward_plane("same")]).unwrap_err(),
+        InterferenceError::DuplicateSourceId {
+            id: "same".to_owned()
+        }
+    );
+}
+
+#[test]
+fn one_frequency_is_owned_by_the_complete_problem() {
+    let sources = SourceSet::new(vec![point("point"), forward_plane("plane")]).unwrap();
+    let problem = InterferenceProblem::new(
+        Hertz::new(2.0).unwrap(),
+        medium(),
+        sources,
+        PositiveMetres::new(0.01).unwrap(),
+    );
+
+    assert_eq!(problem.frequency.get(), 2.0);
+    assert_eq!(problem.sources.len(), 2);
+}
+
+#[test]
+fn problem_exposes_the_exact_wave_and_reference_distance_convention() {
+    let problem = InterferenceProblem::new(
+        Hertz::new(2.0).unwrap(),
+        medium(),
+        SourceSet::new(vec![point("point")]).unwrap(),
+        PositiveMetres::new(0.125).unwrap(),
+    );
+
+    assert_eq!(problem.angular_frequency_radians_per_second(), 4.0 * PI);
+    assert_eq!(problem.wavenumber().real_radians_per_metre(), PI);
+    assert_eq!(problem.wavenumber().imaginary_nepers_per_metre(), 0.5);
+    assert_eq!(problem.wavelength_metres(), 2.0);
+    assert_eq!(problem.singularity_radius.get(), 0.125);
+    assert_eq!(POINT_SOURCE_REFERENCE_DISTANCE_METRES, 1.0);
+
+    assert!(PositiveMetres::new(0.0).is_err());
+    assert!(PositiveMetres::new(-0.125).is_err());
+}
+```
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/propagation_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-core/tests/propagation_conformance.rs`:
+
+```rust
+use std::f64::consts::{FRAC_PI_2, LN_2};
+
+use sim_lib_interference_core::{
+    Emitter, FieldAmplitude, Hertz, InterferenceError, InterferenceProblem, MetresPerSecond,
+    NepersPerMetre, Point3M, PositiveMetres, Radians, ScalarMedium, SourceSet, UnitVector3,
+    contribution_at, forward_plane_contribution_at, point_contribution_at,
+};
+
+fn point(x: f64, y: f64, z: f64) -> Point3M {
+    Point3M::from_metres(x, y, z).unwrap()
+}
+
+fn problem(attenuation_nepers_per_metre: f64) -> InterferenceProblem {
+    let source = Emitter::Point {
+        id: "origin".to_owned(),
+        position: point(0.0, 0.0, 0.0),
+        amplitude_at_reference: FieldAmplitude::new(4.0).unwrap(),
+        phase: Radians::new(0.0).unwrap(),
+    };
+    InterferenceProblem::new(
+        Hertz::new(1.0).unwrap(),
+        ScalarMedium::new(
+            MetresPerSecond::new(4.0).unwrap(),
+            NepersPerMetre::new(attenuation_nepers_per_metre).unwrap(),
+        ),
+        SourceSet::new(vec![source]).unwrap(),
+        PositiveMetres::new(0.01).unwrap(),
+    )
+}
+
+fn assert_close(actual: f64, expected: f64, tolerance: f64) {
+    assert!(
+        (actual - expected).abs() <= tolerance,
+        "actual {actual:?}, expected {expected:?}, tolerance {tolerance:?}"
+    );
+}
+
+#[test]
+fn point_contribution_has_outgoing_phase_and_inverse_distance_spreading() {
+    let problem = problem(0.0);
+    let (real, imaginary) = point_contribution_at(
+        &problem,
+        "point",
+        point(0.0, 0.0, 0.0),
+        FieldAmplitude::new(4.0).unwrap(),
+        Radians::new(0.0).unwrap(),
+        point(1.0, 0.0, 0.0),
+    )
+    .unwrap();
+
+    assert_close(real, 0.0, 8.0 * f64::EPSILON);
+    assert_close(imaginary, 4.0, 8.0 * f64::EPSILON);
+
+    let (real, imaginary) = point_contribution_at(
+        &problem,
+        "point",
+        point(0.0, 0.0, 0.0),
+        FieldAmplitude::new(4.0).unwrap(),
+        Radians::new(0.0).unwrap(),
+        point(2.0, 0.0, 0.0),
+    )
+    .unwrap();
+    assert_close(real, -2.0, 8.0 * f64::EPSILON);
+    assert_close(imaginary, 0.0, 8.0 * f64::EPSILON);
+}
+
+#[test]
+fn attenuation_is_the_positive_imaginary_wavenumber_component() {
+    let problem = problem(LN_2);
+    let (real, imaginary) = forward_plane_contribution_at(
+        &problem,
+        "plane",
+        point(0.0, 0.0, 0.0),
+        UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        FieldAmplitude::new(4.0).unwrap(),
+        Radians::new(0.0).unwrap(),
+        point(1.0, 0.0, 0.0),
+    )
+    .unwrap();
+
+    assert_close(real, 0.0, 8.0 * f64::EPSILON);
+    assert_close(imaginary, 2.0, 8.0 * f64::EPSILON);
+}
+
+#[test]
+fn singular_and_behind_plane_samples_fail_closed() {
+    let problem = problem(0.0);
+
+    assert!(matches!(
+        point_contribution_at(
+            &problem,
+            "point",
+            point(0.0, 0.0, 0.0),
+            FieldAmplitude::new(1.0).unwrap(),
+            Radians::new(0.0).unwrap(),
+            point(0.01, 0.0, 0.0),
+        ),
+        Err(InterferenceError::SingularPointSample { .. })
+    ));
+
+    assert_eq!(
+        forward_plane_contribution_at(
+            &problem,
+            "plane",
+            point(0.0, 0.0, 0.0),
+            UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+            FieldAmplitude::new(1.0).unwrap(),
+            Radians::new(0.0).unwrap(),
+            point(-0.25, 0.0, 0.0),
+        )
+        .unwrap_err(),
+        InterferenceError::BehindForwardPlane {
+            source_id: "plane".to_owned(),
+            signed_distance_metres: -0.25,
+        }
+    );
+}
+
+#[test]
+fn enum_dispatch_matches_the_focused_plane_function() {
+    let problem = problem(0.0);
+    let plane = Emitter::ForwardPlane {
+        id: "plane".to_owned(),
+        through: point(0.0, 0.0, 0.0),
+        direction: UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+        amplitude: FieldAmplitude::new(3.0).unwrap(),
+        phase: Radians::new(FRAC_PI_2).unwrap(),
+    };
+    let at = point(0.0, 0.0, 0.0);
+
+    assert_eq!(
+        contribution_at(&problem, &plane, at).unwrap(),
+        forward_plane_contribution_at(
+            &problem,
+            "plane",
+            point(0.0, 0.0, 0.0),
+            UnitVector3::new(1.0, 0.0, 0.0).unwrap(),
+            FieldAmplitude::new(3.0).unwrap(),
+            Radians::new(FRAC_PI_2).unwrap(),
+            at,
+        )
+        .unwrap()
+    );
+}
+
+#[test]
+fn non_finite_derived_geometry_is_rejected() {
+    let problem = problem(0.0);
+    let result = point_contribution_at(
+        &problem,
+        "far",
+        point(-f64::MAX, 0.0, 0.0),
+        FieldAmplitude::new(1.0).unwrap(),
+        Radians::new(0.0).unwrap(),
+        point(f64::MAX, 0.0, 0.0),
+    );
+
+    assert!(matches!(
+        result,
+        Err(InterferenceError::NonFinitePropagation {
+            name: "point-distance-metres",
+            ..
+        })
+    ));
 }
 ```

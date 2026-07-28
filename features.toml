@@ -59,3 +59,28 @@ claims_specimens = [
   "recipe/sim-interference/01-basics/checked-quantities",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/quantity_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/scalar-wave-model"
+title = "Exact coherent scalar-wave model"
+summary = "Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions."
+owner = "crate/sim-lib-interference-core"
+audiences = ["code", "framework"]
+guidance = "Use InterferenceProblem as the exact dependency-free domain boundary: it fixes u=Re{U exp(-i omega t)}, k_tilde=omega/c+i alpha, outgoing positive propagation phase, a one-metre point reference, a positive singularity exclusion, and the forward-plane half-space. SourceSet sorts unique non-empty ids and emitters carry no frequency. contribution_at is a pure f64 single-source specification function, not a grid solver. This model is homogeneous, isotropic, scalar, three-dimensional, and free-field; it does not claim polarization, impedance-derived intensity, interfaces, obstacles, diffraction, or a general Helmholtz mesh."
+claims_anchors = [
+  "anchor/rustdoc/sim-lib-interference-core/contribution_at",
+  "anchor/rustdoc/sim-lib-interference-core/emitter",
+  "anchor/rustdoc/sim-lib-interference-core/forward_plane_contribution_at",
+  "anchor/rustdoc/sim-lib-interference-core/interference-problem",
+  "anchor/rustdoc/sim-lib-interference-core/point3-m",
+  "anchor/rustdoc/sim-lib-interference-core/point_contribution_at",
+  "anchor/rustdoc/sim-lib-interference-core/point_source_reference_distance_metres",
+  "anchor/rustdoc/sim-lib-interference-core/scalar-medium",
+  "anchor/rustdoc/sim-lib-interference-core/source-set",
+  "anchor/rustdoc/sim-lib-interference-core/unit-vector3",
+  "anchor/rustdoc/sim-lib-interference-core/wave-number",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/model_conformance",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/propagation_conformance",
+]
