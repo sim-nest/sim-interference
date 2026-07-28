@@ -1,0 +1,12 @@
+id = "modeled-resident-study"
+title = "Run an interference study on modeled resident compute"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["interference", "compute", "modeled", "resident", "fallback", "faults"]
+requires = ["interference-runtime", "interference-compute", "site/compute/model", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "modeled_tests::modeled_resident_recipe_reports_checked_evidence"
+expected = "expected.txt"

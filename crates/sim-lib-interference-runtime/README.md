@@ -6,8 +6,9 @@ Loadable, Shape-checked runtime operations for coherent interference studies.
 
 - `interference/problem` and `interference/sampling-plane` for checked physical
   inputs;
-- `interference/solve`, resolved through a child-Env-first `StudySolver`
-  provider with the deterministic reference CPU solver installed by default;
+- `interference/solve`, resolved through an explicit child `StudySolver`, then
+  the registered Tensor solver when a `TensorSite` executor is active, then the
+  deterministic reference CPU solver installed by default;
 - `interference/project` and `interference/analyze` for propagation-free
   projections and certified fringe reports; and
 - `interference/scenarios` and `interference/multitone` for bounded source

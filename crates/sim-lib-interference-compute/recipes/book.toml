@@ -1,0 +1,5 @@
+book = "interference-compute"
+title = "Interference on Compute Sites"
+summary = "Route certified interference studies through scoped Tensor executors."
+order = 176
+chapters = ["01-basics"]

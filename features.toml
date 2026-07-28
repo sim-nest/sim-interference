@@ -116,7 +116,7 @@ title = "Normalized tile-local Tensor lowering"
 summary = "Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor."
 owner = "crate/sim-lib-interference-compute"
 audiences = ["code", "framework"]
-guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. Use solve_dense_f32_cpu for the portable CPU baseline and compare_dense_to_reference for fixed absolute-plus-relative real, imaginary, amplitude, above-floor wrapped-phase, and squared-magnitude evidence. DenseExecutionEvidence retains the executor, tile and segment counts, submissions, admitted phase limit, predicted tile bound, observed max psi, and predicted error bounds; DifferentialReport retains every maximum and the true worst normalized cell. The checked decade sweep proves normalized error remains bounded while naive absolute-f32 phase error grows. This leaf defines no provider, device API, shader, storage type, fallback router, or public compute-site selection."
+guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. Use solve_dense_f32_cpu for the portable CPU baseline and compare_dense_to_reference for fixed absolute-plus-relative real, imaginary, amplitude, above-floor wrapped-phase, and squared-magnitude evidence. DenseExecutionEvidence retains the executor, tile and segment counts, submissions, admitted phase limit, predicted tile bound, observed max psi, and predicted error bounds; DifferentialReport retains every maximum and the true worst normalized cell. The checked decade sweep proves normalized error remains bounded while naive absolute-f32 phase error grows. LoweringPlan itself defines no device API, shader, queue, storage type, or compute-site selector; the separate resident-compute feature composes it with the runtime provider seam."
 claims_anchors = [
   "anchor/crate/sim-lib-interference-compute",
   "anchor/rustdoc/sim-lib-interference-compute/crate-root",
@@ -154,6 +154,32 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-interference/resident-compute-studies"
+title = "Resident interference studies on compute sites"
+summary = "Route an admitted interference Study through the active Env-bound Tensor executor, with pre-submission CPU selection, resident f32 results, explicit transfer evidence, and no restart after provider selection."
+owner = "crate/sim-lib-interference-compute"
+audiences = ["user", "code", "framework"]
+guidance = "Load InterferenceComputeLib beside InterferenceLib, then realize the unchanged interference/solve expression at a TensorSite. The site-scoped tensor/executor binding selects TensorStudySolver through the runtime's tensor-study-solver slot. No executor, a missing required operation, an unsupported f32 profile, work below min_accelerated_cells, or an output requiring host tile assembly selects the deterministic CPU reference before submission. A selected provider owns the request: OOM, deadline, device-loss, execution, metadata, and readback failures are returned without CPU restart. Each tile's three immutable coordinate planes upload once, all arithmetic intermediates remain resident, and explicit host observation materializes only real and imaginary; repeated observation uses the Tensor storage cache. StudyEvidence records provider, adapter/profile, uploads, accepted submissions, segments, zero intermediate materializations, two final component materializations, and the fixed f32 tolerances."
+claims_anchors = [
+  "anchor/runtime-lib/sim-lib-interference-compute/interference-compute-lib",
+  "anchor/rustdoc/sim-lib-interference-compute/cpu-fallback-reason",
+  "anchor/rustdoc/sim-lib-interference-compute/interference-compute-lib",
+  "anchor/rustdoc/sim-lib-interference-compute/interference_compute_lib_symbol",
+  "anchor/rustdoc/sim-lib-interference-compute/provider-route",
+  "anchor/rustdoc/sim-lib-interference-compute/tensor-study-config",
+  "anchor/rustdoc/sim-lib-interference-compute/tensor-study-snapshot",
+  "anchor/rustdoc/sim-lib-interference-compute/tensor-study-solver",
+]
+claims_specimens = [
+  "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-resident-study",
+  "spec-test/sim-interference/crates/sim-lib-interference-compute/src/modeled_tests",
+]
+supports = [
+  "feature/sim-interference/normalized-tensor-lowering",
+  "feature/sim-interference/certified-interference",
+]
+
+[[feature]]
 id = "feature/sim-interference/deterministic-reference-solver"
 title = "Verified deterministic CPU phasor reference"
 summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence."
@@ -182,7 +208,7 @@ title = "Loadable certified interference studies"
 summary = "Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence."
 owner = "crate/sim-lib-interference-runtime"
 audiences = ["code", "framework"]
-guidance = "Load InterferenceLib after InterferenceRecordsLib. Use interference/problem and interference/sampling-plane for checked inputs, then interference/solve for a Study whose StudySolver is resolved from the child Env before the registry default. The installed ReferenceStudySolver is the deterministic CPU baseline; alternate sites replace only that narrow provider value. Use interference/project for propagation-free real, imaginary, amplitude, masked phase, normalized squared-magnitude, or Instant { wt } observation. Detector reduction always follows the observable, covers every cell exactly once, and retains ProjectionCertificate plus the unchanged SamplingCertificate. Use interference/analyze, interference/scenarios, and interference/multitone for certified reports, bounded source construction, and unlike-frequency composition. Every callable has argument and result Shapes, and unknown or repeated request fields fail closed."
+guidance = "Load InterferenceLib after InterferenceRecordsLib. Use interference/problem and interference/sampling-plane for checked inputs, then interference/solve for a Study whose StudySolver is resolved from an explicit child binding, an active Tensor executor's registered tensor-study-solver, then the registry default. The installed ReferenceStudySolver is the deterministic CPU baseline; alternate sites replace only that narrow provider value. Use interference/project for propagation-free real, imaginary, amplitude, masked phase, normalized squared-magnitude, or Instant { wt } observation. Detector reduction always follows the observable, covers every cell exactly once, and retains ProjectionCertificate plus the unchanged SamplingCertificate. Use interference/analyze, interference/scenarios, and interference/multitone for certified reports, bounded source construction, and unlike-frequency composition. Every callable has argument and result Shapes, and unknown or repeated request fields fail closed."
 claims_anchors = [
   "anchor/runtime-lib/sim-lib-interference-runtime/interference-lib",
   "anchor/rustdoc/sim-lib-interference-runtime/analyze_function_symbol",
@@ -200,6 +226,7 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-runtime/solver-provider",
   "anchor/rustdoc/sim-lib-interference-runtime/study-solver",
   "anchor/rustdoc/sim-lib-interference-runtime/study_solver_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/tensor_study_solver_symbol",
   "anchor/rustdoc/sim-lib-interference-solve/detector-footprint",
   "anchor/rustdoc/sim-lib-interference-solve/grid-dimensions",
   "anchor/rustdoc/sim-lib-interference-solve/loss-class",
@@ -332,4 +359,16 @@ steps = [
   { feature = "feature/sim-interference/tensor-runtime-records", why = "Citizen records and Shapes carry the admitted problem, plane, field, evidence, study, and projection over the canonical Tensor." },
   { feature = "feature/sim-interference/certified-interference", why = "InterferenceLib exposes the complete Shape-checked workflow and resolves StudySolver from the child environment before the registry default." },
   { specimen = "recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation", why = "The exact checked Lisp recipe realizes a strict 1024-by-1024 two-source cancellation study through core/local-fabric." },
+]
+
+[[route]]
+id = "route/run-interference-on-compute-site"
+task = "Run interference on a compute site"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-interference/scalar-wave-model", why = "The provider-independent problem fixes the propagation convention, medium, sources, and singularity boundary." },
+  { feature = "feature/sim-interference/certified-sampling", why = "Sampling and work evidence admit the complete physical request before provider selection." },
+  { feature = "feature/sim-interference/normalized-tensor-lowering", why = "The domain lowering exposes only bounded tile-local f32 arithmetic through canonical open Tensor operations." },
+  { feature = "feature/sim-interference/resident-compute-studies", why = "InterferenceComputeLib composes the runtime StudySolver seam with TensorSite's active executor and preserves fallback, residency, transfer, tolerance, and failure evidence." },
+  { specimen = "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-resident-study", why = "The checked modeled recipe ends with one resident tile, three immutable uploads, zero intermediate materializations, two cached final component reads, and no fallback." },
 ]

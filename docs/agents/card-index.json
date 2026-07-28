@@ -1,6 +1,12 @@
 {
   "schema": "sim.card-index.v1",
   "cards": [
+    "crates/sim-lib-interference-compute/recipes/01-basics/chapter.toml",
+    "crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/expected.txt",
+    "crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/purpose.md",
+    "crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/recipe.toml",
+    "crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/setup.siml",
+    "crates/sim-lib-interference-compute/recipes/book.toml",
     "crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml",
     "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt",
     "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md",

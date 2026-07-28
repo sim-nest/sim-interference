@@ -6,9 +6,9 @@ use sim_kernel::{Cx, Symbol, Value};
 use sim_lib_interference_core::{InterferenceProblem, SamplingPlane};
 use sim_lib_numbers_tensor::{
     CpuTensorExecutor, SubmissionEvidence, Tensor, TensorExecution, TensorExecutor,
-    TensorExecutorCard, TensorMeta, TensorOp, TensorRequest, active_tensor_executor, add_op_symbol,
-    cos_op_symbol, div_op_symbol, domains, exp_op_symbol, mul_op_symbol, sin_op_symbol,
-    sqrt_op_symbol, sub_op_symbol,
+    TensorExecutorCard, TensorMeta, TensorOp, TensorRequest, TypedTensorStorage,
+    active_tensor_executor, add_op_symbol, cos_op_symbol, div_op_symbol, domains, exp_op_symbol,
+    mul_op_symbol, sin_op_symbol, sqrt_op_symbol, sub_op_symbol,
 };
 
 use crate::{
@@ -199,6 +199,82 @@ impl LoweringPlan {
             });
         }
         Ok(lowered)
+    }
+
+    pub(crate) fn execute_with_uploaded_inputs(
+        &self,
+        cx: &mut Cx,
+    ) -> Result<(Vec<LoweredTile>, usize), LoweringError> {
+        let mut lowered = Vec::with_capacity(self.prepared.len());
+        let mut uploads = 0_usize;
+        for prepared in &self.prepared {
+            let zero = Tensor::from_storage(
+                prepared.tile.shape().to_vec(),
+                domains::f32(),
+                Arc::new(TypedTensorStorage::<f32>::new(vec![
+                    0.0;
+                    prepared.tile.rows()
+                        * prepared
+                            .tile
+                            .columns()
+                ])),
+            )
+            .map_err(|error| {
+                LoweringError::new(
+                    PreflightCheck::Execution,
+                    format!("cannot construct resident-upload zero Tensor: {error}"),
+                )
+            })?;
+            let local = [
+                self.binary(
+                    cx,
+                    add_op_symbol(),
+                    &prepared.local[0],
+                    &zero,
+                    &prepared.tile.shape(),
+                )?,
+                self.binary(
+                    cx,
+                    add_op_symbol(),
+                    &prepared.local[1],
+                    &zero,
+                    &prepared.tile.shape(),
+                )?,
+                self.binary(
+                    cx,
+                    add_op_symbol(),
+                    &prepared.local[2],
+                    &zero,
+                    &prepared.tile.shape(),
+                )?,
+            ];
+            uploads = uploads.checked_add(local.len()).ok_or_else(|| {
+                LoweringError::new(
+                    PreflightCheck::Execution,
+                    "resident input upload count overflowed usize",
+                )
+            })?;
+            let uploaded = PreparedTile {
+                tile: prepared.tile,
+                local,
+                sources: prepared.sources.clone(),
+            };
+            let mut source_fields = Vec::with_capacity(uploaded.sources.len());
+            let mut submissions = vec![self.flush()?];
+            for source in &uploaded.sources {
+                source_fields.push(self.lower_source(cx, &uploaded, *source)?);
+                submissions.push(self.flush()?);
+            }
+            let (real, imaginary) =
+                self.pairwise_accumulate(cx, uploaded.tile, source_fields, &mut submissions)?;
+            lowered.push(LoweredTile {
+                tile: uploaded.tile,
+                real,
+                imaginary,
+                submissions,
+            });
+        }
+        Ok((lowered, uploads))
     }
 
     fn lower_source(

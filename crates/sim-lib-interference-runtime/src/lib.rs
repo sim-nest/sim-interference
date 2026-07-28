@@ -43,7 +43,7 @@ pub use shapes::{
 };
 pub use solver::{
     InterferenceStudy, ReferenceStudySolver, SolveRequest, SolverProvider, StudySolver,
-    resolve_study_solver, study_solver_symbol,
+    resolve_study_solver, study_solver_symbol, tensor_study_solver_symbol,
 };
 pub use tensor_bridge::PhasorFieldDescriptor;
 

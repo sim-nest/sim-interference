@@ -1,3 +1,9 @@
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/expected.txt"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-compute/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md"}

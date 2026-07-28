@@ -24,6 +24,9 @@ fn run_recipe(root: &Path, recipe: &Path) -> Result<(), String> {
     let text =
         fs::read_to_string(recipe).map_err(|err| format!("read {}: {err}", recipe.display()))?;
     let harness = field(&text, "harness")?;
+    if harness == "cargo-test" {
+        return run_test_recipe(root, recipe, &text);
+    }
     if harness != "cargo-example" {
         return Err(format!(
             "{}: unsupported recipe harness {harness:?}",
@@ -60,6 +63,24 @@ fn run_recipe(root: &Path, recipe: &Path) -> Result<(), String> {
             relative_path(root, recipe),
             expected.trim_end(),
             actual.trim_end()
+        ));
+    }
+    Ok(())
+}
+
+fn run_test_recipe(root: &Path, recipe: &Path, text: &str) -> Result<(), String> {
+    let package = field(text, "package")?;
+    let test = field(text, "test")?;
+    let output = Command::new("cargo")
+        .args(["test", "--quiet", "-p", package, test, "--", "--exact"])
+        .current_dir(root)
+        .output()
+        .map_err(|err| format!("run recipe {}: {err}", relative_path(root, recipe)))?;
+    if !output.status.success() {
+        return Err(format!(
+            "recipe {} failed:\n{}",
+            relative_path(root, recipe),
+            String::from_utf8_lossy(&output.stderr)
         ));
     }
     Ok(())

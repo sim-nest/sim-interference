@@ -269,8 +269,10 @@ dependencies = [
 name = "sim-lib-interference-compute"
 version = "0.1.0"
 dependencies = [
+ "sim-cookbook",
  "sim-kernel",
  "sim-lib-interference-core",
+ "sim-lib-interference-runtime",
  "sim-lib-interference-solve",
  "sim-lib-numbers-arith",
  "sim-lib-numbers-float",

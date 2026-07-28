@@ -446,6 +446,27 @@ pub struct StudyDescriptor {
 }
 
 impl StudyDescriptor {
+    /// Builds and validates a complete study from canonical runtime records.
+    ///
+    /// Alternate study solvers use this constructor so they cannot bypass the
+    /// same problem, plane, field, sampling, work, and dtype invariants as the
+    /// reference provider.
+    pub fn new(
+        problem: ProblemDescriptor,
+        plane: PlaneDescriptor,
+        field: PhasorFieldDescriptor,
+        evidence: StudyEvidenceDescriptor,
+    ) -> Result<Self> {
+        let value = Self {
+            problem,
+            plane,
+            field,
+            evidence,
+        };
+        value.validate()?;
+        Ok(value)
+    }
+
     /// Projects one completed reference solve into runtime records.
     pub fn from_reference(
         problem: &sim_lib_interference_core::InterferenceProblem,
@@ -453,14 +474,12 @@ impl StudyDescriptor {
         field: HostPhasorField,
         evidence: &SolveEvidence,
     ) -> Result<Self> {
-        let value = Self {
-            problem: ProblemDescriptor::from_problem(problem),
-            plane: PlaneDescriptor::from_plane(plane),
-            field: PhasorFieldDescriptor::from_host(field)?,
-            evidence: StudyEvidenceDescriptor::from_reference(evidence),
-        };
-        value.validate()?;
-        Ok(value)
+        Self::new(
+            ProblemDescriptor::from_problem(problem),
+            PlaneDescriptor::from_plane(plane),
+            PhasorFieldDescriptor::from_host(field)?,
+            StudyEvidenceDescriptor::from_reference(evidence),
+        )
     }
 }
 

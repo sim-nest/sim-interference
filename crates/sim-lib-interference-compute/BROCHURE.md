@@ -15,6 +15,12 @@ portable `f32` Tensor operations can evaluate it without large-world phase loss.
   and predicted-error evidence.
 - One fixed differential report for components, amplitude, above-floor wrapped
   phase, and squared magnitude against the deterministic `f64` oracle.
+- Scoped compute-site routing that leaves the CPU registry default untouched.
+- Pre-submission CPU selection for absent or ineligible providers.
+- Resident real/imaginary Studies with upload, submission, segment, readback,
+  adapter, profile, and tolerance evidence.
+- Fail-closed OOM, deadline, device-loss, execution, and readback behavior with
+  no CPU restart after provider selection.
 
 ## Why you will be glad
 
@@ -30,3 +36,8 @@ normalized phase error below `3.3e-8` while naive absolute-f32 error grows past
 This is the domain-specific lowering leaf between checked interference records
 and any canonical `TensorExecutor`. The CPU, modeled, wgpu, and vendor providers
 remain unchanged and interchangeable.
+
+`InterferenceComputeLib` is the thin provider adapter above that leaf. It
+reuses `TensorSite`, the active environment executor, canonical resident Tensor
+storage, and the runtime `StudySolver`; it adds no device enum, shader API,
+storage type, or kernel surface.

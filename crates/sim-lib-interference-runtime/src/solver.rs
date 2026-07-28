@@ -7,6 +7,7 @@ use sim_lib_interference_core::{
     InterferenceProblem, SamplingPlane, SamplingPolicy, SamplingThresholds, WorkBudget,
 };
 use sim_lib_interference_solve::ReferencePhasorSolver;
+use sim_lib_numbers_tensor::active_tensor_executor;
 
 use crate::StudyDescriptor;
 
@@ -113,14 +114,28 @@ pub fn study_solver_symbol() -> Symbol {
     Symbol::qualified("interference", "study-solver")
 }
 
-/// Resolves the active solver from the child environment, then the registry.
+/// Stable registry symbol for the solver selected by an active Tensor executor.
+///
+/// Provider libraries export this value without replacing the deterministic
+/// registry default at [`study_solver_symbol`].
+pub fn tensor_study_solver_symbol() -> Symbol {
+    Symbol::qualified("interference", "tensor-study-solver")
+}
+
+/// Resolves an explicit child solver, an active Tensor solver, then the default.
 ///
 /// A present but malformed child binding is rejected rather than silently
 /// bypassed. EvalFabric sites can therefore override the registry default
-/// without changing the solve expression.
+/// without changing the solve expression. A TensorSite child selects the
+/// registered Tensor solver only while its executor binding is active.
 pub fn resolve_study_solver(cx: &Cx) -> Result<Arc<dyn StudySolver>> {
     if let Some(value) = cx.env().get(&study_solver_symbol()) {
         return solver_from_value(&value, "active environment");
+    }
+    if active_tensor_executor(cx).is_some()
+        && let Some(value) = cx.registry().value_by_symbol(&tensor_study_solver_symbol())
+    {
+        return solver_from_value(value, "Tensor solver registry");
     }
     let value = cx
         .registry()

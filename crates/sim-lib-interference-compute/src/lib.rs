@@ -13,6 +13,8 @@ mod dense;
 mod diff;
 mod lower;
 mod preflight;
+mod provider;
+mod resident;
 mod tile;
 
 pub use constants::{
@@ -27,7 +29,17 @@ pub use lower::{LoweredTile, LoweringPlan};
 pub use preflight::{
     LoweringError, PhaseBudget, PreflightCheck, REQUIRED_TENSOR_OPERATION_NAMES, TileProfile,
 };
+pub use provider::{
+    CpuFallbackReason, InterferenceComputeLib, ProviderRoute, TensorStudyConfig,
+    TensorStudySnapshot, TensorStudySolver, interference_compute_lib_symbol,
+};
 pub use tile::{PlaneTile, TilePlan};
 
+/// Checked modeled-provider recipes embedded with the compute adapter.
+pub static RECIPES: sim_cookbook::EmbeddedDir =
+    include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
+
+#[cfg(test)]
+mod modeled_tests;
 #[cfg(test)]
 mod tests;

@@ -52,3 +52,18 @@ The checked tilted-plane sweep records why normalized reduction is required:
 Both phase bounds remain below pi. Normalized error stays bounded while the
 falsified absolute-f32 formulation grows every decade and is more than 8,000
 times worse at 1000 m.
+
+`InterferenceComputeLib` composes this lowering with the runtime's narrow
+`StudySolver` seam. A `TensorSite` binds its executor in the active child
+environment; only then does `TensorStudySolver` supersede the reference CPU
+solver. Missing executors, operations, f32 support, crossover work, or a
+single-resident-output layout select CPU before submission. Once a provider is
+selected, a failure is returned without a CPU restart.
+
+The resident adapter uploads the three immutable coordinate planes once,
+chains every intermediate at the selected site, and returns real and imaginary
+as the final resident Tensors. `StudyEvidence` carries the provider,
+adapter/profile, upload/submission/segment counts, zero intermediate
+materializations, two final component materializations, and fixed f32
+tolerances. Resident storage owns synchronized observation caching, so repeated
+host projection does not repeat readback.
