@@ -21,6 +21,9 @@
 //! [`analyze_fringes`] then derives deterministic statistics, strict local
 //! node/antinode candidates, and Michelson contrast without dropping either
 //! sampling evidence or projection identity.
+//! [`ScenarioBuilder`] constructs bounded two-point, counter-propagating,
+//! phased-array, and rectangular discrete-aperture problems. Array amplitudes
+//! are normalized and wavelength-relative element spacing remains explicit.
 
 mod analysis;
 mod analytic;
@@ -32,6 +35,9 @@ mod observable;
 mod projection;
 mod reduce;
 mod reference;
+mod scenario;
+mod scenario_admission;
+mod scenario_error;
 mod verification;
 mod verify;
 
@@ -47,6 +53,12 @@ pub use projection::{
 };
 pub use reduce::{ReductionRule, reduce_for_view};
 pub use reference::{ReferencePhasorSolver, SolveEvidence};
+pub use scenario::{
+    ABSOLUTE_MAX_GENERATED_ID_BYTES, ABSOLUTE_MAX_SCENARIO_SOURCES, ABSOLUTE_MAX_TOTAL_ID_BYTES,
+    AperturePolicy, ElementSpacingWavelengths, NamedScenario, STRICT_MAX_SPACING_WAVELENGTHS,
+    ScenarioBuilder, ScenarioCertificate, ScenarioKind, ScenarioLimits,
+};
+pub use scenario_error::ScenarioError;
 pub use verification::{
     MAX_ANALYTIC_RELATIVE_ERROR, MAX_METAMORPHIC_RELATIVE_ERROR, VerificationError,
     VerificationReport,
