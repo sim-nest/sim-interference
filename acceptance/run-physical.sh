@@ -32,20 +32,53 @@ verify() {
   test "$(sed -n '1p' "$artifact")" = "($schema"
   test "$(sed -n '$p' "$artifact")" = ")"
   grep -Fq "  (source \"$source\")" "$artifact"
+  target=$(sed -n 's/^  (target "\([^"]*\)")$/\1/p' "$artifact")
+  case "$target" in
+    5080-laptop|5090|ryzen-ai-max-395) ;;
+    *) echo "acceptance artifact has an unknown target" >&2; exit 1 ;;
+  esac
+  for required_field in profile adapter backend driver power thermal \
+    crossover_cells portable_artifact_sha256 vendor_artifact_sha256; do
+    grep -Eq "^  \\($required_field \"[^\"]+\"\\)$" "$artifact"
+  done
   grep -Fq '  (evidence "physical-device")' "$artifact"
+  grep -Fq '  (segmented_memory "true")' "$artifact"
   grep -Fq '  (result "measured-pass")' "$artifact"
   for case_id in attenuated-multi-segment long-world-distance exact-cancellation; do
-    grep -Fq "(case (id \"$case_id\")" "$artifact"
+    case_line=$(grep -F "(case (id \"$case_id\")" "$artifact")
+    test "$(printf '%s\n' "$case_line" | wc -l)" -eq 1
+    for required_metric in cells sources tiles segments repeats max_psi \
+      component_tolerance phase_tolerance max_component_abs max_phase_abs; do
+      printf '%s\n' "$case_line" | grep -Eq "\\($required_metric \"[0-9.e+-]+\"\\)"
+    done
+    printf '%s\n' "$case_line" | grep -Fq '(repeats "100")'
+    printf '%s\n' "$case_line" |
+      grep -Fq '(intermediate_materializations "0")'
+    printf '%s\n' "$case_line" |
+      grep -Fq '(final_materializations "2")'
+    printf '%s\n' "$case_line" | grep -Fq '(result "pass")'
   done
   grep -Fq '(projection (observables "amplitude,phase,magnitude-squared") (result "pass"))' "$artifact"
   grep -Fq '(failure (explicit_unavailable "pass") (automatic_cpu_choice "pass") (result "pass"))' "$artifact"
-  if grep -Eq '  \(target "(5090|ryzen-ai-max-395)"\)' "$artifact"; then
-    grep -Fq '(case (id "above-5080-crossover")' "$artifact"
-    grep -Fq '(segmented_memory "true")' "$artifact"
+  if test "$target" = 5090 || test "$target" = ryzen-ai-max-395; then
+    crossover_line=$(grep -F '(case (id "above-5080-crossover")' "$artifact")
+    test "$(printf '%s\n' "$crossover_line" | wc -l)" -eq 1
+    printf '%s\n' "$crossover_line" | grep -Fq '(cells "16641")'
+    printf '%s\n' "$crossover_line" | grep -Fq '(repeats "3")'
+    printf '%s\n' "$crossover_line" |
+      grep -Fq '(intermediate_materializations "0")'
+    printf '%s\n' "$crossover_line" |
+      grep -Fq '(final_materializations "2")'
+    printf '%s\n' "$crossover_line" | grep -Fq '(result "pass")'
+    test "$(sed -n 's/^  (crossover_cells "\([0-9][0-9]*\)")$/\1/p' "$artifact")" -lt 16641
   fi
   count=$(grep -Fc '(result "pass"))' "$artifact")
-  test "$count" -ge 5
-  if grep -Eiq 'hostname|username|user=|serial|uuid|/home/|\\\\' "$artifact"; then
+  expected=5
+  if test "$target" = 5090 || test "$target" = ryzen-ai-max-395; then
+    expected=6
+  fi
+  test "$count" -eq "$expected"
+  if grep -Eiq "hostname|username|user=|serial|uuid|/home/|\\\\" "$artifact"; then
     echo "acceptance artifact contains private identity data" >&2
     exit 1
   fi

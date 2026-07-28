@@ -2045,7 +2045,7 @@ use crate::{
 // conformance: dense, modeled, automatic, and physical wgpu providers share one differential and hardware-evidence contract.
 
 const PHYSICAL_ENV: &str = "SIM_INTERFERENCE_WGPU_PHYSICAL";
-
+const TARGET_ENV: &str = "SIM_INTERFERENCE_ACCEPTANCE_TARGET";
 #[derive(Clone)]
 struct MatrixCase {
     name: &'static str,
@@ -2105,16 +2105,16 @@ fn matrix_covers_segments_distance_cancellation_attenuation_and_crossover_edges(
         .iter()
         .find(|case| case.name == "attenuated-multi-segment")
         .unwrap();
-    let dense = dense(segmented);
-    assert_eq!(dense.evidence().tiles(), 1);
-    assert!(dense.evidence().max_segments_per_tensor() > 1);
+    let segmented_dense = dense(segmented);
+    assert_eq!(segmented_dense.evidence().tiles(), 1);
+    assert!(segmented_dense.evidence().max_segments_per_tensor() > 1);
 
     let long_world = cases
         .iter()
         .find(|case| case.name == "long-world-distance")
         .unwrap();
     assert!(long_world.plane.origin().coordinates_metres()[0] >= 1_000.0);
-    assert!(dense_for(long_world).evidence().observed_max_abs_psi_rad() <= std::f64::consts::PI);
+    assert!(dense(long_world).evidence().observed_max_abs_psi_rad() <= std::f64::consts::PI);
 
     let cancellation = cases
         .iter()
@@ -2122,7 +2122,7 @@ fn matrix_covers_segments_distance_cancellation_attenuation_and_crossover_edges(
         .unwrap();
     let cancellation_report = compare_dense_to_reference(
         &reference(cancellation),
-        &dense_for(cancellation),
+        &dense(cancellation),
         DifferentialTolerances::default(),
     )
     .unwrap();
@@ -2180,14 +2180,24 @@ fn wgpu_matrix_repeats_same_profile_one_hundred_times_when_opted_in() {
     }
 
     let wgpu = ComputeWgpuLib::probe().expect("opted-in wgpu discovery must complete");
+    let target = std::env::var(TARGET_ENV).ok();
     let probe = wgpu
         .discovery()
         .adapters
-        .first()
+        .iter()
+        .find(|probe| {
+            target
+                .as_deref()
+                .is_none_or(|target| target_matches(target, &probe.adapter.name))
+        })
         .cloned()
-        .expect("opted-in wgpu measurement requires a probe-backed adapter");
+        .expect("opted-in wgpu measurement requires the requested probe-backed adapter");
     for case in matrix_cases() {
-        run_wgpu_repeats(&wgpu, &probe, &case);
+        run_wgpu(&wgpu, &probe, &case, crate::HARDWARE_DETERMINISM_REPEATS);
+    }
+    if target.as_deref().is_some_and(large_target) {
+        let case = crossover_case("above-5080-crossover", 129, 129);
+        run_wgpu(&wgpu, &probe, &case, 3);
     }
 }
 
@@ -2201,7 +2211,7 @@ fn wgpu_evidence_recipe_reports_not_measured_without_a_hardware_claim() {
     assert!(!evidence.satisfies_hardware_gate());
 }
 
-fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &MatrixCase) {
+fn run_wgpu(lib: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &MatrixCase, repeats: usize) {
     let oracle = reference(case);
     let dense = dense(case);
     let dense_report =
@@ -2210,14 +2220,18 @@ fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &Matr
 
     let mut cx = runtime_cx(solver(case));
     cx.grant(compute_wgpu_capability());
-    cx.load_lib(wgpu).unwrap();
+    cx.load_lib(lib).unwrap();
     let mut baseline = None;
     let mut final_report = None;
     let mut final_study = None;
     let mut deterministic = true;
-    for _ in 0..crate::HARDWARE_DETERMINISM_REPEATS {
-        let study =
-            solve_through_registered_site(&mut cx, compute_wgpu_site_symbol(0), case).unwrap();
+    for _ in 0..repeats {
+        let study = solve_through_registered_site(
+            &mut cx,
+            compute_wgpu_site_symbol(probe.adapter.ordinal),
+            case,
+        )
+        .unwrap();
         assert_resident_lifecycle(case, &study);
         let materialized = study.field.materialize_host(&mut cx).unwrap();
         let report = compare_materialized_to_reference(
@@ -2247,12 +2261,28 @@ fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &Matr
             max_abs_psi: dense.evidence().observed_max_abs_psi_rad(),
             intermediate_materializations: study.evidence.intermediate_materializations,
             final_materializations: study.evidence.final_materializations,
-            repeats: crate::HARDWARE_DETERMINISM_REPEATS,
+            repeats,
             deterministic,
         },
         &report,
     );
     println!("case={}\n{evidence}", case.name);
+    println!(
+        "acceptance-case=(case (id \"{}\") (cells \"{}\") (sources \"{}\") (tiles \"{}\") (segments \"{}\") (repeats \"{}\") (max_psi \"{:.9e}\") (component_tolerance \"{:.9e}\") (phase_tolerance \"{:.9e}\") (max_component_abs \"{:.9e}\") (max_phase_abs \"{:.9e}\") (intermediate_materializations \"{}\") (final_materializations \"{}\") (result \"pass\"))",
+        case.name,
+        case.plane.cell_count(),
+        case.problem.sources.len(),
+        dense.evidence().tiles(),
+        study.evidence.segments,
+        repeats,
+        dense.evidence().observed_max_abs_psi_rad(),
+        DifferentialTolerances::default().component.absolute,
+        DifferentialTolerances::default().phase.absolute,
+        report.max_component_absolute_error(),
+        report.max_phase_absolute_error(),
+        study.evidence.intermediate_materializations,
+        study.evidence.final_materializations,
+    );
     assert!(
         evidence.satisfies_hardware_gate(),
         "{} failed measured hardware evidence: {evidence}",
@@ -2508,10 +2538,6 @@ fn dense(case: &MatrixCase) -> crate::DenseF32Field {
     .unwrap()
 }
 
-fn dense_for(case: &MatrixCase) -> crate::DenseF32Field {
-    dense(case)
-}
-
 fn dense_cx() -> Cx {
     let mut cx = sim_kernel::testing::eager_cx();
     cx.load_lib(&sim_lib_numbers_arith::NumbersArithmeticLib::new())
@@ -2544,6 +2570,19 @@ fn matrix_cases() -> Vec<MatrixCase> {
     ]
 }
 
+fn target_matches(target: &str, adapter: &str) -> bool {
+    match target {
+        "gpu:nvidia/rtx-5080-laptop" => adapter.contains("RTX 5080"),
+        "gpu:nvidia/rtx-5090" => adapter.contains("RTX 5090"),
+        "gpu:amd/gfx1151" => ["RADV STRIX_HALO", "Radeon 8060S", "AMD Radeon Graphics"]
+            .iter()
+            .any(|needle| adapter.contains(needle)),
+        _ => false,
+    }
+}
+fn large_target(target: &str) -> bool {
+    matches!(target, "gpu:nvidia/rtx-5090" | "gpu:amd/gfx1151")
+}
 fn crossover_case(name: &'static str, rows: usize, columns: usize) -> MatrixCase {
     MatrixCase {
         name,
@@ -2552,7 +2591,6 @@ fn crossover_case(name: &'static str, rows: usize, columns: usize) -> MatrixCase
         profile: TileProfile::default(),
     }
 }
-
 fn point_problem(attenuation: f64) -> InterferenceProblem {
     problem(
         attenuation,
@@ -2572,7 +2610,6 @@ fn point_problem(attenuation: f64) -> InterferenceProblem {
         ],
     )
 }
-
 fn forward_problem(phases: Vec<(f64, f64)>) -> InterferenceProblem {
     let sources = phases
         .into_iter()
@@ -2587,7 +2624,6 @@ fn forward_problem(phases: Vec<(f64, f64)>) -> InterferenceProblem {
         .collect();
     problem(0.0, sources)
 }
-
 fn problem(attenuation: f64, sources: Vec<Emitter>) -> InterferenceProblem {
     InterferenceProblem::new(
         Hertz::new(343.0).unwrap(),
@@ -2599,7 +2635,6 @@ fn problem(attenuation: f64, sources: Vec<Emitter>) -> InterferenceProblem {
         PositiveMetres::new(0.001).unwrap(),
     )
 }
-
 fn plane(distance: f64, rows: usize, columns: usize) -> SamplingPlane {
     SamplingPlane::new(
         point(distance, -0.125, -0.125),
@@ -2612,11 +2647,9 @@ fn plane(distance: f64, rows: usize, columns: usize) -> SamplingPlane {
     )
     .unwrap()
 }
-
 fn point(x: f64, y: f64, z: f64) -> Point3M {
     Point3M::from_metres(x, y, z).unwrap()
 }
-
 fn segmented_profile(cells: usize) -> TileProfile {
     TileProfile {
         max_elements_per_tile: cells,
@@ -2627,7 +2660,6 @@ fn segmented_profile(cells: usize) -> TileProfile {
         ..TileProfile::default()
     }
 }
-
 fn modeled_profile(case: &MatrixCase) -> ModeledComputeProfile {
     ModeledComputeProfile {
         provider: format!("modeled/{}", case.name),
@@ -2641,7 +2673,6 @@ fn modeled_profile(case: &MatrixCase) -> ModeledComputeProfile {
         auto_flush_batches: true,
     }
 }
-
 fn field_bits(field: &HostPhasorField) -> (Vec<u64>, Vec<u64>) {
     (
         field.real().iter().map(|value| value.to_bits()).collect(),

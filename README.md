@@ -14,7 +14,8 @@ against the `f64` oracle without defining a provider or device API.
 `sim-lib-interference-runtime` projects those checked values into Tensor-backed
 Citizen records and registers the public Problem, Plane, Study,
 ProjectionRequest, and Projection Shapes. It reuses the canonical Tensor and
-general-purpose codecs; the repository does not claim an accelerated provider
+general-purpose codecs. `sim-lib-interference-compute` composes those records
+with an installed Tensor compute site without defining a provider, device API,
 or renderer.
 
 Every coherent problem has one frequency and a canonical source set. The
@@ -51,6 +52,13 @@ sources, inward counter-propagating planes, progressive-phase line arrays, and
 rectangular discrete apertures. Array/aperture amplitude is normalized across
 elements, active spacing is reported in wavelengths, and strict construction
 refuses spacing above `lambda/2`.
+
+Sanitized physical acceptance reports for the three GPU_MATH_5 target profiles
+live under [`acceptance/`](acceptance/README.md). They record the exact source,
+adapter profile, backend and driver, workload shape, numerical maxima,
+resident-materialization counts, and available power/thermal context. The
+checked capture harness reruns the fixed 100-repeat wgpu matrix and fails closed
+when the requested physical adapter or any required case is absent.
 
 Repository validation:
 

@@ -188,7 +188,11 @@ fn wgpu_matrix_repeats_same_profile_one_hundred_times_when_opted_in() {
         .cloned()
         .expect("opted-in wgpu measurement requires the requested probe-backed adapter");
     for case in matrix_cases() {
-        run_wgpu_repeats(&wgpu, &probe, &case);
+        run_wgpu(&wgpu, &probe, &case, crate::HARDWARE_DETERMINISM_REPEATS);
+    }
+    if target.as_deref().is_some_and(large_target) {
+        let case = crossover_case("above-5080-crossover", 129, 129);
+        run_wgpu(&wgpu, &probe, &case, 3);
     }
 }
 
@@ -202,7 +206,7 @@ fn wgpu_evidence_recipe_reports_not_measured_without_a_hardware_claim() {
     assert!(!evidence.satisfies_hardware_gate());
 }
 
-fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &MatrixCase) {
+fn run_wgpu(lib: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &MatrixCase, repeats: usize) {
     let oracle = reference(case);
     let dense = dense(case);
     let dense_report =
@@ -211,12 +215,12 @@ fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &Matr
 
     let mut cx = runtime_cx(solver(case));
     cx.grant(compute_wgpu_capability());
-    cx.load_lib(wgpu).unwrap();
+    cx.load_lib(lib).unwrap();
     let mut baseline = None;
     let mut final_report = None;
     let mut final_study = None;
     let mut deterministic = true;
-    for _ in 0..crate::HARDWARE_DETERMINISM_REPEATS {
+    for _ in 0..repeats {
         let study = solve_through_registered_site(
             &mut cx,
             compute_wgpu_site_symbol(probe.adapter.ordinal),
@@ -252,19 +256,20 @@ fn run_wgpu_repeats(wgpu: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &Matr
             max_abs_psi: dense.evidence().observed_max_abs_psi_rad(),
             intermediate_materializations: study.evidence.intermediate_materializations,
             final_materializations: study.evidence.final_materializations,
-            repeats: crate::HARDWARE_DETERMINISM_REPEATS,
+            repeats,
             deterministic,
         },
         &report,
     );
     println!("case={}\n{evidence}", case.name);
     println!(
-        "acceptance-case=(case (id \"{}\") (cells \"{}\") (sources \"{}\") (tiles \"{}\") (segments \"{}\") (max_psi \"{:.9e}\") (component_tolerance \"{:.9e}\") (phase_tolerance \"{:.9e}\") (max_component_abs \"{:.9e}\") (max_phase_abs \"{:.9e}\") (intermediate_materializations \"{}\") (final_materializations \"{}\") (result \"pass\"))",
+        "acceptance-case=(case (id \"{}\") (cells \"{}\") (sources \"{}\") (tiles \"{}\") (segments \"{}\") (repeats \"{}\") (max_psi \"{:.9e}\") (component_tolerance \"{:.9e}\") (phase_tolerance \"{:.9e}\") (max_component_abs \"{:.9e}\") (max_phase_abs \"{:.9e}\") (intermediate_materializations \"{}\") (final_materializations \"{}\") (result \"pass\"))",
         case.name,
         case.plane.cell_count(),
         case.problem.sources.len(),
         dense.evidence().tiles(),
         study.evidence.segments,
+        repeats,
         dense.evidence().observed_max_abs_psi_rad(),
         DifferentialTolerances::default().component.absolute,
         DifferentialTolerances::default().phase.absolute,
@@ -538,7 +543,7 @@ fn dense_cx() -> Cx {
 }
 
 fn matrix_cases() -> Vec<MatrixCase> {
-    let mut cases = vec![
+    vec![
         MatrixCase {
             name: "attenuated-multi-segment",
             problem: point_problem(0.012),
@@ -557,14 +562,7 @@ fn matrix_cases() -> Vec<MatrixCase> {
             plane: plane(10.0, 4, 4),
             profile: TileProfile::default(),
         },
-    ];
-    if matches!(
-        std::env::var(TARGET_ENV).as_deref(),
-        Ok("gpu:nvidia/rtx-5090" | "gpu:amd/gfx1151")
-    ) {
-        cases.push(crossover_case("above-5080-crossover", 129, 129));
-    }
-    cases
+    ]
 }
 
 fn target_matches(target: &str, adapter: &str) -> bool {
@@ -576,6 +574,9 @@ fn target_matches(target: &str, adapter: &str) -> bool {
             .any(|needle| adapter.contains(needle)),
         _ => false,
     }
+}
+fn large_target(target: &str) -> bool {
+    matches!(target, "gpu:nvidia/rtx-5090" | "gpu:amd/gfx1151")
 }
 fn crossover_case(name: &'static str, rows: usize, columns: usize) -> MatrixCase {
     MatrixCase {
