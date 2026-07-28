@@ -46,8 +46,16 @@ guidance = "Use these focused wrappers at interference-domain boundaries. Metres
 claims_anchors = [
   "anchor/crate/sim-lib-interference-core",
   "anchor/rustdoc/sim-lib-interference-core/crate-root",
+  "anchor/rustdoc/sim-lib-interference-core/field-amplitude",
+  "anchor/rustdoc/sim-lib-interference-core/hertz",
+  "anchor/rustdoc/sim-lib-interference-core/interference-error",
+  "anchor/rustdoc/sim-lib-interference-core/metres",
+  "anchor/rustdoc/sim-lib-interference-core/metres-per-second",
+  "anchor/rustdoc/sim-lib-interference-core/nepers-per-metre",
+  "anchor/rustdoc/sim-lib-interference-core/positive-metres",
+  "anchor/rustdoc/sim-lib-interference-core/radians",
 ]
 claims_specimens = [
   "recipe/sim-interference/01-basics/checked-quantities",
-  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/quantity",
+  "spec-test/sim-interference/crates/sim-lib-interference-core/tests/quantity_conformance",
 ]
