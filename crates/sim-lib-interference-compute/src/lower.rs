@@ -68,6 +68,7 @@ pub struct LoweringPlan {
     tile_plan: TilePlan,
     prepared: Vec<PreparedTile>,
     max_phase_estimate: SourcePhaseEstimate,
+    phase_budget: PhaseBudget,
     wavenumber: f32,
     attenuation: f32,
 }
@@ -142,6 +143,7 @@ impl LoweringPlan {
             tile_plan,
             prepared,
             max_phase_estimate,
+            phase_budget: budget,
             wavenumber,
             attenuation,
         })
@@ -160,6 +162,11 @@ impl LoweringPlan {
     /// Returns the maximum estimate across every source and tile.
     pub fn max_phase_estimate(&self) -> SourcePhaseEstimate {
         self.max_phase_estimate
+    }
+
+    /// Returns the admitted residual-phase and predicted-error limits.
+    pub fn phase_budget(&self) -> PhaseBudget {
+        self.phase_budget
     }
 
     /// Returns the prepared source constants for one tile.

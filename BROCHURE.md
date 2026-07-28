@@ -13,7 +13,9 @@ field can be observed as real, imaginary, amplitude, honest masked phase,
 normalized squared magnitude, or instantaneous time, then reduced through a
 named detector with complete projection provenance. The runtime crate turns
 those values into fail-closed Citizen records and Shapes while storing phasors
-in the canonical Tensor implementation.
+in the canonical Tensor implementation. The compute crate lowers the same
+model into bounded tile-local `f32` Tensor operations, supplies a dense CPU
+baseline, and reports fixed-tolerance conformance against the `f64` oracle.
 
 ## Why you will be glad
 
@@ -31,9 +33,12 @@ in the canonical Tensor implementation.
 - Integrate every source cell exactly once under an explicit detector rule.
 - Carry dimensions, detector footprint, loss class, source sampling evidence,
   and phase mask count with every scalar projection.
+- Keep executor phase bounded as world distance grows, with a checked sweep
+  that falsifies naive absolute-f32 phase.
 
 ## Where it fits
 
-This is the dependency-free physical and CPU-reference boundary of the
-interference family. It owns no tensor runtime adapter, compute provider, or
-view surface.
+This repository owns the dependency-free physical and CPU-reference boundary,
+the Tensor-backed runtime records, and the provider-neutral normalized compute
+leaf. It owns no compute provider, device API, shader, fallback router, or view
+surface.

@@ -9,12 +9,19 @@
 
 mod constants;
 mod coordinates;
+mod dense;
+mod diff;
 mod lower;
 mod preflight;
 mod tile;
 
 pub use constants::{
     PlaneTileConstants, PointTileConstants, SourcePhaseEstimate, SourceTileConstants,
+};
+pub use dense::{DenseExecutionEvidence, DenseF32Field, solve_dense_f32_cpu};
+pub use diff::{
+    ConformanceMetric, DifferentialError, DifferentialMaximum, DifferentialReport,
+    DifferentialTolerances, ScalarTolerance, compare_dense_to_reference,
 };
 pub use lower::{LoweredTile, LoweringPlan};
 pub use preflight::{

@@ -24,3 +24,31 @@ it owns no executor, device API, shader, queue, or storage type.
 shapes, singular point samples, samples behind forward planes, unstable
 denominators, allocation excess, and phase/error-budget excess before the
 captured executor receives its first request.
+
+`solve_dense_f32_cpu` executes that exact lowering through the canonical CPU
+`TensorExecutor` and assembles its tiles into a finite row-major
+`DenseF32Field`. `DenseExecutionEvidence` retains the executor, tile and
+segment counts, flushes, admitted phase limit, predicted tile-radius bound,
+observed maximum residual phase, and predicted geometry and arithmetic errors.
+
+`compare_dense_to_reference` applies one published fixed comparison contract:
+
+| quantity | absolute | relative |
+| --- | ---: | ---: |
+| real and imaginary | `2e-5` | `2e-4` |
+| amplitude | `2e-5` | `2e-4` |
+| wrapped phase above amplitude `1e-5` | `3e-4` | `1e-4` |
+| squared magnitude | `4e-5` | `4e-4` |
+
+The checked tilted-plane sweep records why normalized reduction is required:
+
+| distance (m) | observed max abs psi | normalized phase error | naive absolute-f32 phase error | predicted bound | tiles | worst cell |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | `6.234665588e-2` | `2.623882128e-8` | `3.152816520e-7` | `6.543099468e-1` | 1 | `(0,1)` |
+| 10 | `6.234665588e-2` | `9.706112192e-9` | `5.229437373e-6` | `6.543099468e-1` | 1 | `(0,1)` |
+| 100 | `6.234665588e-2` | `1.830839347e-8` | `6.098604535e-5` | `6.543099468e-1` | 1 | `(0,4)` |
+| 1000 | `6.234665588e-2` | `3.277787286e-8` | `2.844246718e-4` | `6.543099468e-1` | 1 | `(0,1)` |
+
+Both phase bounds remain below pi. Normalized error stays bounded while the
+falsified absolute-f32 formulation grows every decade and is more than 8,000
+times worse at 1000 m.

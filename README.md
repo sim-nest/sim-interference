@@ -7,6 +7,10 @@ sample planes, sampling certificates, and allocation-free work preflight.
 `sim-lib-interference-solve` owns the deterministic CPU `f64` reference, its
 analytic, metamorphic, time-sign, and Helmholtz convergence verification, and
 certified scalar observation and detector reduction.
+`sim-lib-interference-compute` lowers the same admitted model into normalized
+tile-local `f32` operations over the canonical `TensorExecutor`, provides the
+portable dense CPU baseline, and reports fixed-tolerance differential evidence
+against the `f64` oracle without defining a provider or device API.
 `sim-lib-interference-runtime` projects those checked values into Tensor-backed
 Citizen records and registers the public Problem, Plane, Study,
 ProjectionRequest, and Projection Shapes. It reuses the canonical Tensor and
@@ -29,6 +33,12 @@ successful result carries the complete preflight evidence; any failure returns
 no field. The verification suite checks closed-form identities, true
 metamorphic laws, crest direction, and second-order convergence of the complex
 Helmholtz residual on common physical points at two stencil spacings.
+The normalized `f32` lowering keeps executor trigonometry in `[-pi, pi]`,
+partitions awkward and multi-segment fields before submission, and compares
+real, imaginary, amplitude, above-floor wrapped phase, and squared magnitude
+under one fixed absolute-plus-relative contract. Its checked distance sweep
+keeps normalized phase error bounded while naive absolute-f32 error grows
+across 1, 10, 100, and 1000 metres.
 Projection derives real, imaginary, amplitude, wrapped phase, normalized
 squared magnitude, and instantaneous fields without rerunning propagation.
 Undefined phase is structurally masked. Detail mode refuses loss, while named

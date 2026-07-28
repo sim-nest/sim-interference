@@ -271,6 +271,9 @@ version = "0.1.0"
 dependencies = [
  "sim-kernel",
  "sim-lib-interference-core",
+ "sim-lib-interference-solve",
+ "sim-lib-numbers-arith",
+ "sim-lib-numbers-float",
  "sim-lib-numbers-tensor",
 ]
 
@@ -312,6 +315,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim-lib-numbers-arith"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1260d020cc0b25b2ffccf09e134333ac1b8e20b50982acae09dd120a4543642d"
+dependencies = [
+ "sim-cookbook",
+ "sim-kernel",
+ "sim-lib-numbers-core 0.2.0",
+ "sim-shape",
+]
+
+[[package]]
+name = "sim-lib-numbers-core"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "710c9d557b266a683b0165fce1efba5a979afb677b01b55fef3b7598e12c03c1"
+dependencies = [
+ "sim-cookbook",
+ "sim-kernel",
+ "sim-shape",
+]
+
+[[package]]
 name = "sim-lib-numbers-core"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -319,6 +345,20 @@ checksum = "fa39564c4cefda29c30fb25c1ef87830d9b2f9fc49a1f4d4e47f36d53280d82b"
 dependencies = [
  "sim-cookbook",
  "sim-kernel",
+ "sim-shape",
+]
+
+[[package]]
+name = "sim-lib-numbers-float"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75ecb2a9d0dc1436625a789f61ac209f99f55a50c983075b5d164669d7809588"
+dependencies = [
+ "sim-citizen",
+ "sim-citizen-derive",
+ "sim-cookbook",
+ "sim-kernel",
+ "sim-lib-numbers-core 0.2.0",
  "sim-shape",
 ]
 
@@ -333,7 +373,7 @@ dependencies = [
  "sim-citizen-derive",
  "sim-cookbook",
  "sim-kernel",
- "sim-lib-numbers-core",
+ "sim-lib-numbers-core 0.3.0",
  "sim-shape",
 ]
 

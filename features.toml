@@ -116,10 +116,18 @@ title = "Normalized tile-local Tensor lowering"
 summary = "Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor."
 owner = "crate/sim-lib-interference-compute"
 audiences = ["code", "framework"]
-guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. This leaf owns no provider, device API, shader, storage type, fallback router, or public compute-site selection."
+guidance = "Use LoweringPlan::preflight to capture the active TensorExecutor and admit the complete problem before submission. TileProfile bounds elements, segments, tensor bytes, and final result bytes; PhaseBudget caps residual phase at pi plus predicted geometry and roundoff error. PointTileConstants use host f64 n0, rho, phase sin/cos, and gain; PlaneTileConstants use host signed distance, phase, and gain. Execution composes only canonical add/sub/mul/div/sqrt/exp/sin/cos operations and a deterministic pairwise source tree. Use solve_dense_f32_cpu for the portable CPU baseline and compare_dense_to_reference for fixed absolute-plus-relative real, imaginary, amplitude, above-floor wrapped-phase, and squared-magnitude evidence. DenseExecutionEvidence retains the executor, tile and segment counts, submissions, admitted phase limit, predicted tile bound, observed max psi, and predicted error bounds; DifferentialReport retains every maximum and the true worst normalized cell. The checked decade sweep proves normalized error remains bounded while naive absolute-f32 phase error grows. This leaf defines no provider, device API, shader, storage type, fallback router, or public compute-site selection."
 claims_anchors = [
   "anchor/crate/sim-lib-interference-compute",
   "anchor/rustdoc/sim-lib-interference-compute/crate-root",
+  "anchor/rustdoc/sim-lib-interference-compute/compare_dense_to_reference",
+  "anchor/rustdoc/sim-lib-interference-compute/conformance-metric",
+  "anchor/rustdoc/sim-lib-interference-compute/dense-execution-evidence",
+  "anchor/rustdoc/sim-lib-interference-compute/dense-f32-field",
+  "anchor/rustdoc/sim-lib-interference-compute/differential-error",
+  "anchor/rustdoc/sim-lib-interference-compute/differential-maximum",
+  "anchor/rustdoc/sim-lib-interference-compute/differential-report",
+  "anchor/rustdoc/sim-lib-interference-compute/differential-tolerances",
   "anchor/rustdoc/sim-lib-interference-compute/lowered-tile",
   "anchor/rustdoc/sim-lib-interference-compute/lowering-error",
   "anchor/rustdoc/sim-lib-interference-compute/lowering-plan",
@@ -131,10 +139,13 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-compute/required_tensor_operation_names",
   "anchor/rustdoc/sim-lib-interference-compute/source-phase-estimate",
   "anchor/rustdoc/sim-lib-interference-compute/source-tile-constants",
+  "anchor/rustdoc/sim-lib-interference-compute/solve_dense_f32_cpu",
+  "anchor/rustdoc/sim-lib-interference-compute/scalar-tolerance",
   "anchor/rustdoc/sim-lib-interference-compute/tile-plan",
   "anchor/rustdoc/sim-lib-interference-compute/tile-profile",
 ]
 claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-compute/src/tests/dense",
   "spec-test/sim-interference/crates/sim-lib-interference-compute/src/tests/preflight",
 ]
 supports = [
