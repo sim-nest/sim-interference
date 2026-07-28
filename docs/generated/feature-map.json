@@ -9,6 +9,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-interference-solve"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "xtask"
     }
   ]

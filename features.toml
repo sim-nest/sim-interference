@@ -109,3 +109,22 @@ claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_acceptance_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/deterministic-reference-solver"
+title = "Deterministic CPU phasor reference"
+summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes with immutable sampling and work evidence."
+owner = "crate/sim-lib-interference-solve"
+audiences = ["code", "framework"]
+guidance = "Use ReferencePhasorSolver as the dependency-free executable specification. It admits the complete request and every cell/source geometry before output allocation, visits cells row-major and sources in stable-id order, applies Neumaier compensation independently to real and imaginary components, and returns a HostPhasorField plus immutable SolveEvidence or no field. This crate does not claim analytic verification, observables, tensor runtime storage, acceleration, or presentation."
+claims_anchors = [
+  "anchor/crate/sim-lib-interference-solve",
+  "anchor/rustdoc/sim-lib-interference-solve/crate-root",
+  "anchor/rustdoc/sim-lib-interference-solve/host-phasor-field",
+  "anchor/rustdoc/sim-lib-interference-solve/reference-phasor-solver",
+  "anchor/rustdoc/sim-lib-interference-solve/reference-solve-error",
+  "anchor/rustdoc/sim-lib-interference-solve/solve-evidence",
+]
+claims_specimens = [
+  "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/reference_conformance",
+]

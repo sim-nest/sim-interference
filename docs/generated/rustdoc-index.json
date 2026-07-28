@@ -9,6 +9,13 @@
       "summary": "Checked physical boundaries for coherent scalar wave-field studies."
     },
     {
+      "crate_name": "sim_lib_interference_solve",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-interference-solve/Cargo.toml",
+      "package": "sim-lib-interference-solve",
+      "summary": "Deterministic CPU f64 reference solving for coherent scalar wave fields."
+    },
+    {
       "crate_name": "xtask",
       "group": "workspace",
       "manifest": "xtask/Cargo.toml",

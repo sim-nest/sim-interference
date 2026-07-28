@@ -7,5 +7,12 @@ name = "sim-lib-interference-core"
 version = "0.1.0"
 
 [[package]]
+name = "sim-lib-interference-solve"
+version = "0.1.0"
+dependencies = [
+ "sim-lib-interference-core",
+]
+
+[[package]]
 name = "xtask"
 version = "0.1.0"

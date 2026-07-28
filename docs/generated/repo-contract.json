@@ -30,12 +30,13 @@
   "groups": {
     "workspace": [
       "sim-lib-interference-core",
+      "sim-lib-interference-solve",
       "xtask"
     ]
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 2,
+  "package_count": 3,
   "packages": [
     {
       "crate_name": "sim_lib_interference_core",
@@ -147,6 +148,52 @@
       ]
     },
     {
+      "crate_name": "sim_lib_interference_solve",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-interference-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Deterministic CPU f64 reference solving for coherent scalar wave fields.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-interference-solve/Cargo.toml",
+      "name": "sim-lib-interference-solve",
+      "publish": "false",
+      "root": "crates/sim-lib-interference-solve",
+      "rustdoc_summary": "Deterministic CPU f64 reference solving for coherent scalar wave fields.",
+      "target_kinds": [
+        "lib",
+        "test"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_interference_solve",
+          "src": "crates/sim-lib-interference-solve/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "reference_conformance",
+          "src": "crates/sim-lib-interference-solve/tests/reference_conformance.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "xtask",
       "dependencies": [],
       "description": "Repository validation and generated documentation tasks for sim-interference.",
@@ -179,10 +226,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-28T11:56:13+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "0b196f08d2cc66cc4747adc7e80bbcc2b5794024",
+    "git_commit": "19a00d1e62139d590c43b5594ca29bac9851a245",
     "repo": "sim-interference",
     "schema": "sim.provenance.v1",
-    "source_commit": "0b196f08d2cc66cc4747adc7e80bbcc2b5794024",
+    "source_commit": "19a00d1e62139d590c43b5594ca29bac9851a245",
     "source_remote": "https://github.com/sim-nest/sim-interference",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -195,9 +242,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "6ed65505000b1c90",
+    "workspace_hash": "7b06e66f408d49c3",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 24,
+    "workspace_hash_input_count": 31,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-interference-core/Cargo.toml",
@@ -219,6 +266,13 @@
       "crates/sim-lib-interference-core/tests/quantity_conformance.rs",
       "crates/sim-lib-interference-core/tests/sampling_acceptance_conformance.rs",
       "crates/sim-lib-interference-core/tests/sampling_conformance.rs",
+      "crates/sim-lib-interference-solve/Cargo.toml",
+      "crates/sim-lib-interference-solve/src/complex.rs",
+      "crates/sim-lib-interference-solve/src/error.rs",
+      "crates/sim-lib-interference-solve/src/field.rs",
+      "crates/sim-lib-interference-solve/src/lib.rs",
+      "crates/sim-lib-interference-solve/src/reference.rs",
+      "crates/sim-lib-interference-solve/tests/reference_conformance.rs",
       "features.toml",
       "recipes/01-basics/checked-quantities/recipe.toml",
       "recipes/book.toml",
