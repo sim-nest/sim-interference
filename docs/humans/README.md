@@ -22,7 +22,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 2 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
 | `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 4 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
 | `feature/sim-interference/deterministic-reference-solver` | `crate/sim-lib-interference-solve` | 2 | Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence. |
-| `feature/sim-interference/certified-interference` | `crate/sim-lib-interference-solve` | 1 | Project coherent phasors into honest scalar observables and reduce them through explicit detectors without dropping samples or averaging wrapped phase. |
+| `feature/sim-interference/certified-interference` | `crate/sim-lib-interference-runtime` | 2 | Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence. |
 | `feature/sim-interference/fringe-analysis-scenarios` | `crate/sim-lib-interference-solve` | 2 | Summarize amplitude-like fields without losing provenance and construct bounded canonical source scenarios with explicit aperture approximation evidence. |
 | `feature/sim-interference/certified-multitone-composition` | `crate/sim-lib-interference-solve` | 1 | Combine independently certified coherent frequency studies on identical physical sample geometry as incoherent squared magnitude or shared-clock instantaneous scalars. |
 | `feature/sim-interference/tensor-runtime-records` | `crate/sim-lib-interference-runtime` | 1 | Project checked problems, planes, fields, studies, evidence, and scalar projections into fail-closed Citizen records and Shapes over the canonical Tensor. |
@@ -36,6 +36,12 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 
 ## Recipes
 
+- `crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt`
+- `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md`
+- `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml`
+- `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/setup.siml`
+- `crates/sim-lib-interference-runtime/recipes/book.toml`
 - `recipes/01-basics/chapter.toml`
 - `recipes/01-basics/checked-quantities/expected.txt`
 - `recipes/01-basics/checked-quantities/main.rs`
@@ -1231,6 +1237,25 @@ fn full_reference_verification_matrix_passes() {
 ```
 
 ### `feature/sim-interference/certified-interference`
+
+Specimen `recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation` is checked by `xtask check-recipes`.
+
+Source `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml`:
+
+```toml
+id = "two-source-cancellation"
+title = "Two-source cancellation on the CPU"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["interference", "coherent", "cpu", "realize", "shape-checked", "deterministic"]
+requires = ["interference-runtime", "codec/lisp", "eval-fabric", "numbers/tensor"]
+harness = "cargo-example"
+package = "sim-lib-interference-runtime"
+example = "two_source_cancellation"
+expected = "expected.txt"
+```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-solve/tests/projection_conformance` is checked by `cargo test`.
 

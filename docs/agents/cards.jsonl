@@ -1,3 +1,9 @@
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt"}
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/book.toml"}
 {"kind":"recipe","path":"recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"recipes/01-basics/checked-quantities/expected.txt"}
 {"kind":"recipe","path":"recipes/01-basics/checked-quantities/main.rs"}

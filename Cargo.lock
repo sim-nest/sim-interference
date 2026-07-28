@@ -278,6 +278,7 @@ dependencies = [
  "sim-codec-binary",
  "sim-codec-json",
  "sim-codec-lisp",
+ "sim-cookbook",
  "sim-kernel",
  "sim-lib-interference-core",
  "sim-lib-interference-solve",

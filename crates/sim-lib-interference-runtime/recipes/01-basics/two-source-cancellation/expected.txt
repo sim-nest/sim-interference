@@ -1,0 +1,1 @@
+interference/Study rows=1024 cols=1024 emitters=2 cells=1048576 evaluations=2097152 verdict=resolved

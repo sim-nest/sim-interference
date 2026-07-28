@@ -135,12 +135,28 @@ claims_specimens = [
 
 [[feature]]
 id = "feature/sim-interference/certified-interference"
-title = "Certified observables and detector reduction"
-summary = "Project coherent phasors into honest scalar observables and reduce them through explicit detectors without dropping samples or averaging wrapped phase."
-owner = "crate/sim-lib-interference-solve"
+title = "Loadable certified interference studies"
+summary = "Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence."
+owner = "crate/sim-lib-interference-runtime"
 audiences = ["code", "framework"]
-guidance = "Use project for full-detail real, imaginary, amplitude, masked phase, normalized squared-magnitude, or Instant { wt } observation. Use reduce_for_view only with the detector rule matching the observable: complex mean before phase-sensitive projection, scalar area mean for amplitude, or squared-magnitude area mean for the normalized energy proxy. Detail refuses a smaller target. Integer axis partitions cover every source cell exactly once, including odd and non-divisible grids. ScalarProjection always carries ProjectionCertificate with dimensions, footprint bounds, rule, loss class, unchanged source SamplingCertificate, and mask count."
+guidance = "Load InterferenceLib after InterferenceRecordsLib. Use interference/problem and interference/sampling-plane for checked inputs, then interference/solve for a Study whose StudySolver is resolved from the child Env before the registry default. The installed ReferenceStudySolver is the deterministic CPU baseline; alternate sites replace only that narrow provider value. Use interference/project for propagation-free real, imaginary, amplitude, masked phase, normalized squared-magnitude, or Instant { wt } observation. Detector reduction always follows the observable, covers every cell exactly once, and retains ProjectionCertificate plus the unchanged SamplingCertificate. Use interference/analyze, interference/scenarios, and interference/multitone for certified reports, bounded source construction, and unlike-frequency composition. Every callable has argument and result Shapes, and unknown or repeated request fields fail closed."
 claims_anchors = [
+  "anchor/runtime-lib/sim-lib-interference-runtime/interference-lib",
+  "anchor/rustdoc/sim-lib-interference-runtime/analyze_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/interference-lib",
+  "anchor/rustdoc/sim-lib-interference-runtime/multitone_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/problem_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/project_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/recipes",
+  "anchor/rustdoc/sim-lib-interference-runtime/reference-study-solver",
+  "anchor/rustdoc/sim-lib-interference-runtime/resolve_study_solver",
+  "anchor/rustdoc/sim-lib-interference-runtime/sampling_plane_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/scenarios_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/solve-request",
+  "anchor/rustdoc/sim-lib-interference-runtime/solve_function_symbol",
+  "anchor/rustdoc/sim-lib-interference-runtime/solver-provider",
+  "anchor/rustdoc/sim-lib-interference-runtime/study-solver",
+  "anchor/rustdoc/sim-lib-interference-runtime/study_solver_symbol",
   "anchor/rustdoc/sim-lib-interference-solve/detector-footprint",
   "anchor/rustdoc/sim-lib-interference-solve/grid-dimensions",
   "anchor/rustdoc/sim-lib-interference-solve/loss-class",
@@ -154,7 +170,16 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-solve/scalar-sample",
 ]
 claims_specimens = [
+  "recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/projection_conformance",
+]
+supports = [
+  "feature/sim-interference/scalar-wave-model",
+  "feature/sim-interference/certified-sampling",
+  "feature/sim-interference/deterministic-reference-solver",
+  "feature/sim-interference/tensor-runtime-records",
+  "feature/sim-interference/fringe-analysis-scenarios",
+  "feature/sim-interference/certified-multitone-composition",
 ]
 
 [[feature]]
@@ -242,7 +267,6 @@ supports = [
   "feature/sim-interference/scalar-wave-model",
   "feature/sim-interference/certified-sampling",
   "feature/sim-interference/deterministic-reference-solver",
-  "feature/sim-interference/certified-interference",
 ]
 
 [[route]]
@@ -252,4 +276,17 @@ audiences = ["code", "framework"]
 steps = [
   { feature = "feature/sim-interference/tensor-runtime-records", why = "The runtime feature composes canonical Tensor storage, Citizen read-constructs, and Shape checks without adding a domain parser or grid storage." },
   { specimen = "spec-test/sim-interference/crates/sim-lib-interference-runtime/src/citizen", why = "The checked Citizen inventory specimen proves every interference record can be installed and reconstructed." },
+]
+
+[[route]]
+id = "route/solve-coherent-interference"
+task = "Solve coherent interference"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-interference/scalar-wave-model", why = "The exact scalar-wave model fixes the propagation convention, medium, source identity, and singularity boundary." },
+  { feature = "feature/sim-interference/certified-sampling", why = "Physical sampling and work certificates admit the complete request before field allocation." },
+  { feature = "feature/sim-interference/deterministic-reference-solver", why = "The deterministic CPU implementation is the verified reference provider." },
+  { feature = "feature/sim-interference/tensor-runtime-records", why = "Citizen records and Shapes carry the admitted problem, plane, field, evidence, study, and projection over the canonical Tensor." },
+  { feature = "feature/sim-interference/certified-interference", why = "InterferenceLib exposes the complete Shape-checked workflow and resolves StudySolver from the child environment before the registry default." },
+  { specimen = "recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation", why = "The exact checked Lisp recipe realizes a strict 1024-by-1024 two-source cancellation study through core/local-fabric." },
 ]

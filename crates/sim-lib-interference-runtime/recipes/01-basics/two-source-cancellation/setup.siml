@@ -1,0 +1,23 @@
+(define problem
+  (interference/problem
+    {frequency-hz 1000.0
+     speed-m-s 343.0
+     attenuation-np-m 0.0
+     singularity-radius-m 0.01
+     sources
+       ({kind point id left  position-m (-0.25 0.0 0.0)
+         amplitude-at-reference 1.0 phase-rad 0.0}
+        {kind point id right position-m ( 0.25 0.0 0.0)
+         amplitude-at-reference 1.0 phase-rad 3.141592653589793})}))
+
+(define plane
+  (interference/sampling-plane
+    {origin-m (-1.0 -1.0 0.5)
+     u-axis (1.0 0.0 0.0) v-axis (0.0 1.0 0.0)
+     extent-u-m 2.0 extent-v-m 2.0 rows 1024 cols 1024}))
+
+(realize
+  (interference/solve problem plane
+    {sampling strict work-budget default})
+  :fabric core/local-fabric
+  :result interference/Study)

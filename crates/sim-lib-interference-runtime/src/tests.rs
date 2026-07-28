@@ -11,7 +11,7 @@ use std::{
 use sim_citizen::{CitizenRuntime, values_citizen_eq};
 use sim_codec::{Input, Output, decode_with_codec, encode_with_codec};
 use sim_kernel::{
-    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, Error, Expr, NumberLiteral,
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, Env, Error, Expr, NumberLiteral,
     ObjectEncode, ObjectEncoding, ReadPolicy, Result, Symbol, TrustLevel, Value,
     read_construct_capability,
 };
@@ -20,17 +20,20 @@ use sim_lib_interference_solve::{Observable, ReductionRule, ReferencePhasorSolve
 use sim_lib_numbers_tensor::{Tensor, TensorLocation, TensorStorage, TypedTensorStorage, domains};
 
 use crate::{
-    EmitterDescriptor, InterferenceRecordsLib, MediumDescriptor, PhasorFieldDescriptor,
-    PlaneDescriptor, ProblemDescriptor, ProjectionCertificateDescriptor,
+    EmitterDescriptor, InterferenceLib, InterferenceRecordsLib, MediumDescriptor,
+    PhasorFieldDescriptor, PlaneDescriptor, ProblemDescriptor, ProjectionCertificateDescriptor,
     ProjectionRequestDescriptor, SamplingCertificateDescriptor, ScalarProjectionDescriptor,
-    StudyDescriptor, StudyEvidenceDescriptor, WorkEstimateDescriptor,
+    SolveRequest, SolverProvider, StudyDescriptor, StudyEvidenceDescriptor, StudySolver,
+    WorkEstimateDescriptor,
     citizen::{RecordCitizenSpec, interference_citizen_registry, read_construct_parts},
     projection_records::sample_projection,
     records::{sample_plane, sample_problem},
+    resolve_study_solver,
     shapes::{
         plane_shape_symbol, problem_shape_symbol, projection_request_shape_symbol,
         projection_shape_symbol, study_shape_symbol,
     },
+    study_solver_symbol,
 };
 
 const CITIZEN_SYMBOLS: [&str; 12] = [
@@ -47,6 +50,77 @@ const CITIZEN_SYMBOLS: [&str; 12] = [
     "interference/ProjectionRequest",
     "interference/Projection",
 ];
+
+#[test]
+fn interference_lib_installs_the_reference_solver_as_registry_default() {
+    let mut cx = bare_cx();
+    cx.load_lib(&InterferenceRecordsLib).unwrap();
+    cx.load_lib(&InterferenceLib).unwrap();
+
+    let solver = resolve_study_solver(&cx).unwrap();
+    let problem = sample_problem().to_problem().unwrap();
+    let plane = sample_plane().to_plane().unwrap();
+    let request = SolveRequest::new(
+        &problem,
+        &plane,
+        SamplingPolicy::Annotate,
+        SamplingThresholds::default(),
+        WorkBudget::default(),
+    );
+    let study = solver.solve(&mut cx, &request).unwrap();
+
+    assert_eq!(study.problem, sample_problem());
+    assert_eq!(study.plane, sample_plane());
+    assert!(
+        cx.registry()
+            .value_by_symbol(&study_solver_symbol())
+            .unwrap()
+            .object()
+            .downcast_ref::<SolverProvider>()
+            .is_some()
+    );
+}
+
+#[test]
+fn child_environment_solver_precedes_the_registry_default() {
+    struct UnusableSolver;
+
+    impl StudySolver for UnusableSolver {
+        fn solve(&self, _cx: &mut Cx, _request: &SolveRequest<'_>) -> Result<StudyDescriptor> {
+            Err(Error::Eval("child solver selected".to_owned()))
+        }
+    }
+
+    let mut cx = bare_cx();
+    cx.load_lib(&InterferenceRecordsLib).unwrap();
+    cx.load_lib(&InterferenceLib).unwrap();
+    let mut child = Env::child(Arc::new(cx.env().clone()));
+    child.define(
+        study_solver_symbol(),
+        SolverProvider::new(Arc::new(UnusableSolver))
+            .into_value()
+            .unwrap(),
+    );
+
+    cx.with_env(child, |cx| {
+        let problem = sample_problem().to_problem().unwrap();
+        let plane = sample_plane().to_plane().unwrap();
+        let request = SolveRequest::new(
+            &problem,
+            &plane,
+            SamplingPolicy::Annotate,
+            SamplingThresholds::default(),
+            WorkBudget::default(),
+        );
+        let error = resolve_study_solver(cx)
+            .unwrap()
+            .solve(cx, &request)
+            .unwrap_err();
+        assert!(error.to_string().contains("child solver selected"));
+        Ok(())
+    })
+    .unwrap();
+}
 
 #[test]
 fn explicit_citizen_registry_is_complete_and_conformant() {

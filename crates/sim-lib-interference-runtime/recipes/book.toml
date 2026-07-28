@@ -1,0 +1,5 @@
+book = "interference-runtime"
+title = "Coherent Interference Runtime"
+summary = "Shape-checked coherent field studies through the loadable CPU solver."
+order = 175
+chapters = ["01-basics"]

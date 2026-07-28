@@ -1,6 +1,12 @@
 {
   "schema": "sim.card-index.v1",
   "cards": [
+    "crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml",
+    "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt",
+    "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md",
+    "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml",
+    "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/setup.siml",
+    "crates/sim-lib-interference-runtime/recipes/book.toml",
     "recipes/01-basics/chapter.toml",
     "recipes/01-basics/checked-quantities/expected.txt",
     "recipes/01-basics/checked-quantities/main.rs",
