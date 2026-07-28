@@ -21,7 +21,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-interference/quantity-vocabulary` | `crate/sim-lib-interference-core` | 2 | Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types. |
 | `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 2 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
 | `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 4 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
-| `feature/sim-interference/deterministic-reference-solver` | `crate/sim-lib-interference-solve` | 1 | Solve admitted coherent scalar-wave problems into complete row-major f64 component planes with immutable sampling and work evidence. |
+| `feature/sim-interference/deterministic-reference-solver` | `crate/sim-lib-interference-solve` | 2 | Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence. |
 
 ## Surfaces
 
@@ -1195,5 +1195,29 @@ fn source_input_permutations_canonicalize_to_identical_fields() {
         assert_eq!(component_bits(&solved.0), baseline_bits);
         assert_eq!(solved.1, baseline.1);
     }
+}
+```
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-solve/tests/verification_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-solve/tests/verification_conformance.rs`:
+
+```rust
+use sim_lib_interference_solve::{
+    MAX_ANALYTIC_RELATIVE_ERROR, MAX_METAMORPHIC_RELATIVE_ERROR, verify_reference_solver,
+};
+
+#[test]
+fn full_reference_verification_matrix_passes() {
+    let report = verify_reference_solver().unwrap();
+    eprintln!("verification report: {report:?}");
+
+    assert!(report.analytic_max_error <= MAX_ANALYTIC_RELATIVE_ERROR);
+    assert!(report.reciprocity_relative <= MAX_METAMORPHIC_RELATIVE_ERROR);
+    assert!(report.linearity_relative <= MAX_METAMORPHIC_RELATIVE_ERROR);
+    assert!(report.rigid_motion_relative <= MAX_METAMORPHIC_RELATIVE_ERROR);
+    assert!(report.global_phase_relative <= MAX_METAMORPHIC_RELATIVE_ERROR);
+    assert!(report.source_permutation_identical);
+    assert!((1.8..=2.2).contains(&report.helmholtz_observed_order));
 }
 ```

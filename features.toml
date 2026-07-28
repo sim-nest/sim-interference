@@ -112,11 +112,11 @@ claims_specimens = [
 
 [[feature]]
 id = "feature/sim-interference/deterministic-reference-solver"
-title = "Deterministic CPU phasor reference"
-summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes with immutable sampling and work evidence."
+title = "Verified deterministic CPU phasor reference"
+summary = "Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence."
 owner = "crate/sim-lib-interference-solve"
 audiences = ["code", "framework"]
-guidance = "Use ReferencePhasorSolver as the dependency-free executable specification. It admits the complete request and every cell/source geometry before output allocation, visits cells row-major and sources in stable-id order, applies Neumaier compensation independently to real and imaginary components, and returns a HostPhasorField plus immutable SolveEvidence or no field. This crate does not claim analytic verification, observables, tensor runtime storage, acceleration, or presentation."
+guidance = "Use ReferencePhasorSolver as the dependency-free executable specification. It admits the complete request and every cell/source geometry before output allocation, visits cells row-major and sources in stable-id order, applies Neumaier compensation independently to real and imaginary components, and returns a HostPhasorField plus immutable SolveEvidence or no field. Run verify_reference_solver for fail-closed plane-period, point-spreading, attenuation, interference, reciprocity, linearity, rigid-motion, global-phase, source-permutation, outgoing-crest, and seven-point Helmholtz checks. The Helmholtz matrix covers point, plane, mixed, attenuating, and multi-source fields at common physical points for h and h/2. This crate does not claim observables, tensor runtime storage, acceleration, or presentation."
 claims_anchors = [
   "anchor/crate/sim-lib-interference-solve",
   "anchor/rustdoc/sim-lib-interference-solve/crate-root",
@@ -124,7 +124,11 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-solve/reference-phasor-solver",
   "anchor/rustdoc/sim-lib-interference-solve/reference-solve-error",
   "anchor/rustdoc/sim-lib-interference-solve/solve-evidence",
+  "anchor/rustdoc/sim-lib-interference-solve/verification-error",
+  "anchor/rustdoc/sim-lib-interference-solve/verification-report",
+  "anchor/rustdoc/sim-lib-interference-solve/verify_reference_solver",
 ]
 claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/reference_conformance",
+  "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/verification_conformance",
 ]
