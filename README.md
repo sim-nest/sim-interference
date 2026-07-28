@@ -30,6 +30,13 @@ squared magnitude, and instantaneous fields without rerunning propagation.
 Undefined phase is structurally masked. Detail mode refuses loss, while named
 complex, scalar-area, and squared-magnitude-area detectors integrate an exact
 partition of every source cell and return their own projection certificate.
+Field analysis adds deterministic statistics, strict local node/antinode
+candidates, and optional Michelson contrast while retaining both sampling
+truth and projection identity. Bounded scenario builders cover two point
+sources, inward counter-propagating planes, progressive-phase line arrays, and
+rectangular discrete apertures. Array/aperture amplitude is normalized across
+elements, active spacing is reported in wavelengths, and strict construction
+refuses spacing above `lambda/2`.
 
 Repository validation:
 

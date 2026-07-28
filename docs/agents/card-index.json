@@ -6,6 +6,10 @@
     "recipes/01-basics/checked-quantities/main.rs",
     "recipes/01-basics/checked-quantities/purpose.md",
     "recipes/01-basics/checked-quantities/recipe.toml",
+    "recipes/01-basics/fringe-analysis/expected.txt",
+    "recipes/01-basics/fringe-analysis/main.rs",
+    "recipes/01-basics/fringe-analysis/purpose.md",
+    "recipes/01-basics/fringe-analysis/recipe.toml",
     "recipes/book.toml"
   ]
 }

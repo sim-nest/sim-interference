@@ -353,8 +353,8 @@ impl ScenarioBuilder {
     ) -> Result<ElementSpacingWavelengths, ScenarioError> {
         let wavelength = self.medium.speed().get() / self.frequency.get();
         let spacing = ElementSpacingWavelengths {
-            u: u.map(|value| value.get() / wavelength),
-            v: v.map(|value| value.get() / wavelength),
+            u: relative_spacing(u, wavelength)?,
+            v: relative_spacing(v, wavelength)?,
         };
         for (axis, value) in [("u", spacing.u), ("v", spacing.v)] {
             if let Some(value) = value
@@ -454,6 +454,25 @@ fn require_orthogonal_axes(u_axis: UnitVector3, v_axis: UnitVector3) -> Result<(
         .into())
     } else {
         Ok(())
+    }
+}
+
+fn relative_spacing(
+    spacing: Option<PositiveMetres>,
+    wavelength_metres: f64,
+) -> Result<Option<f64>, ScenarioError> {
+    let Some(spacing) = spacing else {
+        return Ok(None);
+    };
+    let relative = spacing.get() / wavelength_metres;
+    if relative.is_finite() && relative > 0.0 {
+        Ok(Some(relative))
+    } else {
+        Err(InterferenceError::InvalidQuantity {
+            name: "scenario-spacing-wavelengths",
+            value: relative,
+        }
+        .into())
     }
 }
 

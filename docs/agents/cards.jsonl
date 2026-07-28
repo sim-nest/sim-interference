@@ -3,4 +3,8 @@
 {"kind":"recipe","path":"recipes/01-basics/checked-quantities/main.rs"}
 {"kind":"recipe","path":"recipes/01-basics/checked-quantities/purpose.md"}
 {"kind":"recipe","path":"recipes/01-basics/checked-quantities/recipe.toml"}
+{"kind":"recipe","path":"recipes/01-basics/fringe-analysis/expected.txt"}
+{"kind":"recipe","path":"recipes/01-basics/fringe-analysis/main.rs"}
+{"kind":"recipe","path":"recipes/01-basics/fringe-analysis/purpose.md"}
+{"kind":"recipe","path":"recipes/01-basics/fringe-analysis/recipe.toml"}
 {"kind":"recipe","path":"recipes/book.toml"}

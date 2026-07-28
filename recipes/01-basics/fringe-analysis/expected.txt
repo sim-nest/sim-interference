@@ -1,0 +1,4 @@
+standing-wave sources=2 sampling=Resolved
+projection=Amplitude/Detail shape=1x64
+analysis cells=64 extrema=4 contrast-defined=true
+aperture elements=6 amplitude-each=2 spacing=Some(0.25)/Some(0.5) wavelengths

@@ -199,6 +199,26 @@ fn strict_spacing_refuses_sparse_elements_while_annotate_preserves_truth() {
         annotated.certificate().aperture_policy,
         Some(AperturePolicy::Annotate)
     );
+
+    let singleton = builder(ScenarioLimits::default())
+        .phased_array(
+            point(0.0, 0.0, 0.0),
+            x_axis(),
+            1,
+            PositiveMetres::new(f64::MAX).unwrap(),
+            FieldAmplitude::new(1.0).unwrap(),
+            Radians::new(0.0).unwrap(),
+            Radians::new(0.0).unwrap(),
+            AperturePolicy::Strict,
+        )
+        .unwrap();
+    assert_eq!(
+        singleton
+            .certificate()
+            .element_spacing_wavelengths
+            .maximum(),
+        None
+    );
 }
 
 #[test]

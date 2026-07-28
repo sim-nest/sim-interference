@@ -9,6 +9,10 @@ deterministic host phasor field with inseparable solve evidence.
 component planes. `SolveEvidence` retains the sampling policy, certificate,
 and complete work estimate used to admit the request. `project` and
 `reduce_for_view` derive certified scalar fields without rerunning propagation.
+`analyze_fringes` adds deterministic statistics, strict local node/antinode
+candidates, and Michelson contrast while retaining sampling and projection
+identity. `ScenarioBuilder` provides bounded canonical point, plane, phased
+array, and discrete-aperture fixtures.
 
 ## Why you will be glad
 
@@ -20,6 +24,11 @@ and complete work estimate used to admit the request. `project` and
 - Odd and non-divisible grids cover every source cell exactly once.
 - Every scalar result retains its reduction footprint, loss class, source
   sampling certificate, and mask count.
+- Every analysis report states both what was sampled and which scalar
+  projection was analyzed.
+- Array and aperture amplitudes are normalized, wavelength-relative spacing is
+  explicit, and strict policy rejects spacing above `lambda/2`.
+- Source count and generated identity limits are checked before allocation.
 - Solver configuration is immutable and explicit.
 - No SIM runtime, tensor, compute provider, or surface dependency is pulled in.
 

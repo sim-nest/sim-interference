@@ -163,7 +163,8 @@ pub fn analyze_fringes(
     let michelson_contrast = if maximum_amplitude <= amplitude_floor {
         None
     } else {
-        let contrast = (stats.maximum - stats.minimum) / (stats.maximum + stats.minimum);
+        let minimum_to_maximum = stats.minimum / stats.maximum;
+        let contrast = (1.0 - minimum_to_maximum) / (1.0 + minimum_to_maximum);
         Some(require_finite("michelson-contrast", contrast)?)
     };
 
@@ -247,7 +248,6 @@ fn find_extrema(projection: &ScalarProjection) -> Result<Vec<Extremum>, Analysis
             }
         }
     }
-    extrema.shrink_to_fit();
     Ok(extrema)
 }
 

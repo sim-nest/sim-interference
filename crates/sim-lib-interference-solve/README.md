@@ -17,5 +17,19 @@ declared amplitude floor is represented as a mask, never a number. Reduction
 uses explicit complex-mean, scalar-area, or squared-magnitude-area detector
 rules over every source cell exactly once; detail mode refuses a smaller
 target. Every scalar result carries source and target dimensions, footprint,
-loss class, source sampling evidence, and mask count. The crate has no SIM
-runtime, tensor, compute-provider, or presentation dependency.
+loss class, source sampling evidence, and mask count.
+
+`analyze_fringes` accepts only amplitude-like projections and returns
+deterministic field statistics, strict eight-neighbour node/antinode
+candidates, and optional Michelson contrast. Every report keeps both its
+unchanged sampling certificate and its exact projection identity. Contrast is
+absent when the whole field lies at or below the caller's amplitude floor.
+
+`ScenarioBuilder` creates bounded two-point, inward counter-propagating plane,
+progressive-phase line-array, and rectangular discrete-aperture problems.
+Counts and generated identity storage are checked before allocation.
+Array/aperture total amplitude is divided equally among elements; certificates
+report active neighbour spacing in wavelengths. Strict aperture policy refuses
+spacing above `lambda/2`, while annotate policy preserves the approximation.
+The crate has no SIM runtime, tensor, compute-provider, or presentation
+dependency.

@@ -156,3 +156,36 @@ claims_anchors = [
 claims_specimens = [
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/projection_conformance",
 ]
+
+[[feature]]
+id = "feature/sim-interference/fringe-analysis-scenarios"
+title = "Certified fringe analysis and bounded scenarios"
+summary = "Summarize amplitude-like fields without losing provenance and construct bounded canonical source scenarios with explicit aperture approximation evidence."
+owner = "crate/sim-lib-interference-solve"
+audiences = ["code", "framework"]
+guidance = "Use analyze_fringes on amplitude or normalized squared-magnitude projections. FringeReport retains the unchanged SamplingCertificate plus ProjectionIdentity, deterministic row-major statistics, strict eight-neighbour node/antinode candidates, and optional Michelson contrast; contrast is absent below the declared amplitude floor. Use ScenarioBuilder for two-point, inward counter-propagating plane, progressive-phase line-array, and rectangular discrete-aperture problems. ScenarioLimits checks source and generated-id bounds before allocation. Array/aperture total amplitude is divided equally across elements, spacing is reported in wavelengths, and AperturePolicy::Strict refuses active spacing above lambda/2 while Annotate preserves sparse approximation evidence."
+claims_anchors = [
+  "anchor/rustdoc/sim-lib-interference-solve/absolute_max_generated_id_bytes",
+  "anchor/rustdoc/sim-lib-interference-solve/absolute_max_scenario_sources",
+  "anchor/rustdoc/sim-lib-interference-solve/absolute_max_total_id_bytes",
+  "anchor/rustdoc/sim-lib-interference-solve/analyze_fringes",
+  "anchor/rustdoc/sim-lib-interference-solve/analysis-error",
+  "anchor/rustdoc/sim-lib-interference-solve/aperture-policy",
+  "anchor/rustdoc/sim-lib-interference-solve/element-spacing-wavelengths",
+  "anchor/rustdoc/sim-lib-interference-solve/extremum",
+  "anchor/rustdoc/sim-lib-interference-solve/extremum-kind",
+  "anchor/rustdoc/sim-lib-interference-solve/field-stats",
+  "anchor/rustdoc/sim-lib-interference-solve/fringe-report",
+  "anchor/rustdoc/sim-lib-interference-solve/named-scenario",
+  "anchor/rustdoc/sim-lib-interference-solve/projection-identity",
+  "anchor/rustdoc/sim-lib-interference-solve/scenario-builder",
+  "anchor/rustdoc/sim-lib-interference-solve/scenario-certificate",
+  "anchor/rustdoc/sim-lib-interference-solve/scenario-error",
+  "anchor/rustdoc/sim-lib-interference-solve/scenario-kind",
+  "anchor/rustdoc/sim-lib-interference-solve/scenario-limits",
+  "anchor/rustdoc/sim-lib-interference-solve/strict_max_spacing_wavelengths",
+]
+claims_specimens = [
+  "recipe/sim-interference/01-basics/fringe-analysis",
+  "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/analysis_scenario_conformance",
+]
