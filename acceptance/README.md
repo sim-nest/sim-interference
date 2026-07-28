@@ -22,9 +22,11 @@ the sanitized report, and verifies it before returning success. The two larger
 targets additionally run a three-repeat 16,641-cell capacity probe, above the
 RTX 5080 Laptop profile's measured 16,384-cell crossover. Keeping that probe
 separate prevents capacity scaling from weakening or silently lengthening the
-100-repeat determinism matrix. The Ryzen report describes segmented resident
-execution; it does not treat the machine's total 128 GiB memory as one GPU
-buffer.
+100-repeat determinism matrix. Capacity-probe reports preserve the observed
+determinism boolean but do not turn it into a requirement; the probe's claim is
+successful above-crossover resident execution within the fixed numerical
+tolerances. The Ryzen report describes segmented resident execution; it does
+not treat the machine's total 128 GiB memory as one GPU buffer.
 
 Verify a committed report against its measured source:
 

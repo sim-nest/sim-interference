@@ -52,6 +52,8 @@ verify() {
       printf '%s\n' "$case_line" | grep -Eq "\\($required_metric \"[0-9.e+-]+\"\\)"
     done
     printf '%s\n' "$case_line" | grep -Fq '(repeats "100")'
+    printf '%s\n' "$case_line" | grep -Fq '(deterministic "true")'
+    printf '%s\n' "$case_line" | grep -Fq '(determinism_required "true")'
     printf '%s\n' "$case_line" |
       grep -Fq '(intermediate_materializations "0")'
     printf '%s\n' "$case_line" |
@@ -65,6 +67,10 @@ verify() {
     test "$(printf '%s\n' "$crossover_line" | wc -l)" -eq 1
     printf '%s\n' "$crossover_line" | grep -Fq '(cells "16641")'
     printf '%s\n' "$crossover_line" | grep -Fq '(repeats "3")'
+    printf '%s\n' "$crossover_line" |
+      grep -Eq '\(deterministic "(true|false)"\)'
+    printf '%s\n' "$crossover_line" |
+      grep -Fq '(determinism_required "false")'
     printf '%s\n' "$crossover_line" |
       grep -Fq '(intermediate_materializations "0")'
     printf '%s\n' "$crossover_line" |
