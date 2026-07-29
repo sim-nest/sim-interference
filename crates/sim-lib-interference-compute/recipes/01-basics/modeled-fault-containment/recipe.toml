@@ -1,0 +1,12 @@
+id = "modeled-fault-containment"
+title = "Contain selected-provider faults without CPU restart"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 40
+tags = ["interference", "compute", "modeled", "faults", "fail-closed", "headless"]
+requires = ["interference-runtime", "interference-compute", "site/compute/model", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "modeled_tests::selected_provider_faults_never_restart_on_cpu"
+expected = "expected.txt"

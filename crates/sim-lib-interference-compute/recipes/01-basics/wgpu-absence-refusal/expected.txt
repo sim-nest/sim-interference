@@ -1,0 +1,2 @@
+explicit-wgpu=unavailable submissions=0 provider-route=idle result=refused
+automatic-provider=cpu-choice submissions=0 result=pass

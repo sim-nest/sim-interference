@@ -1,0 +1,12 @@
+id = "modeled-differential-matrix"
+title = "Compare modeled resident compute with the CPU oracle"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["interference", "compute", "modeled", "differential", "headless", "evidence"]
+requires = ["interference-runtime", "interference-compute", "site/compute/model", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "hardware_tests::f64_dense_and_modeled_share_one_differential_matrix"
+expected = "expected.txt"

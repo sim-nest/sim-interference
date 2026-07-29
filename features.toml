@@ -180,7 +180,10 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-compute/tensor-study-solver",
 ]
 claims_specimens = [
+  "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-differential-matrix",
+  "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-fault-containment",
   "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-resident-study",
+  "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/wgpu-absence-refusal",
   "recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/wgpu-differential-evidence",
   "spec-test/sim-interference/crates/sim-lib-interference-compute/src/hardware_tests",
   "spec-test/sim-interference/crates/sim-lib-interference-compute/src/modeled_tests",

@@ -1,0 +1,3 @@
+matrix=attenuated-multi-segment,long-world-distance,exact-cancellation,crossover-edges
+providers=dense-f32-cpu,modeled-resident result=pass
+intermediate-materializations=0 final-component-reads=2 cached-repeat=bit-identical

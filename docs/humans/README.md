@@ -22,7 +22,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 5 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
 | `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 5 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
 | `feature/sim-interference/normalized-tensor-lowering` | `crate/sim-lib-interference-compute` | 2 | Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor. |
-| `feature/sim-interference/resident-compute-studies` | `crate/sim-lib-interference-compute` | 4 | Route an admitted interference Study through the active Env-bound Tensor executor, with pre-submission CPU selection, resident f32 results, explicit transfer evidence, and no restart after provider selection. |
+| `feature/sim-interference/resident-compute-studies` | `crate/sim-lib-interference-compute` | 7 | Route an admitted interference Study through the active Env-bound Tensor executor, with pre-submission CPU selection, resident f32 results, explicit transfer evidence, and no restart after provider selection. |
 | `feature/sim-interference/deterministic-reference-solver` | `crate/sim-lib-interference-solve` | 2 | Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence. |
 | `feature/sim-interference/certified-interference` | `crate/sim-lib-interference-runtime` | 4 | Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence. |
 | `feature/sim-interference/fringe-analysis-scenarios` | `crate/sim-lib-interference-solve` | 3 | Summarize amplitude-like fields without losing provenance and construct bounded canonical source scenarios with explicit aperture approximation evidence. |
@@ -39,10 +39,22 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 ## Recipes
 
 - `crates/sim-lib-interference-compute/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-differential-matrix/expected.txt`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-differential-matrix/purpose.md`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-differential-matrix/recipe.toml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-differential-matrix/setup.siml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-fault-containment/expected.txt`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-fault-containment/purpose.md`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-fault-containment/recipe.toml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/modeled-fault-containment/setup.siml`
 - `crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/expected.txt`
 - `crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/purpose.md`
 - `crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/recipe.toml`
 - `crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/setup.siml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-absence-refusal/expected.txt`
+- `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-absence-refusal/purpose.md`
+- `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-absence-refusal/recipe.toml`
+- `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-absence-refusal/setup.siml`
 - `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/expected.txt`
 - `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/purpose.md`
 - `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/recipe.toml`
@@ -2064,6 +2076,44 @@ fn exec_error(error: impl std::fmt::Display) -> TensorExecError {
 
 ### `feature/sim-interference/resident-compute-studies`
 
+Specimen `recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-differential-matrix` is checked by `xtask check-recipes`.
+
+Source `crates/sim-lib-interference-compute/recipes/01-basics/modeled-differential-matrix/recipe.toml`:
+
+```toml
+id = "modeled-differential-matrix"
+title = "Compare modeled resident compute with the CPU oracle"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["interference", "compute", "modeled", "differential", "headless", "evidence"]
+requires = ["interference-runtime", "interference-compute", "site/compute/model", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "hardware_tests::f64_dense_and_modeled_share_one_differential_matrix"
+expected = "expected.txt"
+```
+
+Specimen `recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-fault-containment` is checked by `xtask check-recipes`.
+
+Source `crates/sim-lib-interference-compute/recipes/01-basics/modeled-fault-containment/recipe.toml`:
+
+```toml
+id = "modeled-fault-containment"
+title = "Contain selected-provider faults without CPU restart"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 40
+tags = ["interference", "compute", "modeled", "faults", "fail-closed", "headless"]
+requires = ["interference-runtime", "interference-compute", "site/compute/model", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "modeled_tests::selected_provider_faults_never_restart_on_cpu"
+expected = "expected.txt"
+```
+
 Specimen `recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/modeled-resident-study` is checked by `xtask check-recipes`.
 
 Source `crates/sim-lib-interference-compute/recipes/01-basics/modeled-resident-study/recipe.toml`:
@@ -2080,6 +2130,25 @@ requires = ["interference-runtime", "interference-compute", "site/compute/model"
 harness = "cargo-test"
 package = "sim-lib-interference-compute"
 test = "modeled_tests::modeled_resident_recipe_reports_checked_evidence"
+expected = "expected.txt"
+```
+
+Specimen `recipe/sim-interference/crates/sim-lib-interference-compute/01-basics/wgpu-absence-refusal` is checked by `xtask check-recipes`.
+
+Source `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-absence-refusal/recipe.toml`:
+
+```toml
+id = "wgpu-absence-refusal"
+title = "Refuse an unavailable wgpu site before submission"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 50
+tags = ["interference", "compute", "wgpu", "absence", "faults", "headless"]
+requires = ["interference-runtime", "interference-compute", "site/compute/wgpu", "numbers/tensor"]
+harness = "cargo-test"
+package = "sim-lib-interference-compute"
+test = "hardware_tests::explicit_wgpu_absence_and_auto_cpu_choice_are_pre_submission"
 expected = "expected.txt"
 ```
 

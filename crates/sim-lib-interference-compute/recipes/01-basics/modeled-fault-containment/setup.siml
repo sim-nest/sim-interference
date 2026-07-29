@@ -1,0 +1,5 @@
+(realize
+  (interference/solve problem plane
+    {sampling annotate work-budget default})
+  :fabric site/compute/model
+  :result interference/Study)

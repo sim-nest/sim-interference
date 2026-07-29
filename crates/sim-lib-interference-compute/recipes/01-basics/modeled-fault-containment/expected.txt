@@ -1,0 +1,3 @@
+faults=out-of-memory,device-lost,deadline,execution,readback
+cpu-restarts=0 provider-completions=0 result=refused
+readback-failure=cached-error
