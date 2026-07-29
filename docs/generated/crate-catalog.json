@@ -1,0 +1,73 @@
+{
+  "generator": "xtask crate-catalog v1",
+  "package_count": 5,
+  "packages": [
+    {
+      "description": "Normalized tile-local f32 Tensor lowering for coherent interference.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-interference-compute/Cargo.toml",
+      "name": "sim-lib-interference-compute",
+      "publish": "true",
+      "readme": "crates/sim-lib-interference-compute/README.md",
+      "root": "crates/sim-lib-interference-compute",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
+      "description": "Validated physical boundary types for coherent scalar wave-field studies.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-interference-core/Cargo.toml",
+      "name": "sim-lib-interference-core",
+      "publish": "true",
+      "readme": "crates/sim-lib-interference-core/README.md",
+      "root": "crates/sim-lib-interference-core",
+      "target_kinds": [
+        "example",
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Tensor-backed Citizen records and Shape contracts for coherent interference studies.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-interference-runtime/Cargo.toml",
+      "name": "sim-lib-interference-runtime",
+      "publish": "true",
+      "readme": "crates/sim-lib-interference-runtime/README.md",
+      "root": "crates/sim-lib-interference-runtime",
+      "target_kinds": [
+        "custom-build",
+        "example",
+        "lib"
+      ]
+    },
+    {
+      "description": "Deterministic CPU f64 reference solving for coherent scalar wave fields.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-interference-solve/Cargo.toml",
+      "name": "sim-lib-interference-solve",
+      "publish": "true",
+      "readme": "crates/sim-lib-interference-solve/README.md",
+      "root": "crates/sim-lib-interference-solve",
+      "target_kinds": [
+        "example",
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Repository validation and generated documentation tasks for sim-interference.",
+      "generated_readme": false,
+      "manifest": "xtask/Cargo.toml",
+      "name": "xtask",
+      "publish": "false",
+      "readme": "xtask/README.md",
+      "root": "xtask",
+      "target_kinds": [
+        "bin"
+      ]
+    }
+  ]
+}
