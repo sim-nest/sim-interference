@@ -1,7 +1,7 @@
 # Physical interference acceptance
 
 This directory holds the public, sanitized proof that the resident interference
-feature runs through physical wgpu compute on every GPU_MATH_5 target profile.
+feature runs through physical wgpu compute on every registered target profile.
 The committed reports are:
 
 These reports accelerate the homogeneous, isotropic, three-dimensional scalar
@@ -13,12 +13,12 @@ normalized observables rather than physical intensity, power, or energy.
 - `5090-v1.sx`
 - `ryzen-ai-max-395-v1.sx`
 
-Each report names the exact measured source commit and sanitized GPU_MATH_5
-profile provenance. Per-case records retain cell, source, tile, and segment
+Each report names the exact measured source commit and sanitized target-profile
+provenance. Per-case records retain cell, source, tile, and segment
 counts; maximum normalized phase; fixed component and phase tolerances; observed
 differential maxima; and the zero-intermediate/two-final materialization
 lifecycle. They also retain the driver/backend and the power and thermal context
-available from the originating GPU_MATH_5 profile.
+available from the originating target profile.
 
 `run-physical.sh capture` is intended for the registered control-plane target
 runner. It selects the requested physical adapter, executes the fixed

@@ -35,7 +35,7 @@ impl DenseExecutionEvidence {
         self.tiles
     }
 
-    /// Returns the largest planned segment count for one tile Tensor.
+    /// Returns the largest admitted segment count for one tile Tensor.
     pub fn max_segments_per_tensor(&self) -> usize {
         self.max_segments_per_tensor
     }

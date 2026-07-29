@@ -58,7 +58,7 @@ rectangular discrete apertures. Array/aperture amplitude is normalized across
 elements, active spacing is reported in wavelengths, and strict construction
 refuses spacing above `lambda/2`.
 
-Sanitized physical acceptance reports for the three GPU_MATH_5 target profiles
+Sanitized physical acceptance reports for the three registered target profiles
 live under [`acceptance/`](acceptance/README.md). They record the exact source,
 adapter profile, backend and driver, workload shape, numerical maxima,
 resident-materialization counts, and available power/thermal context. The

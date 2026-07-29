@@ -22,7 +22,7 @@ in the canonical Tensor implementation. The compute crate lowers the same
 model into bounded tile-local `f32` Tensor operations, supplies a dense CPU
 baseline, and reports fixed-tolerance conformance against the `f64` oracle.
 
-## Why you will be glad
+## Why it matters
 
 - Reject NaN and infinity before they can contaminate a study.
 - Refuse aliased carrier/fringe sampling and under-resolved point envelopes by

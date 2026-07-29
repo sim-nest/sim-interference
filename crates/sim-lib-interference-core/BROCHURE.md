@@ -15,7 +15,7 @@ convention. `SamplingPlane` defines finite pixel centres;
 `SamplingCertificate` records carrier, power-fringe, and point-envelope
 adequacy; `RequestPreflight` applies sampling policy and `WorkBudget`.
 
-## Why you will be glad
+## Why it matters
 
 - Sampling thresholds are data carried by the certificate, not hidden UI
   policy.

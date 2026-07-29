@@ -19,7 +19,7 @@ candidates, and Michelson contrast while retaining sampling and projection
 identity. `ScenarioBuilder` provides bounded canonical point, plane, phased
 array, and discrete-aperture fixtures.
 
-## Why you will be glad
+## Why it matters
 
 - The host field has one explicit two-dimensional shape.
 - Result components remain separate until a caller deliberately projects them.

@@ -24,7 +24,7 @@ observables, not physical intensity, power, or energy.
 - An exact checked Lisp recipe for a 1024-by-1024 two-source cancellation study
   through the local evaluation fabric.
 
-## Why you will be glad
+## Why it matters
 
 Host reference buffers cross into Tensor storage once. Resident results remain
 resident until an explicit host materialization asks each component for one

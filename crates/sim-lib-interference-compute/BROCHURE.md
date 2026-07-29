@@ -33,7 +33,7 @@ normalized observables, not physical intensity, power, or energy.
 - Explicit unavailable-wgpu refusal and automatic pre-submit CPU-choice
   evidence.
 
-## Why you will be glad
+## Why it matters
 
 Absolute world coordinates and absolute propagation phase never enter an `f32`
 Tensor. Missing operations, singular geometry, forward-plane violations, unsafe

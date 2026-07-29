@@ -3,7 +3,7 @@
 Use the unchanged `interference/solve` expression at a probe-backed wgpu
 `TensorSite`. The checked harness compares the materialized result with the
 same deterministic f64 oracle and fixed report used by dense f32 and modeled
-execution. It covers attenuation, planned multi-segment fields, long world
+execution. It covers attenuation, multi-segment fields, long world
 distance, exact cancellation, and measured crossover edges.
 
 Physical execution is deliberately opt-in with

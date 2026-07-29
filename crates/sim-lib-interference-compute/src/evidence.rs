@@ -33,7 +33,7 @@ impl HardwareMeasurementResult {
 pub struct HardwareEvidenceMetrics {
     /// Number of admitted physical field tiles.
     pub tiles: usize,
-    /// Number of planned resident final-component segments.
+    /// Number of resident final-component segments.
     pub segments: u64,
     /// Largest residual phase argument sent to Tensor trigonometry.
     pub max_abs_psi: f64,
