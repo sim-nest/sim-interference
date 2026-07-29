@@ -1,21 +1,29 @@
-(define problem
-  (interference/problem
-    {frequency-hz 343.0
-     speed-m-s 343.0
-     attenuation-np-m 0.01
-     singularity-radius-m 0.01
-     sources
-       ({kind point id source position-m (0.0 0.0 0.0)
-         amplitude-at-reference 1.0 phase-rad 0.25})}))
-
-(define plane
-  (interference/sampling-plane
-    {origin-m (1.0 -0.125 -0.125)
-     u-axis (0.0 1.0 0.0) v-axis (0.0 0.0 1.0)
-     extent-u-m 0.25 extent-v-m 0.25 rows 8 cols 8}))
-
-(realize
-  (interference/solve problem plane
-    {sampling annotate work-budget default})
-  :fabric site/compute/model
-  :result interference/Study)
+(let ((problem
+        (interference/problem
+          (expr:map
+            [frequency-hz 343.0]
+            [speed-m-s 343.0]
+            [attenuation-np-m 0.01]
+            [singularity-radius-m 0.01]
+            [sources
+              '((expr:map
+                  [kind point]
+                  [id source]
+                  [position-m (0.0 0.0 0.0)]
+                  [amplitude-at-reference 1.0]
+                  [phase-rad 0.25]))]))))
+  (let ((plane
+          (interference/sampling-plane
+            (expr:map
+              [origin-m '(1.0 -0.125 -0.125)]
+              [u-axis '(0.0 1.0 0.0)]
+              [v-axis '(0.0 0.0 1.0)]
+              [extent-u-m 0.25]
+              [extent-v-m 0.25]
+              [rows (expr:number citizen/int "8")]
+              [cols (expr:number citizen/int "8")]))))
+    (realize
+      (interference/solve problem plane
+        (expr:map [sampling annotate] [work-budget default]))
+      :fabric site/compute/model
+      :result interference/Study)))
