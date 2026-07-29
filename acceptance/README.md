@@ -4,6 +4,11 @@ This directory holds the public, sanitized proof that the resident interference
 feature runs through physical wgpu compute on every GPU_MATH_5 target profile.
 The committed reports are:
 
+These reports accelerate the homogeneous, isotropic, three-dimensional scalar
+free-field model only. They do not establish polarization, impedance,
+interfaces, obstacles, or diffraction, and their amplitude-squared results are
+normalized observables rather than physical intensity, power, or energy.
+
 - `5080-laptop-v1.sx`
 - `5090-v1.sx`
 - `ryzen-ai-max-395-v1.sx`

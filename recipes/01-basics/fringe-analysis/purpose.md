@@ -8,3 +8,8 @@ statistics, local node/antinode candidates, and Michelson contrast.
 The same recipe constructs a strict rectangular point-element aperture to show
 that its requested total amplitude is divided across elements and that both
 neighbour spacings are reported in wavelengths.
+
+Scope: this is a homogeneous, isotropic, three-dimensional scalar free-field
+study. It does not model polarization, impedance, interfaces, obstacles, or
+diffraction. Amplitude-squared observations are normalized proxies, not
+physical intensity, power, or energy.

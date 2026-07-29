@@ -3,6 +3,11 @@
 In one line: accurate coherent-wave geometry is reduced on the host so ordinary
 portable `f32` Tensor operations can evaluate it without large-world phase loss.
 
+Scope limit: this lowers the homogeneous, isotropic, three-dimensional scalar
+free-field model unchanged. It does not add polarization, impedance,
+interfaces, obstacles, or diffraction. Amplitude-squared metrics are
+normalized observables, not physical intensity, power, or energy.
+
 ## What it gives you
 
 - Complete fail-closed preflight before the first executor submission.

@@ -6,6 +6,11 @@
 //! Domain values cross this boundary as validated Citizen read-constructs.
 //! Phasors reuse two canonical [`sim_lib_numbers_tensor::Tensor`] values, scalar
 //! projections reuse one, and registered Shapes admit public runtime calls.
+//!
+//! The runtime preserves the homogeneous, isotropic, three-dimensional scalar
+//! free-field scope. It does not add polarization, impedance, interfaces,
+//! obstacles, or diffraction. Amplitude-squared values are normalized
+//! observables, not physical intensity, power, or energy.
 
 #[macro_use]
 mod citizen;

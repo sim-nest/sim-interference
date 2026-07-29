@@ -7,3 +7,8 @@ one full period.
 
 Unlike-frequency phasors are never added. Each tone keeps its own solve and
 sampling certificate through composition.
+
+Each tone uses the homogeneous, isotropic, three-dimensional scalar free-field
+model. The composition does not add polarization, impedance, interfaces,
+obstacles, or diffraction; amplitude-squared combinations are normalized
+observables, not physical intensity, power, or energy.

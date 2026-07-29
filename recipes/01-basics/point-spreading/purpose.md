@@ -6,3 +6,7 @@ and halves whenever distance doubles.
 
 This is scalar three-dimensional free-field spreading in a homogeneous medium,
 not impedance-derived intensity or a boundary-aware radiation model.
+
+Amplitude-squared observations are normalized proxies, not physical intensity,
+power, or energy; polarization, interfaces, obstacles, and diffraction remain
+outside the model.

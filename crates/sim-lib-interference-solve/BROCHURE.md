@@ -3,6 +3,11 @@
 In one line: this crate turns an admitted coherent wave problem into a
 deterministic host phasor field with inseparable solve evidence.
 
+Scope limit: the solved model is homogeneous, isotropic, three-dimensional,
+scalar, and free-field. It does not claim polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared outputs are normalized
+observables, not physical intensity, power, or energy.
+
 ## What it gives you
 
 `ReferencePhasorSolver` produces separate row-major real and imaginary `f64`

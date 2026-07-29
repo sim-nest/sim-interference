@@ -5,6 +5,13 @@
 //! preflight vocabulary used by the interference family. It deliberately does
 //! not define grid solving, tensor storage, runtime bindings, or presentation.
 //!
+//! # Scope boundary
+//!
+//! The model is homogeneous, isotropic, three-dimensional, scalar, and
+//! free-field. It does not model polarization, impedance, interfaces,
+//! obstacles, or diffraction. Downstream amplitude-squared observations are
+//! normalized proxies, not physical intensity, power, or energy.
+//!
 //! # Governing convention
 //!
 //! The real field is `u(x, t) = Re{U(x) * exp(-i * omega * t)}`. In a

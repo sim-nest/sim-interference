@@ -18,6 +18,11 @@ general-purpose codecs. `sim-lib-interference-compute` composes those records
 with an installed Tensor compute site without defining a provider, device API,
 or renderer.
 
+The modeled domain is scalar, homogeneous, isotropic, three-dimensional, and
+free-field. It does not model polarization, impedance, interfaces, obstacles,
+or diffraction. Amplitude-squared projections and detector reductions are
+normalized observables, not physical intensity, power, or energy.
+
 Every coherent problem has one frequency and a canonical source set. The
 time convention `u=Re{U exp(-i omega t)}`, outgoing spatial sign
 `U~exp(+i k r)`, point-source `1/r` spreading, attenuation, singularity

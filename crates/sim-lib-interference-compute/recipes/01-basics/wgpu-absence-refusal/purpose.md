@@ -7,3 +7,8 @@ its declared CPU route before submission.
 
 This headless recipe distinguishes explicit placement failure from a provider's
 pre-submission fallback policy without probing hardware.
+
+Placement does not broaden the homogeneous, isotropic, three-dimensional
+scalar free-field model. Polarization, impedance, interfaces, obstacles, and
+diffraction remain outside scope, and amplitude-squared metrics remain
+normalized rather than physical intensity, power, or energy.

@@ -3,6 +3,11 @@
 In one line: this crate makes certified interference studies ordinary,
 Shape-checked SIM values without giving up tensor residency or provenance.
 
+Scope limit: the carried model is homogeneous, isotropic, three-dimensional,
+scalar, and free-field. It does not add polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared values are normalized
+observables, not physical intensity, power, or energy.
+
 ## What it gives you
 
 - Citizen records for problems, planes, fields, studies, evidence, and

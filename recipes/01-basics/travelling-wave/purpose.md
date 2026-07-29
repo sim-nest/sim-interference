@@ -6,3 +6,6 @@ phasors rotate in the positive spatial direction because the model pairs
 
 The emitter is one scalar free-field component in a homogeneous medium. The
 recipe does not model an interface, boundary reflection, or polarization.
+
+Amplitude-squared observations of this field are normalized proxies, not
+impedance-derived physical intensity, power, or energy.

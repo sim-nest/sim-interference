@@ -2,6 +2,11 @@
 
 Loadable, Shape-checked runtime operations for coherent interference studies.
 
+The runtime carries the same homogeneous, isotropic, three-dimensional scalar
+free-field model as the dependency-free core. It does not add polarization,
+impedance, interfaces, obstacles, or diffraction. Amplitude-squared runtime
+values are normalized observables, not physical intensity, power, or energy.
+
 `InterferenceLib` exports:
 
 - `interference/problem` and `interference/sampling-plane` for checked physical

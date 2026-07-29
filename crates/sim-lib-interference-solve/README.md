@@ -11,6 +11,12 @@ covariance, global phase, canonical source permutations, the outgoing time
 sign, and second-order seven-point Helmholtz residual convergence across point,
 plane, mixed, attenuating, and multi-source fields.
 
+The solver executes a homogeneous, isotropic, three-dimensional scalar
+free-field model. It does not model polarization, impedance, interfaces,
+obstacles, or diffraction. Its amplitude-squared projections and detector
+reductions are normalized observables, not physical intensity, power, or
+energy.
+
 Scalar projection provides real, imaginary, amplitude, phase, normalized
 squared magnitude, and instantaneous observations. Phase at or below its
 declared amplitude floor is represented as a mask, never a number. Reduction

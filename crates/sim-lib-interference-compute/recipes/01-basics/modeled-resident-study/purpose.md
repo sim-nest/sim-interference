@@ -10,3 +10,8 @@ is below the configured crossover. Once selected, provider failure is returned
 without a CPU restart. Immutable coordinate planes upload once, arithmetic
 stays resident, and only the final real and imaginary components cross to a
 host observation. Repeated observation uses the resident storage cache.
+
+Compute placement preserves the homogeneous, isotropic, three-dimensional
+scalar free-field scope. It does not add polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared metrics are normalized
+observables, not physical intensity, power, or energy.

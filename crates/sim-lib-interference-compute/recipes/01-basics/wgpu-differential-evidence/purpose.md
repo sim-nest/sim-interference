@@ -15,3 +15,8 @@ materializations, and exactly two final component materializations.
 Without that opt-in, or without a qualifying adapter, the bounded evidence is
 `not-measured`. This is useful headless contract evidence, but it never
 satisfies a hardware acceptance gate and is never reported as a pass.
+
+The measured workload remains a homogeneous, isotropic, three-dimensional
+scalar free-field model. Wgpu does not add polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared metrics are normalized
+observables, not physical intensity, power, or energy.

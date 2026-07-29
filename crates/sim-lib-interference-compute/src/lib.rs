@@ -6,6 +6,11 @@
 //! The host keeps physical geometry and absolute phase in `f64`. Each prepared
 //! tile exposes only bounded offsets and residual phase to ordinary open Tensor
 //! operations, so no executor needs interference-specific behavior.
+//!
+//! The lowering preserves the homogeneous, isotropic, three-dimensional scalar
+//! free-field scope. It does not add polarization, impedance, interfaces,
+//! obstacles, or diffraction. Amplitude-squared metrics are normalized
+//! observables, not physical intensity, power, or energy.
 
 mod constants;
 mod coordinates;

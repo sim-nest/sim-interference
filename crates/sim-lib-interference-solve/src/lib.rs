@@ -6,6 +6,12 @@
 //! [`HostPhasorField`] with separate row-major real and imaginary component
 //! planes plus immutable [`SolveEvidence`].
 //!
+//! The solved model is homogeneous, isotropic, three-dimensional, scalar, and
+//! free-field. It does not model polarization, impedance, interfaces,
+//! obstacles, or diffraction. Amplitude-squared projections and detector
+//! reductions are normalized observables, not physical intensity, power, or
+//! energy.
+//!
 //! [`verify_reference_solver`] independently checks closed-form propagation
 //! identities, true metamorphic field laws, the outgoing time sign, and
 //! second-order convergence of a seven-point Helmholtz residual over point,

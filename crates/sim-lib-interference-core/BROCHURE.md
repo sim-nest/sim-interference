@@ -3,6 +3,11 @@
 In one line: this crate validates scalar-wave physics, sampling truth, and
 bounded work before solving begins.
 
+Scope limit: the model is homogeneous, isotropic, three-dimensional, scalar,
+and free-field. It does not claim polarization, impedance, interfaces,
+obstacles, or diffraction. Downstream amplitude-squared values are normalized
+observables, not physical intensity, power, or energy.
+
 ## What it gives you
 
 Focused `f64` wrappers feed one coherent source model and exact Green-function

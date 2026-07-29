@@ -2,6 +2,11 @@
 
 Normalized tile-local `f32` Tensor lowering for coherent scalar-wave fields.
 
+The lowering preserves the core's homogeneous, isotropic, three-dimensional
+scalar free-field scope. It does not add polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared differential metrics are
+normalized observables, not physical intensity, power, or energy.
+
 The crate preflights a complete interference problem and physical sampling
 plane before submitting any work. It partitions the plane under explicit
 phase, element, segment, tensor-byte, and result-byte limits. Host `f64`

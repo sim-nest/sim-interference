@@ -3,6 +3,11 @@
 In one line: `sim-interference` produces deterministic coherent scalar-wave
 fields without separating the answer from its sampling and work evidence.
 
+Scope limit: the model is homogeneous, isotropic, three-dimensional, scalar,
+and free-field. It does not claim polarization, impedance, interfaces,
+obstacles, or diffraction. Amplitude-squared results are normalized
+observables, not physical intensity, power, or energy.
+
 ## What it gives you
 
 The dependency-free crates provide checked physical quantities, canonical
