@@ -1,1 +1,1 @@
-include!("../../../recipes/01-basics/alias-refusal/main.rs");
+include!("../recipes/01-basics/alias-refusal/main.rs");

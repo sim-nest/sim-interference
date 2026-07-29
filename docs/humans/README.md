@@ -60,62 +60,64 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/recipe.toml`
 - `crates/sim-lib-interference-compute/recipes/01-basics/wgpu-differential-evidence/setup.siml`
 - `crates/sim-lib-interference-compute/recipes/book.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/alias-refusal/expected.txt`
+- `crates/sim-lib-interference-core/recipes/01-basics/alias-refusal/main.rs`
+- `crates/sim-lib-interference-core/recipes/01-basics/alias-refusal/purpose.md`
+- `crates/sim-lib-interference-core/recipes/01-basics/alias-refusal/recipe.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/attenuation/expected.txt`
+- `crates/sim-lib-interference-core/recipes/01-basics/attenuation/main.rs`
+- `crates/sim-lib-interference-core/recipes/01-basics/attenuation/purpose.md`
+- `crates/sim-lib-interference-core/recipes/01-basics/attenuation/recipe.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/checked-quantities/expected.txt`
+- `crates/sim-lib-interference-core/recipes/01-basics/checked-quantities/main.rs`
+- `crates/sim-lib-interference-core/recipes/01-basics/checked-quantities/purpose.md`
+- `crates/sim-lib-interference-core/recipes/01-basics/checked-quantities/recipe.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/point-spreading/expected.txt`
+- `crates/sim-lib-interference-core/recipes/01-basics/point-spreading/main.rs`
+- `crates/sim-lib-interference-core/recipes/01-basics/point-spreading/purpose.md`
+- `crates/sim-lib-interference-core/recipes/01-basics/point-spreading/recipe.toml`
+- `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/expected.txt`
+- `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/main.rs`
+- `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/purpose.md`
+- `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/recipe.toml`
+- `crates/sim-lib-interference-core/recipes/book.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/setup.siml`
 - `crates/sim-lib-interference-runtime/recipes/book.toml`
-- `recipes/01-basics/alias-refusal/expected.txt`
-- `recipes/01-basics/alias-refusal/main.rs`
-- `recipes/01-basics/alias-refusal/purpose.md`
-- `recipes/01-basics/alias-refusal/recipe.toml`
-- `recipes/01-basics/animation-projection/expected.txt`
-- `recipes/01-basics/animation-projection/main.rs`
-- `recipes/01-basics/animation-projection/purpose.md`
-- `recipes/01-basics/animation-projection/recipe.toml`
-- `recipes/01-basics/aperture-refusal/expected.txt`
-- `recipes/01-basics/aperture-refusal/main.rs`
-- `recipes/01-basics/aperture-refusal/purpose.md`
-- `recipes/01-basics/aperture-refusal/recipe.toml`
-- `recipes/01-basics/attenuation/expected.txt`
-- `recipes/01-basics/attenuation/main.rs`
-- `recipes/01-basics/attenuation/purpose.md`
-- `recipes/01-basics/attenuation/recipe.toml`
-- `recipes/01-basics/chapter.toml`
-- `recipes/01-basics/checked-quantities/expected.txt`
-- `recipes/01-basics/checked-quantities/main.rs`
-- `recipes/01-basics/checked-quantities/purpose.md`
-- `recipes/01-basics/checked-quantities/recipe.toml`
-- `recipes/01-basics/detector-reduction/expected.txt`
-- `recipes/01-basics/detector-reduction/main.rs`
-- `recipes/01-basics/detector-reduction/purpose.md`
-- `recipes/01-basics/detector-reduction/recipe.toml`
-- `recipes/01-basics/fringe-analysis/expected.txt`
-- `recipes/01-basics/fringe-analysis/main.rs`
-- `recipes/01-basics/fringe-analysis/purpose.md`
-- `recipes/01-basics/fringe-analysis/recipe.toml`
-- `recipes/01-basics/point-spreading/expected.txt`
-- `recipes/01-basics/point-spreading/main.rs`
-- `recipes/01-basics/point-spreading/purpose.md`
-- `recipes/01-basics/point-spreading/recipe.toml`
-- `recipes/01-basics/travelling-wave/expected.txt`
-- `recipes/01-basics/travelling-wave/main.rs`
-- `recipes/01-basics/travelling-wave/purpose.md`
-- `recipes/01-basics/travelling-wave/recipe.toml`
-- `recipes/01-basics/two-tone-beats/expected.txt`
-- `recipes/01-basics/two-tone-beats/main.rs`
-- `recipes/01-basics/two-tone-beats/purpose.md`
-- `recipes/01-basics/two-tone-beats/recipe.toml`
-- `recipes/book.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/animation-projection/expected.txt`
+- `crates/sim-lib-interference-solve/recipes/01-basics/animation-projection/main.rs`
+- `crates/sim-lib-interference-solve/recipes/01-basics/animation-projection/purpose.md`
+- `crates/sim-lib-interference-solve/recipes/01-basics/animation-projection/recipe.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/aperture-refusal/expected.txt`
+- `crates/sim-lib-interference-solve/recipes/01-basics/aperture-refusal/main.rs`
+- `crates/sim-lib-interference-solve/recipes/01-basics/aperture-refusal/purpose.md`
+- `crates/sim-lib-interference-solve/recipes/01-basics/aperture-refusal/recipe.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/detector-reduction/expected.txt`
+- `crates/sim-lib-interference-solve/recipes/01-basics/detector-reduction/main.rs`
+- `crates/sim-lib-interference-solve/recipes/01-basics/detector-reduction/purpose.md`
+- `crates/sim-lib-interference-solve/recipes/01-basics/detector-reduction/recipe.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/fringe-analysis/expected.txt`
+- `crates/sim-lib-interference-solve/recipes/01-basics/fringe-analysis/main.rs`
+- `crates/sim-lib-interference-solve/recipes/01-basics/fringe-analysis/purpose.md`
+- `crates/sim-lib-interference-solve/recipes/01-basics/fringe-analysis/recipe.toml`
+- `crates/sim-lib-interference-solve/recipes/01-basics/two-tone-beats/expected.txt`
+- `crates/sim-lib-interference-solve/recipes/01-basics/two-tone-beats/main.rs`
+- `crates/sim-lib-interference-solve/recipes/01-basics/two-tone-beats/purpose.md`
+- `crates/sim-lib-interference-solve/recipes/01-basics/two-tone-beats/recipe.toml`
+- `crates/sim-lib-interference-solve/recipes/book.toml`
 
 ## Worked Examples
 
 ### `feature/sim-interference/quantity-vocabulary`
 
-Specimen `recipe/sim-interference/01-basics/checked-quantities` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/checked-quantities` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/checked-quantities/recipe.toml`:
+Source `crates/sim-lib-interference-core/recipes/01-basics/checked-quantities/recipe.toml`:
 
 ```toml
 id = "checked-quantities"
@@ -265,9 +267,9 @@ fn diagnostic_text_and_quantity_names_are_stable() {
 
 ### `feature/sim-interference/scalar-wave-model`
 
-Specimen `recipe/sim-interference/01-basics/attenuation` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/attenuation` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/attenuation/recipe.toml`:
+Source `crates/sim-lib-interference-core/recipes/01-basics/attenuation/recipe.toml`:
 
 ```toml
 id = "attenuation"
@@ -283,9 +285,9 @@ package = "sim-lib-interference-core"
 example = "attenuation"
 ```
 
-Specimen `recipe/sim-interference/01-basics/point-spreading` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/point-spreading` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/point-spreading/recipe.toml`:
+Source `crates/sim-lib-interference-core/recipes/01-basics/point-spreading/recipe.toml`:
 
 ```toml
 id = "point-spreading"
@@ -301,9 +303,9 @@ package = "sim-lib-interference-core"
 example = "point-spreading"
 ```
 
-Specimen `recipe/sim-interference/01-basics/travelling-wave` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/travelling-wave` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/travelling-wave/recipe.toml`:
+Source `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/recipe.toml`:
 
 ```toml
 id = "travelling-wave"
@@ -664,9 +666,9 @@ fn non_finite_derived_geometry_is_rejected() {
 
 ### `feature/sim-interference/certified-sampling`
 
-Specimen `recipe/sim-interference/01-basics/alias-refusal` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/alias-refusal` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/alias-refusal/recipe.toml`:
+Source `crates/sim-lib-interference-core/recipes/01-basics/alias-refusal/recipe.toml`:
 
 ```toml
 id = "alias-refusal"
@@ -3707,9 +3709,9 @@ fn full_reference_verification_matrix_passes() {
 
 ### `feature/sim-interference/certified-interference`
 
-Specimen `recipe/sim-interference/01-basics/animation-projection` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/animation-projection` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/animation-projection/recipe.toml`:
+Source `crates/sim-lib-interference-solve/recipes/01-basics/animation-projection/recipe.toml`:
 
 ```toml
 id = "animation-projection"
@@ -3725,9 +3727,9 @@ package = "sim-lib-interference-solve"
 example = "animation-projection"
 ```
 
-Specimen `recipe/sim-interference/01-basics/detector-reduction` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/detector-reduction` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/detector-reduction/recipe.toml`:
+Source `crates/sim-lib-interference-solve/recipes/01-basics/detector-reduction/recipe.toml`:
 
 ```toml
 id = "detector-reduction"
@@ -3875,9 +3877,9 @@ fn public_cancellation_projection_is_masked() {
 
 ### `feature/sim-interference/fringe-analysis-scenarios`
 
-Specimen `recipe/sim-interference/01-basics/aperture-refusal` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/aperture-refusal` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/aperture-refusal/recipe.toml`:
+Source `crates/sim-lib-interference-solve/recipes/01-basics/aperture-refusal/recipe.toml`:
 
 ```toml
 id = "aperture-refusal"
@@ -3893,9 +3895,9 @@ package = "sim-lib-interference-solve"
 example = "aperture-refusal"
 ```
 
-Specimen `recipe/sim-interference/01-basics/fringe-analysis` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/fringe-analysis` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/fringe-analysis/recipe.toml`:
+Source `crates/sim-lib-interference-solve/recipes/01-basics/fringe-analysis/recipe.toml`:
 
 ```toml
 id = "fringe-analysis"
@@ -4017,9 +4019,9 @@ fn public_aperture_certificate_quantifies_normalization_and_spacing() {
 
 ### `feature/sim-interference/certified-multitone-composition`
 
-Specimen `recipe/sim-interference/01-basics/two-tone-beats` is checked by `xtask check-recipes`.
+Specimen `recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/two-tone-beats` is checked by `xtask check-recipes`.
 
-Source `recipes/01-basics/two-tone-beats/recipe.toml`:
+Source `crates/sim-lib-interference-solve/recipes/01-basics/two-tone-beats/recipe.toml`:
 
 ```toml
 id = "two-tone-beats"

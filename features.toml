@@ -56,7 +56,7 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-core/radians",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/checked-quantities",
+  "recipe/sim-interference/crates/sim-lib-interference-core/01-basics/checked-quantities",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/quantity_conformance",
 ]
 
@@ -81,9 +81,9 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-core/wave-number",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/attenuation",
-  "recipe/sim-interference/01-basics/point-spreading",
-  "recipe/sim-interference/01-basics/travelling-wave",
+  "recipe/sim-interference/crates/sim-lib-interference-core/01-basics/attenuation",
+  "recipe/sim-interference/crates/sim-lib-interference-core/01-basics/point-spreading",
+  "recipe/sim-interference/crates/sim-lib-interference-core/01-basics/travelling-wave",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/model_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/propagation_conformance",
 ]
@@ -107,7 +107,7 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-core/work-metric",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/alias-refusal",
+  "recipe/sim-interference/crates/sim-lib-interference-core/01-basics/alias-refusal",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/budget_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/certificate_conformance",
   "spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_acceptance_conformance",
@@ -254,8 +254,8 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-solve/scalar-sample",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/animation-projection",
-  "recipe/sim-interference/01-basics/detector-reduction",
+  "recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/animation-projection",
+  "recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/detector-reduction",
   "recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/projection_conformance",
 ]
@@ -297,8 +297,8 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-solve/strict_max_spacing_wavelengths",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/aperture-refusal",
-  "recipe/sim-interference/01-basics/fringe-analysis",
+  "recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/aperture-refusal",
+  "recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/fringe-analysis",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/analysis_scenario_conformance",
 ]
 
@@ -320,7 +320,7 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-interference-solve/tone-study",
 ]
 claims_specimens = [
-  "recipe/sim-interference/01-basics/two-tone-beats",
+  "recipe/sim-interference/crates/sim-lib-interference-solve/01-basics/two-tone-beats",
   "spec-test/sim-interference/crates/sim-lib-interference-solve/tests/multitone_conformance",
 ]
 

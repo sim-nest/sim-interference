@@ -1,4 +1,4 @@
-//! Package metadata and unpublished-release floor checks.
+//! Publishable package metadata and release floor checks.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -24,12 +24,28 @@ pub fn run() -> Result<(), String> {
         for key in [
             "description",
             "license.workspace",
+            "readme = \"README.md\"",
             "repository.workspace",
             "homepage.workspace",
-            "publish = false",
+            "publish = true",
+            "keywords",
+            "categories",
+            "include = [",
         ] {
             if !text.contains(key) {
                 missing.push(format!("{} missing {key}", relative_path(&root, manifest)));
+            }
+        }
+        for line in text
+            .lines()
+            .filter(|line| line.contains('{') && line.contains("path ="))
+        {
+            if !line.contains("version =") {
+                missing.push(format!(
+                    "{} has unversioned path dependency: {}",
+                    relative_path(&root, manifest),
+                    line.trim()
+                ));
             }
         }
     }
@@ -45,7 +61,7 @@ pub fn run() -> Result<(), String> {
     }
 
     println!(
-        "check-package-floors: OK ({} unpublished package manifest(s))",
+        "check-package-floors: OK ({} publishable package manifest(s))",
         manifests.len()
     );
     Ok(())

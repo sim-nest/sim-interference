@@ -6,13 +6,21 @@ license.workspace = true
 readme = "README.md"
 repository.workspace = true
 homepage.workspace = true
-publish = false
+publish = true
 description = "Deterministic CPU f64 reference solving for coherent scalar wave fields."
 keywords = ["interference", "wave", "physics", "simulation"]
 categories = ["science", "simulation"]
+include = [
+  "/src/**",
+  "/examples/**",
+  "/tests/**",
+  "/recipes/**",
+  "/README.md",
+  "/BROCHURE.md",
+]
 
 [dependencies]
-sim-lib-interference-core = { path = "../sim-lib-interference-core" }
+sim-lib-interference-core = { version = "0.1.0", path = "../sim-lib-interference-core" }
 
 [[example]]
 name = "fringe-analysis"

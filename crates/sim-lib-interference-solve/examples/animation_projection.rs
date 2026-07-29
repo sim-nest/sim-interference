@@ -1,1 +1,1 @@
-include!("../../../recipes/01-basics/animation-projection/main.rs");
+include!("../recipes/01-basics/animation-projection/main.rs");

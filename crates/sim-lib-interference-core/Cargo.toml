@@ -6,10 +6,18 @@ license.workspace = true
 readme = "README.md"
 repository.workspace = true
 homepage.workspace = true
-publish = false
+publish = true
 description = "Validated physical boundary types for coherent scalar wave-field studies."
 keywords = ["interference", "wave", "physics", "simulation"]
 categories = ["science", "simulation"]
+include = [
+  "/src/**",
+  "/examples/**",
+  "/tests/**",
+  "/recipes/**",
+  "/README.md",
+  "/BROCHURE.md",
+]
 
 [dependencies]
 

@@ -1,5 +1,5 @@
 {
-  "card_count": 5,
+  "card_count": 6,
   "cards": [
     {
       "id": "browse/catalog",
@@ -20,9 +20,15 @@
       "summary": "Shape-checked coherent field studies through the loadable CPU solver."
     },
     {
-      "id": "cookbook/sim-interference",
+      "id": "cookbook/sim-lib-interference-core",
       "kind": "cookbook-recipe",
-      "owner": "sim-interference",
+      "owner": "sim-lib-interference-core",
+      "summary": ""
+    },
+    {
+      "id": "cookbook/sim-lib-interference-solve",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-interference-solve",
       "summary": ""
     },
     {
