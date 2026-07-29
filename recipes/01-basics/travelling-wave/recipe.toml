@@ -1,0 +1,11 @@
+id = "travelling-wave"
+title = "Follow the phase of an outgoing travelling wave"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 30
+tags = ["interference", "cpu", "travelling-wave", "phase", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "travelling-wave"

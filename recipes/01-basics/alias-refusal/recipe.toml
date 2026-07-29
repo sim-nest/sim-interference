@@ -1,0 +1,11 @@
+id = "alias-refusal"
+title = "Refuse an aliased physical sampling request"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 60
+tags = ["interference", "cpu", "sampling", "alias", "fail-closed"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "alias-refusal"

@@ -1,0 +1,11 @@
+id = "point-spreading"
+title = "Measure inverse-distance point spreading"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 40
+tags = ["interference", "cpu", "point-source", "spreading", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "point-spreading"

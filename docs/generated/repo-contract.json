@@ -146,8 +146,48 @@
           "kind": [
             "example"
           ],
+          "name": "alias-refusal",
+          "src": "crates/sim-lib-interference-core/examples/alias_refusal.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "attenuation",
+          "src": "crates/sim-lib-interference-core/examples/attenuation.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
           "name": "checked-quantities",
           "src": "crates/sim-lib-interference-core/examples/checked_quantities.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "point-spreading",
+          "src": "crates/sim-lib-interference-core/examples/point_spreading.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "travelling-wave",
+          "src": "crates/sim-lib-interference-core/examples/travelling_wave.rs"
         },
         {
           "crate_types": [
@@ -327,8 +367,48 @@
           "kind": [
             "example"
           ],
+          "name": "animation-projection",
+          "src": "crates/sim-lib-interference-solve/examples/animation_projection.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "aperture-refusal",
+          "src": "crates/sim-lib-interference-solve/examples/aperture_refusal.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "detector-reduction",
+          "src": "crates/sim-lib-interference-solve/examples/detector_reduction.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
           "name": "fringe-analysis",
           "src": "crates/sim-lib-interference-solve/examples/fringe_analysis.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "example"
+          ],
+          "name": "two-tone-beats",
+          "src": "crates/sim-lib-interference-solve/examples/two_tone_beats.rs"
         },
         {
           "crate_types": [
@@ -415,10 +495,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-28T11:56:13+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "e4e4f407daa3c8b94e12a284b68ccc237bbc74aa",
+    "git_commit": "f89aac66d7dd19af3552e8af8d82e9ec7e8cacae",
     "repo": "sim-interference",
     "schema": "sim.provenance.v1",
-    "source_commit": "e4e4f407daa3c8b94e12a284b68ccc237bbc74aa",
+    "source_commit": "f89aac66d7dd19af3552e8af8d82e9ec7e8cacae",
     "source_remote": "https://github.com/sim-nest/sim-interference",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -431,9 +511,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "b423d4442493f70d",
+    "workspace_hash": "322bb9af7b397b3a",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 97,
+    "workspace_hash_input_count": 113,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-interference-compute/Cargo.toml",
@@ -458,7 +538,11 @@
       "crates/sim-lib-interference-compute/src/tests.rs",
       "crates/sim-lib-interference-compute/src/tile.rs",
       "crates/sim-lib-interference-core/Cargo.toml",
+      "crates/sim-lib-interference-core/examples/alias_refusal.rs",
+      "crates/sim-lib-interference-core/examples/attenuation.rs",
       "crates/sim-lib-interference-core/examples/checked_quantities.rs",
+      "crates/sim-lib-interference-core/examples/point_spreading.rs",
+      "crates/sim-lib-interference-core/examples/travelling_wave.rs",
       "crates/sim-lib-interference-core/src/budget.rs",
       "crates/sim-lib-interference-core/src/certificate.rs",
       "crates/sim-lib-interference-core/src/emitter.rs",
@@ -498,7 +582,11 @@
       "crates/sim-lib-interference-runtime/src/tensor_bridge.rs",
       "crates/sim-lib-interference-runtime/src/tests.rs",
       "crates/sim-lib-interference-solve/Cargo.toml",
+      "crates/sim-lib-interference-solve/examples/animation_projection.rs",
+      "crates/sim-lib-interference-solve/examples/aperture_refusal.rs",
+      "crates/sim-lib-interference-solve/examples/detector_reduction.rs",
       "crates/sim-lib-interference-solve/examples/fringe_analysis.rs",
+      "crates/sim-lib-interference-solve/examples/two_tone_beats.rs",
       "crates/sim-lib-interference-solve/src/analysis.rs",
       "crates/sim-lib-interference-solve/src/analysis_tests.rs",
       "crates/sim-lib-interference-solve/src/analytic.rs",
@@ -528,8 +616,16 @@
       "crates/sim-lib-interference-solve/tests/reference_conformance.rs",
       "crates/sim-lib-interference-solve/tests/verification_conformance.rs",
       "features.toml",
+      "recipes/01-basics/alias-refusal/recipe.toml",
+      "recipes/01-basics/animation-projection/recipe.toml",
+      "recipes/01-basics/aperture-refusal/recipe.toml",
+      "recipes/01-basics/attenuation/recipe.toml",
       "recipes/01-basics/checked-quantities/recipe.toml",
+      "recipes/01-basics/detector-reduction/recipe.toml",
       "recipes/01-basics/fringe-analysis/recipe.toml",
+      "recipes/01-basics/point-spreading/recipe.toml",
+      "recipes/01-basics/travelling-wave/recipe.toml",
+      "recipes/01-basics/two-tone-beats/recipe.toml",
       "recipes/book.toml",
       "xtask/Cargo.toml"
     ]
@@ -590,8 +686,40 @@
       "card_id": "cookbook/sim-interference",
       "group": "",
       "package": "sim-interference",
-      "recipe_count": 2,
+      "recipe_count": 10,
       "recipes": [
+        {
+          "card_id": "sim-interference/01-basics/alias-refusal",
+          "codec": "rust",
+          "id": "alias-refusal",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/alias-refusal/recipe.toml",
+          "title": "Refuse an aliased physical sampling request"
+        },
+        {
+          "card_id": "sim-interference/01-basics/animation-projection",
+          "codec": "rust",
+          "id": "animation-projection",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/animation-projection/recipe.toml",
+          "title": "Project animation frames without re-solving"
+        },
+        {
+          "card_id": "sim-interference/01-basics/aperture-refusal",
+          "codec": "rust",
+          "id": "aperture-refusal",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/aperture-refusal/recipe.toml",
+          "title": "Refuse a sparse aperture approximation"
+        },
+        {
+          "card_id": "sim-interference/01-basics/attenuation",
+          "codec": "rust",
+          "id": "attenuation",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/attenuation/recipe.toml",
+          "title": "Measure exponential field attenuation"
+        },
         {
           "card_id": "sim-interference/01-basics/checked-quantities",
           "codec": "rust",
@@ -601,12 +729,44 @@
           "title": "Construct checked interference quantities"
         },
         {
+          "card_id": "sim-interference/01-basics/detector-reduction",
+          "codec": "rust",
+          "id": "detector-reduction",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/detector-reduction/recipe.toml",
+          "title": "Reduce every source cell through a detector"
+        },
+        {
           "card_id": "sim-interference/01-basics/fringe-analysis",
           "codec": "rust",
           "id": "fringe-analysis",
           "package": "sim-interference",
           "recipe_toml": "recipes/01-basics/fringe-analysis/recipe.toml",
           "title": "Build and analyze a certified standing wave"
+        },
+        {
+          "card_id": "sim-interference/01-basics/point-spreading",
+          "codec": "rust",
+          "id": "point-spreading",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/point-spreading/recipe.toml",
+          "title": "Measure inverse-distance point spreading"
+        },
+        {
+          "card_id": "sim-interference/01-basics/travelling-wave",
+          "codec": "rust",
+          "id": "travelling-wave",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/travelling-wave/recipe.toml",
+          "title": "Follow the phase of an outgoing travelling wave"
+        },
+        {
+          "card_id": "sim-interference/01-basics/two-tone-beats",
+          "codec": "rust",
+          "id": "two-tone-beats",
+          "package": "sim-interference",
+          "recipe_toml": "recipes/01-basics/two-tone-beats/recipe.toml",
+          "title": "Observe a certified two-tone beat"
         }
       ],
       "summary": "",

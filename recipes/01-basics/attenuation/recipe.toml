@@ -1,0 +1,11 @@
+id = "attenuation"
+title = "Measure exponential field attenuation"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 50
+tags = ["interference", "cpu", "attenuation", "homogeneous-medium", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "attenuation"

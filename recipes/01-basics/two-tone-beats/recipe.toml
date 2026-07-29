@@ -1,0 +1,11 @@
+id = "two-tone-beats"
+title = "Observe a certified two-tone beat"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 100
+tags = ["interference", "cpu", "multitone", "beats", "instant"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "two-tone-beats"

@@ -17,5 +17,21 @@ categories = ["science", "simulation"]
 name = "checked-quantities"
 path = "examples/checked_quantities.rs"
 
+[[example]]
+name = "travelling-wave"
+path = "examples/travelling_wave.rs"
+
+[[example]]
+name = "point-spreading"
+path = "examples/point_spreading.rs"
+
+[[example]]
+name = "attenuation"
+path = "examples/attenuation.rs"
+
+[[example]]
+name = "alias-refusal"
+path = "examples/alias_refusal.rs"
+
 [lints]
 workspace = true

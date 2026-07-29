@@ -1,0 +1,1 @@
+strict=refused axis=u spacing=0.550 wavelengths maximum=0.500

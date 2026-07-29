@@ -1,0 +1,11 @@
+id = "animation-projection"
+title = "Project animation frames without re-solving"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 90
+tags = ["interference", "cpu", "animation", "instant", "projection"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "animation-projection"

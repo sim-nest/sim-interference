@@ -1,0 +1,2 @@
+source=3x5 target=2x2 footprint-rows=1..2 footprint-cols=2..3 loss=DetectorIntegration
+samples=2.000000,2.000000,2.000000,2.000000

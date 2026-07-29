@@ -1,0 +1,1 @@
+strict=refused verdict=Aliased carrier-samples=0.857500 power-fringe-samples=0.428750

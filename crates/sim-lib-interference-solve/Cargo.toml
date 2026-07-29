@@ -18,5 +18,21 @@ sim-lib-interference-core = { path = "../sim-lib-interference-core" }
 name = "fringe-analysis"
 path = "examples/fringe_analysis.rs"
 
+[[example]]
+name = "aperture-refusal"
+path = "examples/aperture_refusal.rs"
+
+[[example]]
+name = "detector-reduction"
+path = "examples/detector_reduction.rs"
+
+[[example]]
+name = "animation-projection"
+path = "examples/animation_projection.rs"
+
+[[example]]
+name = "two-tone-beats"
+path = "examples/two_tone_beats.rs"
+
 [lints]
 workspace = true

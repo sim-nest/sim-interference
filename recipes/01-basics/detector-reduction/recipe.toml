@@ -1,0 +1,11 @@
+id = "detector-reduction"
+title = "Reduce every source cell through a detector"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 80
+tags = ["interference", "cpu", "detector", "reduction", "projection"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "detector-reduction"

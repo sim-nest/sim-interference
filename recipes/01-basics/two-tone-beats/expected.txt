@@ -1,0 +1,4 @@
+time=0.000s sample=2.000000
+time=0.125s sample=0.000000
+time=0.250s sample=2.000000
+beat-period=0.250s components=2

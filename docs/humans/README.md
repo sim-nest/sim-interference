@@ -19,14 +19,14 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | --- | --- | ---: | --- |
 | `feature/sim-interference/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, rustdoc, recipe, diagram, and Index facts for the interference domain. |
 | `feature/sim-interference/quantity-vocabulary` | `crate/sim-lib-interference-core` | 2 | Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types. |
-| `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 2 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
-| `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 4 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
+| `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 5 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
+| `feature/sim-interference/certified-sampling` | `crate/sim-lib-interference-core` | 5 | Define exact finite plane samples, classify carrier, power-fringe, and point-envelope resolution, and bound solve work before allocation. |
 | `feature/sim-interference/normalized-tensor-lowering` | `crate/sim-lib-interference-compute` | 2 | Lower coherent point and forward-plane fields into bounded tile-local f32 Tensor arithmetic without exposing large-world coordinates or absolute phase to an executor. |
 | `feature/sim-interference/resident-compute-studies` | `crate/sim-lib-interference-compute` | 4 | Route an admitted interference Study through the active Env-bound Tensor executor, with pre-submission CPU selection, resident f32 results, explicit transfer evidence, and no restart after provider selection. |
 | `feature/sim-interference/deterministic-reference-solver` | `crate/sim-lib-interference-solve` | 2 | Solve admitted coherent scalar-wave problems into complete row-major f64 component planes, then check analytic identities, metamorphic laws, and Helmholtz residual convergence. |
-| `feature/sim-interference/certified-interference` | `crate/sim-lib-interference-runtime` | 2 | Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence. |
-| `feature/sim-interference/fringe-analysis-scenarios` | `crate/sim-lib-interference-solve` | 2 | Summarize amplitude-like fields without losing provenance and construct bounded canonical source scenarios with explicit aperture approximation evidence. |
-| `feature/sim-interference/certified-multitone-composition` | `crate/sim-lib-interference-solve` | 1 | Combine independently certified coherent frequency studies on identical physical sample geometry as incoherent squared magnitude or shared-clock instantaneous scalars. |
+| `feature/sim-interference/certified-interference` | `crate/sim-lib-interference-runtime` | 4 | Construct, solve, project, analyze, scenario-build, and compose coherent interference through Shape-checked runtime operations with explicit solver selection and unchanged evidence. |
+| `feature/sim-interference/fringe-analysis-scenarios` | `crate/sim-lib-interference-solve` | 3 | Summarize amplitude-like fields without losing provenance and construct bounded canonical source scenarios with explicit aperture approximation evidence. |
+| `feature/sim-interference/certified-multitone-composition` | `crate/sim-lib-interference-solve` | 2 | Combine independently certified coherent frequency studies on identical physical sample geometry as incoherent squared magnitude or shared-clock instantaneous scalars. |
 | `feature/sim-interference/tensor-runtime-records` | `crate/sim-lib-interference-runtime` | 1 | Project checked problems, planes, fields, studies, evidence, and scalar projections into fail-closed Citizen records and Shapes over the canonical Tensor. |
 
 ## Surfaces
@@ -54,15 +54,47 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/setup.siml`
 - `crates/sim-lib-interference-runtime/recipes/book.toml`
+- `recipes/01-basics/alias-refusal/expected.txt`
+- `recipes/01-basics/alias-refusal/main.rs`
+- `recipes/01-basics/alias-refusal/purpose.md`
+- `recipes/01-basics/alias-refusal/recipe.toml`
+- `recipes/01-basics/animation-projection/expected.txt`
+- `recipes/01-basics/animation-projection/main.rs`
+- `recipes/01-basics/animation-projection/purpose.md`
+- `recipes/01-basics/animation-projection/recipe.toml`
+- `recipes/01-basics/aperture-refusal/expected.txt`
+- `recipes/01-basics/aperture-refusal/main.rs`
+- `recipes/01-basics/aperture-refusal/purpose.md`
+- `recipes/01-basics/aperture-refusal/recipe.toml`
+- `recipes/01-basics/attenuation/expected.txt`
+- `recipes/01-basics/attenuation/main.rs`
+- `recipes/01-basics/attenuation/purpose.md`
+- `recipes/01-basics/attenuation/recipe.toml`
 - `recipes/01-basics/chapter.toml`
 - `recipes/01-basics/checked-quantities/expected.txt`
 - `recipes/01-basics/checked-quantities/main.rs`
 - `recipes/01-basics/checked-quantities/purpose.md`
 - `recipes/01-basics/checked-quantities/recipe.toml`
+- `recipes/01-basics/detector-reduction/expected.txt`
+- `recipes/01-basics/detector-reduction/main.rs`
+- `recipes/01-basics/detector-reduction/purpose.md`
+- `recipes/01-basics/detector-reduction/recipe.toml`
 - `recipes/01-basics/fringe-analysis/expected.txt`
 - `recipes/01-basics/fringe-analysis/main.rs`
 - `recipes/01-basics/fringe-analysis/purpose.md`
 - `recipes/01-basics/fringe-analysis/recipe.toml`
+- `recipes/01-basics/point-spreading/expected.txt`
+- `recipes/01-basics/point-spreading/main.rs`
+- `recipes/01-basics/point-spreading/purpose.md`
+- `recipes/01-basics/point-spreading/recipe.toml`
+- `recipes/01-basics/travelling-wave/expected.txt`
+- `recipes/01-basics/travelling-wave/main.rs`
+- `recipes/01-basics/travelling-wave/purpose.md`
+- `recipes/01-basics/travelling-wave/recipe.toml`
+- `recipes/01-basics/two-tone-beats/expected.txt`
+- `recipes/01-basics/two-tone-beats/main.rs`
+- `recipes/01-basics/two-tone-beats/purpose.md`
+- `recipes/01-basics/two-tone-beats/recipe.toml`
 - `recipes/book.toml`
 
 ## Worked Examples
@@ -220,6 +252,60 @@ fn diagnostic_text_and_quantity_names_are_stable() {
 ```
 
 ### `feature/sim-interference/scalar-wave-model`
+
+Specimen `recipe/sim-interference/01-basics/attenuation` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/attenuation/recipe.toml`:
+
+```toml
+id = "attenuation"
+title = "Measure exponential field attenuation"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 50
+tags = ["interference", "cpu", "attenuation", "homogeneous-medium", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "attenuation"
+```
+
+Specimen `recipe/sim-interference/01-basics/point-spreading` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/point-spreading/recipe.toml`:
+
+```toml
+id = "point-spreading"
+title = "Measure inverse-distance point spreading"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 40
+tags = ["interference", "cpu", "point-source", "spreading", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "point-spreading"
+```
+
+Specimen `recipe/sim-interference/01-basics/travelling-wave` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/travelling-wave/recipe.toml`:
+
+```toml
+id = "travelling-wave"
+title = "Follow the phase of an outgoing travelling wave"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 30
+tags = ["interference", "cpu", "travelling-wave", "phase", "free-field"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "travelling-wave"
+```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/model_conformance` is checked by `cargo test`.
 
@@ -565,6 +651,24 @@ fn non_finite_derived_geometry_is_rejected() {
 ```
 
 ### `feature/sim-interference/certified-sampling`
+
+Specimen `recipe/sim-interference/01-basics/alias-refusal` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/alias-refusal/recipe.toml`:
+
+```toml
+id = "alias-refusal"
+title = "Refuse an aliased physical sampling request"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 60
+tags = ["interference", "cpu", "sampling", "alias", "fail-closed"]
+harness = "cargo-example"
+package = "sim-lib-interference-core"
+example = "alias-refusal"
+```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/budget_conformance` is checked by `cargo test`.
 
@@ -3534,6 +3638,42 @@ fn full_reference_verification_matrix_passes() {
 
 ### `feature/sim-interference/certified-interference`
 
+Specimen `recipe/sim-interference/01-basics/animation-projection` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/animation-projection/recipe.toml`:
+
+```toml
+id = "animation-projection"
+title = "Project animation frames without re-solving"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 90
+tags = ["interference", "cpu", "animation", "instant", "projection"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "animation-projection"
+```
+
+Specimen `recipe/sim-interference/01-basics/detector-reduction` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/detector-reduction/recipe.toml`:
+
+```toml
+id = "detector-reduction"
+title = "Reduce every source cell through a detector"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 80
+tags = ["interference", "cpu", "detector", "reduction", "projection"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "detector-reduction"
+```
+
 Specimen `recipe/sim-interference/crates/sim-lib-interference-runtime/01-basics/two-source-cancellation` is checked by `xtask check-recipes`.
 
 Source `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/recipe.toml`:
@@ -3666,6 +3806,24 @@ fn public_cancellation_projection_is_masked() {
 
 ### `feature/sim-interference/fringe-analysis-scenarios`
 
+Specimen `recipe/sim-interference/01-basics/aperture-refusal` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/aperture-refusal/recipe.toml`:
+
+```toml
+id = "aperture-refusal"
+title = "Refuse a sparse aperture approximation"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 70
+tags = ["interference", "cpu", "aperture", "sampling", "fail-closed"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "aperture-refusal"
+```
+
 Specimen `recipe/sim-interference/01-basics/fringe-analysis` is checked by `xtask check-recipes`.
 
 Source `recipes/01-basics/fringe-analysis/recipe.toml`:
@@ -3789,6 +3947,24 @@ fn public_aperture_certificate_quantifies_normalization_and_spacing() {
 ```
 
 ### `feature/sim-interference/certified-multitone-composition`
+
+Specimen `recipe/sim-interference/01-basics/two-tone-beats` is checked by `xtask check-recipes`.
+
+Source `recipes/01-basics/two-tone-beats/recipe.toml`:
+
+```toml
+id = "two-tone-beats"
+title = "Observe a certified two-tone beat"
+codec = "rust"
+setup = "main.rs"
+purpose = "purpose.md"
+expected = "expected.txt"
+order = 100
+tags = ["interference", "cpu", "multitone", "beats", "instant"]
+harness = "cargo-example"
+package = "sim-lib-interference-solve"
+example = "two-tone-beats"
+```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-solve/tests/multitone_conformance` is checked by `cargo test`.
 
