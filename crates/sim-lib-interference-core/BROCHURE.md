@@ -1,7 +1,6 @@
 # sim-lib-interference-core
 
-In one line: this crate validates scalar-wave physics, sampling truth, and
-bounded work before solving begins.
+In one line: this crate validates scalar-wave physics, sampling truth, and bounded work before solving begins.
 
 Scope limit: the model is homogeneous, isotropic, three-dimensional, scalar,
 and free-field. It does not claim polarization, impedance, interfaces,
@@ -15,7 +14,7 @@ convention. `SamplingPlane` defines finite pixel centres;
 `SamplingCertificate` records carrier, power-fringe, and point-envelope
 adequacy; `RequestPreflight` applies sampling policy and `WorkBudget`.
 
-## Why it matters
+## Why you will be glad
 
 - Sampling thresholds are data carried by the certificate, not hidden UI
   policy.

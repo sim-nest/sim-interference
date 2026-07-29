@@ -1,7 +1,6 @@
 # sim-lib-interference-compute
 
-In one line: accurate coherent-wave geometry is reduced on the host so ordinary
-portable `f32` Tensor operations can evaluate it without large-world phase loss.
+In one line: accurate coherent-wave geometry is reduced on the host so ordinary portable `f32` Tensor operations can evaluate it without large-world phase loss.
 
 Scope limit: this lowers the homogeneous, isotropic, three-dimensional scalar
 free-field model unchanged. It does not add polarization, impedance,
@@ -33,7 +32,7 @@ normalized observables, not physical intensity, power, or energy.
 - Explicit unavailable-wgpu refusal and automatic pre-submit CPU-choice
   evidence.
 
-## Why it matters
+## Why you will be glad
 
 Absolute world coordinates and absolute propagation phase never enter an `f32`
 Tensor. Missing operations, singular geometry, forward-plane violations, unsafe

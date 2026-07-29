@@ -1,7 +1,6 @@
 # sim-lib-interference-solve
 
-In one line: this crate turns an admitted coherent wave problem into a
-deterministic host phasor field with inseparable solve evidence.
+In one line: this crate turns an admitted coherent wave problem into a deterministic host phasor field with inseparable solve evidence.
 
 Scope limit: the solved model is homogeneous, isotropic, three-dimensional,
 scalar, and free-field. It does not claim polarization, impedance, interfaces,
@@ -12,14 +11,14 @@ observables, not physical intensity, power, or energy.
 
 `ReferencePhasorSolver` produces separate row-major real and imaginary `f64`
 component planes. `SolveEvidence` retains the sampling policy, certificate,
-and complete work estimate used to admit the request. `project` and
+and complete work estimate that admitted the request. `project` and
 `reduce_for_view` derive certified scalar fields without rerunning propagation.
 `analyze_fringes` adds deterministic statistics, strict local node/antinode
 candidates, and Michelson contrast while retaining sampling and projection
 identity. `ScenarioBuilder` provides bounded canonical point, plane, phased
 array, and discrete-aperture fixtures.
 
-## Why it matters
+## Why you will be glad
 
 - The host field has one explicit two-dimensional shape.
 - Result components remain separate until a caller deliberately projects them.

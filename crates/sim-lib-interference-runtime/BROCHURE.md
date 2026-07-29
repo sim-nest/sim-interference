@@ -1,7 +1,6 @@
 # sim-lib-interference-runtime
 
-In one line: this crate makes certified interference studies ordinary,
-Shape-checked SIM values without giving up tensor residency or provenance.
+In one line: this crate makes certified interference studies ordinary, Shape-checked SIM values without giving up tensor residency or provenance.
 
 Scope limit: the carried model is homogeneous, isotropic, three-dimensional,
 scalar, and free-field. It does not add polarization, impedance, interfaces,
@@ -24,7 +23,7 @@ observables, not physical intensity, power, or energy.
 - An exact checked Lisp recipe for a 1024-by-1024 two-source cancellation study
   through the local evaluation fabric.
 
-## Why it matters
+## Why you will be glad
 
 Host reference buffers cross into Tensor storage once. Resident results remain
 resident until an explicit host materialization asks each component for one
