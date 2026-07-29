@@ -32,7 +32,7 @@ Verify a committed report against its measured source:
 
 ```text
 sh acceptance/run-physical.sh verify \
-  --source 9495516acd8c039324bac9538147dd0a99e80d6a \
+  --source d0efde42c9a56fac1a6bc23e94a4a6ad835b2780 \
   acceptance/5080-laptop-v1.sx
 ```
 
