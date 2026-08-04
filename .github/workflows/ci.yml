@@ -2,6 +2,7 @@
 name: ci
 on:
   pull_request: {}
+  # Keep a manual trigger available during release-closeout CI recovery.
   workflow_dispatch: {}
   push:
     branches: [main]
