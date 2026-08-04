@@ -15,6 +15,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      # The shared simdoc encoder patches sibling SIM crates relative to the
+      # sim-tooling checkout, so standalone CI needs these checkouts under the
+      # repo root before xtask forwards into sim-tooling.
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-citizen
+          path: sim-citizen
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-codecs
+          path: sim-codecs
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-foundation
+          path: sim-foundation
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-kernel
+          path: sim-kernel
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-shape
+          path: sim-shape
       - uses: actions/checkout@v4
         with:
           repository: sim-nest/sim-tooling
