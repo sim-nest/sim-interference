@@ -2,17 +2,45 @@
 name: ci
 on:
   pull_request: {}
+  # Keep a manual trigger available during release-closeout CI recovery.
+  workflow_dispatch: {}
   push:
     branches: [main]
 jobs:
   check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sim-interference
     env:
       SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: sim-interference
+      # Materialize shared tooling and patched siblings beside the target repo
+      # so repo-local scans still only see the sim-interference checkout.
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-citizen
+          path: sim-citizen
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-codecs
+          path: sim-codecs
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-foundation
+          path: sim-foundation
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-kernel
+          path: sim-kernel
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-shape
+          path: sim-shape
       - uses: actions/checkout@v4
         with:
           repository: sim-nest/sim-tooling
