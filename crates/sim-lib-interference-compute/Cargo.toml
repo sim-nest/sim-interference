@@ -35,7 +35,7 @@ sim-lib-numbers-arith = { version = "0.3.0" }
 sim-lib-numbers-float = { version = "0.3.0" }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true
