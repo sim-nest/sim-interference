@@ -3,10 +3,10 @@
   "generated_by": "cargo run -p xtask -- simdoc",
   "generation_timestamp": "2026-07-28T11:56:13+02:00",
   "generator": "xtask repo-contract v1",
-  "git_commit": "4ac88da16a688022974152eaeb61fac23ff44fdf",
+  "git_commit": "435299b3948c2638d169a0df47ba48124f52d0ac",
   "repo": "sim-interference",
   "schema": "sim.provenance.v1",
-  "source_commit": "4ac88da16a688022974152eaeb61fac23ff44fdf",
+  "source_commit": "435299b3948c2638d169a0df47ba48124f52d0ac",
   "source_remote": "https://github.com/sim-nest/sim-interference",
   "validation_commands": [
     "cargo fmt --all --check",
@@ -19,7 +19,7 @@
     "cargo run -p xtask -- validation-matrix --check --repo .",
     "cargo run -p xtask -- crate-catalog --check --repo ."
   ],
-  "workspace_hash": "4ca565abb42a7e49",
+  "workspace_hash": "72845d84d3b2b9e9",
   "workspace_hash_algorithm": "fnv1a64",
   "workspace_hash_input_count": 127,
   "workspace_hash_inputs": [
