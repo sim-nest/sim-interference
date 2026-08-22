@@ -2,6 +2,7 @@
 //! Repository automation wrapper for validation and generated documentation.
 
 mod file_sizes;
+mod host_blind;
 mod index_check;
 mod package_floors;
 mod recipes;
@@ -14,6 +15,7 @@ fn main() {
         Some("simdoc") => simdoc::run(args),
         Some("index-check") => index_check::run(args),
         Some("check-file-sizes") => file_sizes::run(),
+        Some("check-host-blind") => host_blind::run(),
         Some("check-recipes") => recipes::run(),
         Some("check-package-floors") => package_floors::run(),
         _ => Err(format!(

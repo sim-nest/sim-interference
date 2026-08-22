@@ -12,10 +12,7 @@ use sim_lib_compute_auto::{
     measure_bounded_profile,
 };
 use sim_lib_compute_model::{ModeledComputeProfile, ModeledTensorExecutor};
-use sim_lib_compute_wgpu::{
-    ComputeWgpuLib, WgpuAdapterProbe, WgpuDiscovery, compute_wgpu_capability,
-    compute_wgpu_site_symbol,
-};
+use sim_lib_compute_wgpu::{ComputeWgpuLib, WgpuDiscovery, compute_wgpu_site_symbol};
 use sim_lib_interference_core::{
     Emitter, FieldAmplitude, Hertz, InterferenceProblem, MetresPerSecond, NepersPerMetre, Point3M,
     PositiveMetres, Radians, SamplingPlane, SamplingPolicy, SamplingThresholds, ScalarMedium,
@@ -31,16 +28,13 @@ use sim_lib_numbers_tensor::{
 };
 
 use crate::{
-    CpuFallbackReason, DifferentialReport, DifferentialTolerances, HardwareEvidenceMetrics,
-    HardwareEvidenceReport, HardwareMeasurementResult, PhaseBudget, ProviderRoute,
-    TensorStudyConfig, TensorStudySolver, TileProfile, compare_dense_to_reference,
-    compare_materialized_to_reference, solve_dense_f32_cpu,
+    CpuFallbackReason, DifferentialReport, DifferentialTolerances, HardwareEvidenceReport,
+    PhaseBudget, ProviderRoute, TensorStudyConfig, TensorStudySolver, TileProfile,
+    compare_dense_to_reference, compare_materialized_to_reference, solve_dense_f32_cpu,
 };
 
 // conformance: dense, modeled, automatic, and physical wgpu providers share one differential and hardware-evidence contract.
 
-const PHYSICAL_ENV: &str = "SIM_INTERFERENCE_WGPU_PHYSICAL";
-const TARGET_ENV: &str = "SIM_INTERFERENCE_ACCEPTANCE_TARGET";
 #[derive(Clone)]
 struct MatrixCase {
     name: &'static str,
@@ -165,33 +159,22 @@ fn explicit_wgpu_absence_and_auto_cpu_choice_are_pre_submission() {
 }
 
 #[test]
-fn wgpu_matrix_repeats_same_profile_one_hundred_times_when_opted_in() {
-    if std::env::var_os(PHYSICAL_ENV).is_none() {
-        let evidence = HardwareEvidenceReport::not_measured("unavailable", "unavailable");
-        println!("{evidence}");
-        assert_eq!(evidence.result(), HardwareMeasurementResult::NotMeasured);
-        assert!(!evidence.satisfies_hardware_gate());
-        return;
-    }
-    let wgpu = ComputeWgpuLib::probe().expect("opted-in wgpu discovery must complete");
-    let target = std::env::var(TARGET_ENV).ok();
-    let probe = wgpu
-        .discovery()
-        .adapters
-        .iter()
-        .find(|probe| {
-            target
-                .as_deref()
-                .is_none_or(|target| target_matches(target, &probe.adapter.name))
-        })
-        .cloned()
-        .expect("opted-in wgpu measurement requires the requested probe-backed adapter");
-    for case in matrix_cases() {
-        run_wgpu(&wgpu, &probe, &case, crate::HARDWARE_DETERMINISM_REPEATS);
-    }
-    if target.as_deref().is_some_and(large_target) {
-        let case = crossover_case("above-5080-crossover", 129, 129);
-        run_wgpu(&wgpu, &probe, &case, 3);
+fn modeled_matrix_repeats_same_profile_without_host_discovery() {
+    let case = matrix_cases().remove(0);
+    let executor = ModeledTensorExecutor::new(modeled_profile(&case));
+    let solver = solver(&case);
+    let mut baseline = None;
+    for _ in 0..crate::HARDWARE_DETERMINISM_REPEATS {
+        let (study, mut cx) = solve_through_executor(
+            solver.clone(),
+            Arc::new(executor.clone()),
+            Symbol::new("site/compute/model"),
+            &case,
+        )
+        .unwrap();
+        let bits = field_bits(&study.field.materialize_host(&mut cx).unwrap());
+        assert!(baseline.as_ref().is_none_or(|expected| expected == &bits));
+        baseline = Some(bits);
     }
 }
 
@@ -203,87 +186,6 @@ fn wgpu_evidence_recipe_reports_not_measured_without_a_hardware_claim() {
         include_str!("../recipes/01-basics/wgpu-differential-evidence/expected.txt").trim_end()
     );
     assert!(!evidence.satisfies_hardware_gate());
-}
-
-fn run_wgpu(lib: &ComputeWgpuLib, probe: &WgpuAdapterProbe, case: &MatrixCase, repeats: usize) {
-    let determinism_required = repeats == crate::HARDWARE_DETERMINISM_REPEATS;
-    let oracle = reference(case);
-    let dense = dense(case);
-    let dense_report =
-        compare_dense_to_reference(&oracle, &dense, DifferentialTolerances::default()).unwrap();
-    assert_report(case.name, "dense", &dense_report);
-    let mut cx = runtime_cx(solver(case));
-    cx.grant(compute_wgpu_capability());
-    cx.load_lib(lib).unwrap();
-    let mut baseline = None;
-    let mut final_report = None;
-    let mut final_study = None;
-    let mut deterministic = true;
-    for _ in 0..repeats {
-        let study = solve_through_registered_site(
-            &mut cx,
-            compute_wgpu_site_symbol(probe.adapter.ordinal),
-            case,
-        )
-        .unwrap();
-        assert_resident_lifecycle(case, &study);
-        let materialized = study.field.materialize_host(&mut cx).unwrap();
-        let report = compare_materialized_to_reference(
-            &oracle,
-            &materialized,
-            DifferentialTolerances::default(),
-        )
-        .unwrap();
-        assert_report(case.name, "wgpu", &report);
-        let bits = field_bits(&materialized);
-        if let Some(expected) = &baseline {
-            deterministic &= expected == &bits;
-        } else {
-            baseline = Some(bits);
-        }
-        final_report = Some(report);
-        final_study = Some(study);
-    }
-    let study = final_study.unwrap();
-    let report = final_report.unwrap();
-    let evidence = HardwareEvidenceReport::measured(
-        adapter_id(probe),
-        profile_id(probe),
-        HardwareEvidenceMetrics {
-            tiles: dense.evidence().tiles(),
-            segments: study.evidence.segments,
-            max_abs_psi: dense.evidence().observed_max_abs_psi_rad(),
-            intermediate_materializations: study.evidence.intermediate_materializations,
-            final_materializations: study.evidence.final_materializations,
-            repeats,
-            deterministic,
-        },
-        &report,
-    );
-    println!("case={}\n{evidence}", case.name);
-    println!(
-        "acceptance-case=(case (id \"{}\") (cells \"{}\") (sources \"{}\") (tiles \"{}\") (segments \"{}\") (repeats \"{}\") (deterministic \"{}\") (determinism_required \"{}\") (max_psi \"{:.9e}\") (component_tolerance \"{:.9e}\") (phase_tolerance \"{:.9e}\") (max_component_abs \"{:.9e}\") (max_phase_abs \"{:.9e}\") (intermediate_materializations \"{}\") (final_materializations \"{}\") (result \"pass\"))",
-        case.name,
-        case.plane.cell_count(),
-        case.problem.sources.len(),
-        dense.evidence().tiles(),
-        study.evidence.segments,
-        repeats,
-        deterministic,
-        determinism_required,
-        dense.evidence().observed_max_abs_psi_rad(),
-        DifferentialTolerances::default().component.absolute,
-        DifferentialTolerances::default().phase.absolute,
-        report.max_component_absolute_error(),
-        report.max_phase_absolute_error(),
-        study.evidence.intermediate_materializations,
-        study.evidence.final_materializations,
-    );
-    assert!(
-        !determinism_required || evidence.satisfies_hardware_gate(),
-        "{} failed measured hardware evidence: {evidence}",
-        case.name
-    );
 }
 
 fn measured_crossover_edges() {
@@ -566,19 +468,6 @@ fn matrix_cases() -> Vec<MatrixCase> {
     ]
 }
 
-fn target_matches(target: &str, adapter: &str) -> bool {
-    match target {
-        "gpu:nvidia/rtx-5080-laptop" => adapter.contains("RTX 5080"),
-        "gpu:nvidia/rtx-5090" => adapter.contains("RTX 5090"),
-        "gpu:amd/gfx1151" => ["RADV STRIX_HALO", "Radeon 8060S", "AMD Radeon Graphics"]
-            .iter()
-            .any(|needle| adapter.contains(needle)),
-        _ => false,
-    }
-}
-fn large_target(target: &str) -> bool {
-    matches!(target, "gpu:nvidia/rtx-5090" | "gpu:amd/gfx1151")
-}
 fn crossover_case(name: &'static str, rows: usize, columns: usize) -> MatrixCase {
     MatrixCase {
         name,
@@ -677,24 +566,5 @@ fn field_bits(field: &HostPhasorField) -> (Vec<u64>, Vec<u64>) {
             .iter()
             .map(|value| value.to_bits())
             .collect(),
-    )
-}
-
-fn adapter_id(probe: &WgpuAdapterProbe) -> String {
-    format!(
-        "{}/{:04x}:{:04x}/{}",
-        probe.adapter.backend, probe.adapter.vendor, probe.adapter.device, probe.adapter.ordinal
-    )
-}
-
-fn profile_id(probe: &WgpuAdapterProbe) -> String {
-    format!(
-        "wgpu-v1/buffer-{}/binding-{}/wg-{}",
-        probe.adapter.granted_limits.max_buffer_size,
-        probe.adapter.granted_limits.max_storage_buffer_binding_size,
-        probe
-            .adapter
-            .granted_limits
-            .max_compute_invocations_per_workgroup
     )
 }
