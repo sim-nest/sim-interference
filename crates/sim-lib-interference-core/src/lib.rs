@@ -55,5 +55,6 @@ pub use problem::{InterferenceProblem, POINT_SOURCE_REFERENCE_DISTANCE_METRES};
 pub use propagation::{contribution_at, forward_plane_contribution_at, point_contribution_at};
 pub use quantity::{
     FieldAmplitude, Hertz, Metres, MetresPerSecond, NepersPerMetre, PositiveMetres, Radians,
+    SEMVER_WRAPPER_REMOVAL_BOUNDARY, frequency_dimension, length_dimension, speed_dimension,
 };
 pub use sampling::{SAMPLING_AXIS_ORTHOGONALITY_TOLERANCE, SamplingPlane};

@@ -2,8 +2,31 @@ use std::f64::consts::{PI, TAU};
 
 use sim_lib_interference_core::{
     FieldAmplitude, Hertz, InterferenceError, Metres, MetresPerSecond, NepersPerMetre,
-    PositiveMetres, Radians,
+    PositiveMetres, Radians, SEMVER_WRAPPER_REMOVAL_BOUNDARY, frequency_dimension,
+    length_dimension, speed_dimension,
 };
+use sim_lib_numbers_quantity::{BaseDimension, Dimension};
+
+#[test]
+fn compatibility_wrappers_delegate_dimension_ownership_and_name_removal_boundary() {
+    assert_eq!(length_dimension(), Dimension::base(BaseDimension::Length));
+    assert_eq!(
+        frequency_dimension(),
+        Dimension::DIMENSIONLESS
+            .quotient(&Dimension::base(BaseDimension::Time))
+            .unwrap()
+    );
+    assert_eq!(
+        speed_dimension(),
+        Dimension::base(BaseDimension::Length)
+            .quotient(&Dimension::base(BaseDimension::Time))
+            .unwrap()
+    );
+    assert_eq!(
+        SEMVER_WRAPPER_REMOVAL_BOUNDARY,
+        "sim-lib-interference-core 0.2.0"
+    );
+}
 
 fn assert_invalid<T>(
     result: Result<T, InterferenceError>,

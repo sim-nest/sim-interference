@@ -3,6 +3,32 @@
 use std::f64::consts::{PI, TAU};
 
 use crate::InterferenceError;
+use sim_lib_numbers_quantity::{BaseDimension, Dimension};
+
+/// Semver removal boundary for the legacy interference wrappers in this module.
+///
+/// They remain through the `0.1.x` line to preserve constructors and `Copy`
+/// behavior. Physical dimension ownership is now delegated to
+/// `sim-lib-numbers-quantity`; the wrappers add only interference admission
+/// (positive/non-negative and phase normalization) and are removed at `0.2.0`.
+pub const SEMVER_WRAPPER_REMOVAL_BOUNDARY: &str = "sim-lib-interference-core 0.2.0";
+
+/// Shared-owner length dimension used by metre compatibility wrappers.
+pub fn length_dimension() -> Dimension {
+    Dimension::base(BaseDimension::Length)
+}
+/// Shared-owner frequency dimension used by the hertz compatibility wrapper.
+pub fn frequency_dimension() -> Dimension {
+    Dimension::DIMENSIONLESS
+        .quotient(&Dimension::base(BaseDimension::Time))
+        .expect("constant dimension")
+}
+/// Shared-owner propagation-speed dimension.
+pub fn speed_dimension() -> Dimension {
+    Dimension::base(BaseDimension::Length)
+        .quotient(&Dimension::base(BaseDimension::Time))
+        .expect("constant dimension")
+}
 
 fn invalid(name: &'static str, value: f64) -> InterferenceError {
     InterferenceError::InvalidQuantity { name, value }

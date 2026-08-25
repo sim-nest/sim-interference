@@ -1,0 +1,4 @@
+book = "interference-physics-adapter"
+title = "Interference Physics Adapter"
+summary = "Carry certified wave observations into shared audits without inventing ports."
+chapters = ["01-observation"]
