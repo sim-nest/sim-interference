@@ -1,3 +1,5 @@
+// conformance: physics adaptation preserves evidence and refuses invented physical ports.
+
 use sim_lib_interference_physics::{InterferenceAuditInput, adapt_interference};
 use sim_lib_physics_adapter::{AdapterRefusal, DIMENSIONLESS, DataOrigin};
 fn input() -> InterferenceAuditInput {

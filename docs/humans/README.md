@@ -17,6 +17,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 
 | Feature | Subject | Specimens | Summary |
 | --- | --- | ---: | --- |
+| `feature/sim-interference/physics-audit-adapter` | `crate/sim-lib-interference-physics` | 1 | Lower certified wave observations into the shared physics contract without inventing intensity, power, or lumped ports. |
 | `feature/sim-interference/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, rustdoc, recipe, diagram, and Index facts for the interference domain. |
 | `feature/sim-interference/quantity-vocabulary` | `crate/sim-lib-interference-core` | 2 | Admit finite scalar-wave inputs through explicit distance, frequency, speed, attenuation, phase, and amplitude boundary types. |
 | `feature/sim-interference/scalar-wave-model` | `crate/sim-lib-interference-core` | 5 | Describe one-frequency coherent point and forward-plane emitters in a homogeneous attenuating medium, with canonical source identity and pure single-point Green functions. |
@@ -82,6 +83,8 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/purpose.md`
 - `crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/recipe.toml`
 - `crates/sim-lib-interference-core/recipes/book.toml`
+- `crates/sim-lib-interference-physics/recipes/01-observation/chapter.toml`
+- `crates/sim-lib-interference-physics/recipes/book.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt`
 - `crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md`
@@ -113,6 +116,56 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 
 ## Worked Examples
 
+### `feature/sim-interference/physics-audit-adapter`
+
+Specimen `spec-test/sim-interference/crates/sim-lib-interference-physics/tests/physics_adapter` is checked by `cargo test`.
+
+Source `crates/sim-lib-interference-physics/tests/physics_adapter.rs`:
+
+```rust
+// conformance: physics adaptation preserves evidence and refuses invented physical ports.
+
+use sim_lib_interference_physics::{InterferenceAuditInput, adapt_interference};
+use sim_lib_physics_adapter::{AdapterRefusal, DIMENSIONLESS, DataOrigin};
+fn input() -> InterferenceAuditInput {
+    InterferenceAuditInput {
+        model_id: "wave/model/two-source".into(),
+        state_id: "wave/field/1".into(),
+        boundary_id: "wave/boundary/plane".into(),
+        amplitude_squared: 4.0,
+        sampling_certificate: "resolved:32-samples-per-wavelength".into(),
+        compute_evidence: "cpu-reference:cells=64".into(),
+        influenced_states: vec!["state/detector".into()],
+        model_evidence: vec!["homogeneous-scalar-wave".into()],
+        origin: DataOrigin::Modeled,
+        explicit_port: None,
+    }
+}
+#[test]
+fn preserves_wave_certificates_without_inventing_a_port() {
+    let out = adapt_interference(input()).unwrap();
+    assert_eq!(out.observations[0].dimension, DIMENSIONLESS);
+    assert_eq!(
+        out.observations[0].kind,
+        "wave:normalized-amplitude-squared"
+    );
+    assert!(out.ports.is_empty());
+    assert_eq!(out.solver_evidence.len(), 2);
+    assert_eq!(
+        out.validate_lumped_audit(),
+        Err(AdapterRefusal::MissingPort)
+    );
+}
+#[test]
+fn retains_origin_and_influences() {
+    let mut value = input();
+    value.origin = DataOrigin::Observed;
+    let out = adapt_interference(value).unwrap();
+    assert_eq!(out.observations[0].origin, DataOrigin::Observed);
+    assert_eq!(out.influences[0].as_str(), "state/detector");
+}
+```
+
 ### `feature/sim-interference/quantity-vocabulary`
 
 Specimen `recipe/sim-interference/crates/sim-lib-interference-core/01-basics/checked-quantities` is checked by `xtask check-recipes`.
@@ -142,8 +195,31 @@ use std::f64::consts::{PI, TAU};
 
 use sim_lib_interference_core::{
     FieldAmplitude, Hertz, InterferenceError, Metres, MetresPerSecond, NepersPerMetre,
-    PositiveMetres, Radians,
+    PositiveMetres, Radians, SEMVER_WRAPPER_REMOVAL_BOUNDARY, frequency_dimension,
+    length_dimension, speed_dimension,
 };
+use sim_lib_numbers_quantity::{BaseDimension, Dimension};
+
+#[test]
+fn compatibility_wrappers_delegate_dimension_ownership_and_name_removal_boundary() {
+    assert_eq!(length_dimension(), Dimension::base(BaseDimension::Length));
+    assert_eq!(
+        frequency_dimension(),
+        Dimension::DIMENSIONLESS
+            .quotient(&Dimension::base(BaseDimension::Time))
+            .unwrap()
+    );
+    assert_eq!(
+        speed_dimension(),
+        Dimension::base(BaseDimension::Length)
+            .quotient(&Dimension::base(BaseDimension::Time))
+            .unwrap()
+    );
+    assert_eq!(
+        SEMVER_WRAPPER_REMOVAL_BOUNDARY,
+        "sim-lib-interference-core 0.2.0"
+    );
+}
 
 fn assert_invalid<T>(
     result: Result<T, InterferenceError>,
@@ -263,6 +339,7 @@ fn diagnostic_text_and_quantity_names_are_stable() {
         "invalid quantity `phase-rad`: inf"
     );
 }
+// conformance: quantity tests prove interference boundary admission and unit delegation.
 ```
 
 ### `feature/sim-interference/scalar-wave-model`
@@ -490,6 +567,7 @@ fn problem_exposes_the_exact_wave_and_reference_distance_convention() {
     assert!(PositiveMetres::new(0.0).is_err());
     assert!(PositiveMetres::new(-0.125).is_err());
 }
+// conformance: model tests prove admitted wave-model invariants and refusal behavior.
 ```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/propagation_conformance` is checked by `cargo test`.
@@ -662,6 +740,7 @@ fn non_finite_derived_geometry_is_rejected() {
         })
     ));
 }
+// conformance: propagation tests prove bounded wave laws against reference cases.
 ```
 
 ### `feature/sim-interference/certified-sampling`
@@ -791,6 +870,7 @@ fn checked_estimation_rejects_arithmetic_overflow() {
         })
     );
 }
+// conformance: work-budget tests prove checked estimates and fail-closed limits.
 ```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/certificate_conformance` is checked by `cargo test`.
@@ -964,6 +1044,7 @@ fn thresholds_are_validated_and_strict_is_fail_closed() {
     );
     assert_eq!(SamplingPolicy::Annotate.admit(&aliased), Ok(()));
 }
+// conformance: certificate tests prove sampling evidence identity and classification.
 ```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_acceptance_conformance` is checked by `cargo test`.
@@ -1115,6 +1196,7 @@ fn arithmetic_overflow_is_refused_by_allocation_free_constructors() {
         })
     );
 }
+// conformance: sampling acceptance tests prove strict and evidence-preserving policies.
 ```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-core/tests/sampling_conformance` is checked by `cargo test`.
@@ -1216,6 +1298,7 @@ fn cell_count_overflow_is_rejected_during_construction() {
         }
     );
 }
+// conformance: sampling tests prove physical grid geometry and resolution classification.
 ```
 
 ### `feature/sim-interference/normalized-tensor-lowering`
@@ -2526,7 +2609,11 @@ fn realize_study(
 }
 
 fn runtime_cx(solver: TensorStudySolver) -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xc238_1dff_4ba0_eb70),
+    );
     cx.load_lib(&sim_lib_numbers_arith::NumbersArithmeticLib::new())
         .unwrap();
     cx.load_lib(&sim_lib_numbers_float::F32NumbersLib::new())
@@ -3309,7 +3396,11 @@ impl TensorStorage for HostStorage {
 }
 
 fn runtime_cx(solver: TensorStudySolver) -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x7d10_1806_df9a_bcba),
+    );
     cx.load_lib(&sim_lib_numbers_arith::NumbersArithmeticLib::new())
         .unwrap();
     cx.load_lib(&sim_lib_numbers_float::F32NumbersLib::new())
@@ -3551,6 +3642,7 @@ fn source_input_permutations_canonicalize_to_identical_fields() {
         assert_eq!(solved.1, baseline.1);
     }
 }
+// conformance: reference tests prove solver outputs against analytic wave cases.
 ```
 
 Specimen `spec-test/sim-interference/crates/sim-lib-interference-solve/tests/verification_conformance` is checked by `cargo test`.
@@ -3575,6 +3667,7 @@ fn full_reference_verification_matrix_passes() {
     assert!(report.source_permutation_identical);
     assert!((1.8..=2.2).contains(&report.helmholtz_observed_order));
 }
+// conformance: verification tests prove certificates, error bounds, and refusal paths.
 ```
 
 ### `feature/sim-interference/certified-interference`
@@ -3743,6 +3836,7 @@ fn public_cancellation_projection_is_masked() {
     assert_eq!(projection.samples(), [ScalarSample::Masked]);
     assert_eq!(projection.certificate().mask_count(), 1);
 }
+// conformance: projection tests prove field lowering against independent references.
 ```
 
 ### `feature/sim-interference/fringe-analysis-scenarios`
@@ -3885,6 +3979,7 @@ fn public_aperture_certificate_quantifies_normalization_and_spacing() {
     assert_eq!(certificate.element_spacing_wavelengths.v, Some(0.5));
     assert_eq!(certificate.element_spacing_wavelengths.maximum(), Some(0.5));
 }
+// conformance: analysis scenarios prove solver composition and retained evidence.
 ```
 
 ### `feature/sim-interference/certified-multitone-composition`
@@ -4050,6 +4145,7 @@ fn envelope_peak_near(
     }
     best_index as f64 * step_seconds
 }
+// conformance: multitone tests prove coherent decomposition and bounded combination.
 ```
 
 ### `feature/sim-interference/tensor-runtime-records`

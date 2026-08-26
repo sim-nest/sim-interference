@@ -20,7 +20,7 @@ include = [
 ]
 
 [dependencies]
-sim-lib-numbers-quantity = { version = "0.1.0", path = "../../../sim-numbers/crates/sim-lib-numbers-quantity" }
+sim-lib-numbers-quantity = { version = "0.1.0" }
 
 [[example]]
 name = "checked-quantities"

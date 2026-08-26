@@ -8,7 +8,11 @@ use sim_lib_interference_runtime::{
 };
 
 fn main() -> sim_kernel::Result<()> {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x8a46_385f_aad7_70a8),
+    );
     cx.load_lib(&InterferenceRecordsLib)?;
     cx.load_lib(&InterferenceLib)?;
 

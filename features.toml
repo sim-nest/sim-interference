@@ -18,10 +18,11 @@ id = "feature/sim-interference/physics-audit-adapter"
 title = "Interference physics observation adapter"
 summary = "Lower certified wave observations into the shared physics contract without inventing intensity, power, or lumped ports."
 owner = "crate/sim-lib-interference-physics"
-guidance = "Use adapt_interference with sampling and compute evidence. Normalized amplitude-squared stays dimensionless; declare a conjugate port only through an explicit physical boundary adapter. Legacy scalar wrappers delegate dimensions to sim-lib-numbers-quantity and end at sim-lib-interference-core 0.2.0."
+guidance = "Use adapt_interference with sampling and compute evidence supplied by the upstream owners. Normalized amplitude-squared stays dimensionless; declare a conjugate port only through an explicit physical boundary adapter. Legacy scalar wrappers live in sim-lib-interference-core, delegate dimensions to sim-lib-numbers-quantity, and end at sim-lib-interference-core 0.2.0."
 claims_anchors = ["anchor/crate/sim-lib-interference-physics", "anchor/rustdoc/sim-lib-interference-physics/adapt_interference"]
 claims_specimens = ["spec-test/sim-interference/crates/sim-lib-interference-physics/tests/physics_adapter"]
-composes = ["crate/sim-lib-physics-adapter", "crate/sim-lib-numbers-quantity", "feature/sim-interference/certified-sampling", "feature/sim-interference/normalized-tensor-lowering"]
+composes = ["crate/sim-lib-physics-adapter"]
+supports = ["feature/sim-interference/certified-sampling", "feature/sim-interference/normalized-tensor-lowering"]
 
 [[route]]
 id = "route/audit-interference-observation"

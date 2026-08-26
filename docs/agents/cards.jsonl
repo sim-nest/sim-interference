@@ -42,6 +42,8 @@
 {"kind":"recipe","path":"crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-core/recipes/book.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-physics/recipes/01-observation/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-interference-physics/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt"}
 {"kind":"recipe","path":"crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md"}

@@ -146,3 +146,4 @@ fn diagnostic_text_and_quantity_names_are_stable() {
         "invalid quantity `phase-rad`: inf"
     );
 }
+// conformance: quantity tests prove interference boundary admission and unit delegation.

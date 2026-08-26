@@ -95,3 +95,4 @@ fn public_aperture_certificate_quantifies_normalization_and_spacing() {
     assert_eq!(certificate.element_spacing_wavelengths.v, Some(0.5));
     assert_eq!(certificate.element_spacing_wavelengths.maximum(), Some(0.5));
 }
+// conformance: analysis scenarios prove solver composition and retained evidence.

@@ -113,3 +113,4 @@ fn source_input_permutations_canonicalize_to_identical_fields() {
         assert_eq!(solved.1, baseline.1);
     }
 }
+// conformance: reference tests prove solver outputs against analytic wave cases.

@@ -309,7 +309,11 @@ fn exact_cpu_lisp_recipe_is_embedded_and_runs_through_the_checked_runtime() {
 }
 
 fn interference_cx() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x33c2_b042_6fc7_92ab),
+    );
     cx.load_lib(&InterferenceRecordsLib).unwrap();
     cx.load_lib(&InterferenceLib).unwrap();
     cx

@@ -163,3 +163,4 @@ fn non_finite_derived_geometry_is_rejected() {
         })
     ));
 }
+// conformance: propagation tests prove bounded wave laws against reference cases.

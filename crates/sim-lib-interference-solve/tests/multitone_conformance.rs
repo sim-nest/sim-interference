@@ -136,3 +136,4 @@ fn envelope_peak_near(
     }
     best_index as f64 * step_seconds
 }
+// conformance: multitone tests prove coherent decomposition and bounded combination.
