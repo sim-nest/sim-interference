@@ -1,6 +1,6 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 5,
+  "package_count": 6,
   "packages": [
     {
       "description": "Normalized tile-local f32 Tensor lowering for coherent interference.",
@@ -25,6 +25,19 @@
       "root": "crates/sim-lib-interference-core",
       "target_kinds": [
         "example",
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Interference observation adapter for shared physics audits.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-interference-physics/Cargo.toml",
+      "name": "sim-lib-interference-physics",
+      "publish": "true",
+      "readme": "crates/sim-lib-interference-physics/README.md",
+      "root": "crates/sim-lib-interference-physics",
+      "target_kinds": [
         "lib",
         "test"
       ]
