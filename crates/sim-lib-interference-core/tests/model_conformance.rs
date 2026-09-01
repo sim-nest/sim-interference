@@ -162,3 +162,4 @@ fn problem_exposes_the_exact_wave_and_reference_distance_convention() {
     assert!(PositiveMetres::new(0.0).is_err());
     assert!(PositiveMetres::new(-0.125).is_err());
 }
+// conformance: model tests prove admitted wave-model invariants and refusal behavior.

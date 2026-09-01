@@ -16,6 +16,13 @@
       "summary": "Checked physical boundaries for coherent scalar wave-field studies."
     },
     {
+      "crate_name": "sim_lib_interference_physics",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-interference-physics/Cargo.toml",
+      "package": "sim-lib-interference-physics",
+      "summary": "Lowers wave results and certificates to observations, never implicit ports."
+    },
+    {
       "crate_name": "sim_lib_interference_runtime",
       "group": "workspace",
       "manifest": "crates/sim-lib-interference-runtime/Cargo.toml",

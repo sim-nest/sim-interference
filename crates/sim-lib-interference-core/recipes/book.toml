@@ -1,1 +1,5 @@
+book = "interference/core"
 title = "Interference Core Recipes"
+summary = "Describe deterministic interference systems."
+order = 10
+chapters = ["01-basics"]

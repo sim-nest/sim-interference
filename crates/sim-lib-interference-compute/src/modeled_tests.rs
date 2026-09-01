@@ -552,7 +552,11 @@ impl TensorStorage for HostStorage {
 }
 
 fn runtime_cx(solver: TensorStudySolver) -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x7d10_1806_df9a_bcba),
+    );
     cx.load_lib(&sim_lib_numbers_arith::NumbersArithmeticLib::new())
         .unwrap();
     cx.load_lib(&sim_lib_numbers_float::F32NumbersLib::new())

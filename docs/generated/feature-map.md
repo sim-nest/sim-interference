@@ -6,6 +6,7 @@
 | --- | --- | ---: | ---: |
 | `sim-lib-interference-compute` | `workspace` | 0 | 0 |
 | `sim-lib-interference-core` | `workspace` | 0 | 0 |
+| `sim-lib-interference-physics` | `workspace` | 0 | 0 |
 | `sim-lib-interference-runtime` | `workspace` | 0 | 0 |
 | `sim-lib-interference-solve` | `workspace` | 0 | 0 |
 | `xtask` | `workspace` | 0 | 0 |

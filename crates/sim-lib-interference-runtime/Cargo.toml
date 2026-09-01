@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-interference-runtime"
-version = "0.1.0"
+version = "0.2.0"
 edition.workspace = true
 license.workspace = true
 readme = "README.md"
@@ -20,23 +20,23 @@ include = [
 ]
 
 [dependencies]
-sim-citizen = { version = "0.2.0" }
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.0" }
-sim-lib-interference-core = { version = "0.1.0", path = "../sim-lib-interference-core" }
-sim-lib-interference-solve = { version = "0.1.0", path = "../sim-lib-interference-solve" }
-sim-lib-numbers-tensor = { version = "0.2.1" }
-sim-shape = { version = "0.2.0" }
+sim-citizen = { version = "0.3.0" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-interference-core = { version = "0.2.0", path = "../sim-lib-interference-core" }
+sim-lib-interference-solve = { version = "0.2.0", path = "../sim-lib-interference-solve" }
+sim-lib-numbers-tensor = { version = "0.3.0" }
+sim-shape = { version = "0.3.0" }
 
 [dev-dependencies]
-sim-codec = { version = "0.1.0" }
-sim-codec-binary = { version = "0.2.0" }
-sim-codec-json = { version = "0.2.0" }
-sim-codec-lisp = { version = "0.2.0" }
-sim-kernel = { version = "0.2.0", features = ["test-support"] }
+sim-codec = { version = "0.2.0" }
+sim-codec-binary = { version = "0.3.0" }
+sim-codec-json = { version = "0.3.0" }
+sim-codec-lisp = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0", features = ["test-support"] }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true

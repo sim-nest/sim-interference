@@ -1,0 +1,3 @@
+title = "Certified wave observation"
+order = 10
+summary = "Preserve sampling and compute evidence, origin, and influence while normalized amplitude-squared remains dimensionless."

@@ -683,5 +683,6 @@ fn bare_cx() -> Cx {
     Cx::new(
         Arc::new(sim_kernel::EagerPolicy),
         Arc::new(sim_kernel::DefaultFactory),
+        sim_kernel::HandleSeed::new(0x4950_524a),
     )
 }

@@ -508,7 +508,11 @@ fn read_policy_with_construct() -> ReadPolicy {
 }
 
 fn bare_cx() -> Cx {
-    Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory))
+    Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x0b15_1a3b_2d2e_86d3),
+    )
 }
 
 fn int_expr(value: impl ToString) -> Expr {

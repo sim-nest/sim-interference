@@ -1,1 +1,5 @@
+book = "interference/solve"
 title = "Interference Solve Recipes"
+summary = "Solve checked interference systems."
+order = 10
+chapters = ["01-basics"]

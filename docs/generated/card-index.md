@@ -6,7 +6,8 @@
 | --- | --- | --- | --- |
 | `browse/catalog` | `browse-root` | `workspace` | root browse catalog |
 | `cookbook/interference-compute` | `cookbook-recipe` | `sim-lib-interference-compute` | Route certified interference studies through scoped Tensor executors. |
+| `cookbook/interference-physics-adapter` | `cookbook-recipe` | `sim-lib-interference-physics` | Carry certified wave observations into shared audits without inventing ports. |
 | `cookbook/interference-runtime` | `cookbook-recipe` | `sim-lib-interference-runtime` | Shape-checked coherent field studies through the loadable CPU solver. |
-| `cookbook/sim-lib-interference-core` | `cookbook-recipe` | `sim-lib-interference-core` |  |
-| `cookbook/sim-lib-interference-solve` | `cookbook-recipe` | `sim-lib-interference-solve` |  |
+| `cookbook/interference/core` | `cookbook-recipe` | `sim-lib-interference-core` | Describe deterministic interference systems. |
+| `cookbook/interference/solve` | `cookbook-recipe` | `sim-lib-interference-solve` | Solve checked interference systems. |
 | `registry/catalog` | `browse-registry` | `workspace` | registry catalog browse card |

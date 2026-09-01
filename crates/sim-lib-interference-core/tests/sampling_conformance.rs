@@ -92,3 +92,4 @@ fn cell_count_overflow_is_rejected_during_construction() {
         }
     );
 }
+// conformance: sampling tests prove physical grid geometry and resolution classification.

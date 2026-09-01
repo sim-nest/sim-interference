@@ -45,6 +45,8 @@
     "crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/purpose.md",
     "crates/sim-lib-interference-core/recipes/01-basics/travelling-wave/recipe.toml",
     "crates/sim-lib-interference-core/recipes/book.toml",
+    "crates/sim-lib-interference-physics/recipes/01-observation/chapter.toml",
+    "crates/sim-lib-interference-physics/recipes/book.toml",
     "crates/sim-lib-interference-runtime/recipes/01-basics/chapter.toml",
     "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/expected.txt",
     "crates/sim-lib-interference-runtime/recipes/01-basics/two-source-cancellation/purpose.md",

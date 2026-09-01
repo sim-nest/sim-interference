@@ -100,3 +100,4 @@ fn checked_estimation_rejects_arithmetic_overflow() {
         })
     );
 }
+// conformance: work-budget tests prove checked estimates and fail-closed limits.

@@ -102,3 +102,4 @@ fn public_cancellation_projection_is_masked() {
     assert_eq!(projection.samples(), [ScalarSample::Masked]);
     assert_eq!(projection.certificate().mask_count(), 1);
 }
+// conformance: projection tests prove field lowering against independent references.

@@ -1,5 +1,5 @@
 {
-  "card_count": 6,
+  "card_count": 7,
   "cards": [
     {
       "id": "browse/catalog",
@@ -14,22 +14,28 @@
       "summary": "Route certified interference studies through scoped Tensor executors."
     },
     {
+      "id": "cookbook/interference-physics-adapter",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-interference-physics",
+      "summary": "Carry certified wave observations into shared audits without inventing ports."
+    },
+    {
       "id": "cookbook/interference-runtime",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-interference-runtime",
       "summary": "Shape-checked coherent field studies through the loadable CPU solver."
     },
     {
-      "id": "cookbook/sim-lib-interference-core",
+      "id": "cookbook/interference/core",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-interference-core",
-      "summary": ""
+      "summary": "Describe deterministic interference systems."
     },
     {
-      "id": "cookbook/sim-lib-interference-solve",
+      "id": "cookbook/interference/solve",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-interference-solve",
-      "summary": ""
+      "summary": "Solve checked interference systems."
     },
     {
       "id": "registry/catalog",

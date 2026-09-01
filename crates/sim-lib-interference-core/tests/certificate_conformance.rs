@@ -164,3 +164,4 @@ fn thresholds_are_validated_and_strict_is_fail_closed() {
     );
     assert_eq!(SamplingPolicy::Annotate.admit(&aliased), Ok(()));
 }
+// conformance: certificate tests prove sampling evidence identity and classification.

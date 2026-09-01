@@ -5,6 +5,7 @@ members = [
   "crates/sim-lib-interference-core",
   "crates/sim-lib-interference-runtime",
   "crates/sim-lib-interference-solve",
+  "crates/sim-lib-interference-physics",
   "xtask",
 ]
 

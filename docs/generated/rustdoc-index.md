@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | `sim-lib-interference-compute` | `workspace` | Normalized tile-local f32 lowering over the canonical Tensor executor. |
 | `sim-lib-interference-core` | `workspace` | Checked physical boundaries for coherent scalar wave-field studies. |
+| `sim-lib-interference-physics` | `workspace` | Lowers wave results and certificates to observations, never implicit ports. |
 | `sim-lib-interference-runtime` | `workspace` | Tensor-backed runtime records for coherent interference studies. |
 | `sim-lib-interference-solve` | `workspace` | Deterministic CPU f64 solving and certified observation of coherent scalar fields. |
 | `xtask` | `workspace` | Repository automation wrapper for validation and generated documentation. |

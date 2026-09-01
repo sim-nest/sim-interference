@@ -142,3 +142,4 @@ fn arithmetic_overflow_is_refused_by_allocation_free_constructors() {
         })
     );
 }
+// conformance: sampling acceptance tests prove strict and evidence-preserving policies.
