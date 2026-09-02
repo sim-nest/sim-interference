@@ -8,6 +8,7 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | --- | --- | --- | --- |
 | `sim-lib-interference-compute` | `true` | `custom-build, lib` | Normalized tile-local f32 Tensor lowering for coherent interference. |
 | `sim-lib-interference-core` | `true` | `example, lib, test` | Validated physical boundary types for coherent scalar wave-field studies. |
+| `sim-lib-interference-physics` | `true` | `lib, test` | Interference observation adapter for shared physics audits. |
 | `sim-lib-interference-runtime` | `true` | `custom-build, example, lib` | Tensor-backed Citizen records and Shape contracts for coherent interference studies. |
 | `sim-lib-interference-solve` | `true` | `example, lib, test` | Deterministic CPU f64 reference solving for coherent scalar wave fields. |
 | `xtask` | `false` | `bin` | Repository validation and generated documentation tasks for sim-interference. |
