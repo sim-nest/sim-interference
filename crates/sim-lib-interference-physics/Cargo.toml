@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-interference-physics"
-version = "0.1.0"
+version = "0.1.1"
 edition.workspace = true
 license.workspace = true
 description = "Interference observation adapter for shared physics audits."
@@ -19,7 +19,7 @@ include = [
 ]
 
 [dependencies]
-sim-lib-physics-adapter = { version = "0.1.0" }
+sim-lib-physics-adapter = { version = "0.2.0" }
 
 [lints]
 workspace = true

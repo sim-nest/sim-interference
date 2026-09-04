@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-interference-solve"
-version = "0.2.0"
+version = "0.3.0"
 edition.workspace = true
 license.workspace = true
 readme = "README.md"
@@ -20,7 +20,7 @@ include = [
 ]
 
 [dependencies]
-sim-lib-interference-core = { version = "0.2.0", path = "../sim-lib-interference-core" }
+sim-lib-interference-core = { version = "0.3.0", path = "../sim-lib-interference-core" }
 
 [[example]]
 name = "fringe-analysis"
