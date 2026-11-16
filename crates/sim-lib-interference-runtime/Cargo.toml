@@ -11,9 +11,9 @@ description = "Tensor-backed Citizen records and Shape contracts for coherent in
 keywords = ["interference", "tensor", "citizen", "simulation"]
 categories = ["science", "simulation"]
 include = [
-  "/src/**",
-  "/examples/**",
-  "/recipes/**",
+  "src/**",
+  "examples/**",
+  "recipes/**",
   "/build.rs",
   "/README.md",
   "/BROCHURE.md",

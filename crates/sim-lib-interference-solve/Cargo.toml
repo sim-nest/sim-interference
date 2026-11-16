@@ -11,10 +11,10 @@ description = "Deterministic CPU f64 reference solving for coherent scalar wave 
 keywords = ["interference", "wave", "physics", "simulation"]
 categories = ["science", "simulation"]
 include = [
-  "/src/**",
-  "/examples/**",
-  "/tests/**",
-  "/recipes/**",
+  "src/**",
+  "examples/**",
+  "tests/**",
+  "recipes/**",
   "/README.md",
   "/BROCHURE.md",
 ]

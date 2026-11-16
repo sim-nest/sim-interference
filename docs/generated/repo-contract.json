@@ -46,6 +46,7 @@
   ],
   "citizen_count": 0,
   "citizens": [],
+  "contract_exclusions": [],
   "generator": "xtask repo-contract v1",
   "group_count": 1,
   "group_order": [
@@ -543,29 +544,42 @@
   ],
   "provenance": {
     "api_docs": "target/doc/",
-    "generated_by": "cargo run -p xtask -- simdoc",
-    "generation_timestamp": "2026-07-28T11:56:13+02:00",
+    "execution": {
+      "executable": {
+        "lock_sha256": "de3cf584352514646909797b8454326e8ba4d3d90bf87ed7c3592ae971073678",
+        "package": "simdoc",
+        "source_sha256": "81fa719817cf21b92dc2c55cb2dabd0cf2e533566249aa018c6c1c6a13aeb9ca",
+        "version": "0.1.0"
+      },
+      "operation": "repo-contract --repo .",
+      "resolver": null,
+      "toolchain": {
+        "cargo": {
+          "commit_hash": "30a34c6821b57de0aaec83a901aca39f88f6778c",
+          "release": "1.96.0"
+        },
+        "rustc": {
+          "commit_hash": "ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96",
+          "release": "1.96.0"
+        }
+      }
+    },
+    "generation_timestamp": "2026-11-07T14:11:04+01:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "6e90b9c463ac45d0bc046f597ba5f29a3ae871ce",
+    "git_commit": "24cf3318e688b0278358e95e480099ad82f7eade",
+    "regeneration_command": "cargo run -p xtask -- simdoc",
     "repo": "sim-interference",
     "schema": "sim.provenance.v1",
-    "source_commit": "6e90b9c463ac45d0bc046f597ba5f29a3ae871ce",
+    "source_commit": "24cf3318e688b0278358e95e480099ad82f7eade",
     "source_remote": "https://github.com/sim-nest/sim-interference",
     "validation_commands": [
-      "cargo fmt --all --check",
-      "cargo test",
-      "cargo clippy --all-targets -- -D warnings",
-      "cargo doc --no-deps",
-      "cargo run -p xtask -- simdoc --check",
-      "cargo run -p xtask -- check-file-sizes",
-      "cargo run -p xtask -- repo-contract --check --repo .",
-      "cargo run -p xtask -- validation-matrix --check --repo .",
-      "cargo run -p xtask -- crate-catalog --check --repo ."
+      "cargo run -p xtask -- simdoc --check"
     ],
-    "workspace_hash": "634841522cdb2304",
+    "workspace_hash": "a858b88f6aa123ad",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 131,
+    "workspace_hash_input_count": 133,
     "workspace_hash_inputs": [
+      ".github/workflows/ci.yml",
       "Cargo.toml",
       "crates/sim-lib-interference-compute/Cargo.toml",
       "crates/sim-lib-interference-compute/build.rs",
@@ -696,7 +710,8 @@
       "crates/sim-lib-interference-solve/tests/reference_conformance.rs",
       "crates/sim-lib-interference-solve/tests/verification_conformance.rs",
       "features.toml",
-      "xtask/Cargo.toml"
+      "xtask/Cargo.toml",
+      "xtask/src/main.rs"
     ]
   },
   "recipe_book_count": 5,
