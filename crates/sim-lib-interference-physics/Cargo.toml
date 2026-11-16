@@ -11,9 +11,9 @@ repository.workspace = true
 homepage.workspace = true
 publish = true
 include = [
-  "/src/**",
-  "/tests/**",
-  "/recipes/**",
+  "src/**",
+  "tests/**",
+  "recipes/**",
   "/README.md",
   "/BROCHURE.md",
 ]

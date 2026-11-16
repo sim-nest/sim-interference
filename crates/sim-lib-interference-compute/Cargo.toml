@@ -11,8 +11,8 @@ description = "Normalized tile-local f32 Tensor lowering for coherent interferen
 keywords = ["interference", "tensor", "compute", "simulation"]
 categories = ["science", "simulation"]
 include = [
-  "/src/**",
-  "/recipes/**",
+  "src/**",
+  "recipes/**",
   "/build.rs",
   "/README.md",
   "/BROCHURE.md",
